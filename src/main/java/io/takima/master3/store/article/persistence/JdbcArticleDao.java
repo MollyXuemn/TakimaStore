@@ -3,22 +3,29 @@ import io.takima.master3.store.ConnectionManager;
 import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.domain.Article;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Repository
+public class JdbcArticleDao implements ArticleDao {
+    ResultSetMapper<Article> articleMapper;
+    private final DataSource ds;
+    @Autowired
+    public JdbcArticleDao(DataSource ds) {
+        this.ds = ds;
+    }
 
-public enum JdbcArticleDao implements ArticleDao {
-    INSTANCE;
-    ResultSetMapper<Article> articleMapper = ArticleMapper.INSTANCE;
-    List<Article> articles = new ArrayList<>();
-
-    void JdbcArticleDao() {
+    public void JdbcArticleDao() {
         this.articleMapper = ArticleMapper.INSTANCE;
     }
 
     public List<Article> findAll(){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from article")) {
@@ -33,7 +40,7 @@ public enum JdbcArticleDao implements ArticleDao {
         return articles;
     };
     public List<Article> findByName(String name){
-
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE name= ?")) {
@@ -71,7 +78,7 @@ public enum JdbcArticleDao implements ArticleDao {
             };
 
     public List<Article> findBySellerId(long sellerId) {
-
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE seller_id = ?")) {
@@ -88,6 +95,7 @@ public enum JdbcArticleDao implements ArticleDao {
     };
 
     public void update(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -110,6 +118,7 @@ public enum JdbcArticleDao implements ArticleDao {
         }
     };
     public void create(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -134,6 +143,7 @@ public enum JdbcArticleDao implements ArticleDao {
     };
 
     public void delete(long id) throws SQLException {
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(

@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 public enum SellerMapper implements ResultSetMapper<Seller>  {
     INSTANCE;
-    @Override
     public Seller map(ResultSet resultSet) throws SQLException {
         return Seller.builder()
                 .id(resultSet.getLong("id"))

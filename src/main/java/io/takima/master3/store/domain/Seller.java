@@ -91,6 +91,5 @@ public record Seller (
         public Seller build() {
             return new Seller(id, name, street, city, zipcode, country, iban);
         }
-
     }
 }

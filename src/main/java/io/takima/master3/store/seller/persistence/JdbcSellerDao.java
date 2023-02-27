@@ -1,25 +1,34 @@
 package io.takima.master3.store.seller.persistence;
 import io.takima.master3.store.domain.Seller;
 import io.takima.master3.store.ConnectionManager;
+import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.mapper.SellerMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.*;
 
+@Repository
+public class JdbcSellerDao implements SellerDao {
+    private final DataSource ds;
+    private ResultSetMapper<Seller> sellerMapper;
 
-public enum JdbcSellerDao implements SellerDao {
-    INSTANCE;
-    ResultSetMapper<Seller> sellerMapper = SellerMapper.INSTANCE ;
-    List<Seller> sellers = new ArrayList<>();
+    @Autowired
+    public JdbcSellerDao(DataSource ds) {
+        this.ds = ds;
+    }
 
     public void SellerDao(ResultSetMapper<Seller> sellerMapper) {
         this.sellerMapper = SellerMapper.INSTANCE;
     }
 
     public List<Seller> findAll() {
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from seller")) {
@@ -34,7 +43,7 @@ public enum JdbcSellerDao implements SellerDao {
         return sellers;
     }
     public List<Seller> findByName(String name){
-
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM seller WHERE name= ?")) {
@@ -67,6 +76,7 @@ public enum JdbcSellerDao implements SellerDao {
         return Optional.empty();
     }
     public void update(Seller seller){
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -87,6 +97,7 @@ public enum JdbcSellerDao implements SellerDao {
         }
     };
     public void create(Seller seller){
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -109,6 +120,7 @@ public enum JdbcSellerDao implements SellerDao {
     };
 
     public void delete(long id) throws SQLException {
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
