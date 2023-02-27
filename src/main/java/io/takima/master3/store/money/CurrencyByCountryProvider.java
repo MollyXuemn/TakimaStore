@@ -4,7 +4,7 @@ import java.util.Map;
 
 
 public class CurrencyByCountryProvider {
-    private  final Map<String, String > CURRENCY;
+    private  final Map<String, String> CURRENCY;
     public CurrencyByCountryProvider() {
         CURRENCY = Map.of(
                 "USD","USD" ,
@@ -19,5 +19,4 @@ public class CurrencyByCountryProvider {
     public String getCurrencyByCountry(String country) {
         return CURRENCY.getOrDefault(country, "USD");
     }
-
 }

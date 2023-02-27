@@ -1,6 +1,8 @@
 package io.takima.master3.store.money;
 
 
+import io.takima.master3.store.domain.Money;
+
 public record MoneyConversion(
         String currency,
         ExchangeRateProvider exchangeRateProvider) {
@@ -10,5 +12,4 @@ public record MoneyConversion(
         double currentCurrencyRate = exchangeRateProvider().getExchangeRateForCurrency(price.currency());
         return new Money((price.amount() / currentCurrencyRate) * targetCurrencyRate, currency);
     }
-
 }

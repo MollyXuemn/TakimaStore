@@ -12,9 +12,10 @@ import java.util.*;
 
 public interface ArticleDao {
     ResultSetMapper<Article> articleMapper = ArticleMapper.INSTANCE;
-    List<Article> articles = new ArrayList<>();
+
 
     public default List<Article> findAll(){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from article")) {
@@ -29,7 +30,7 @@ public interface ArticleDao {
         return articles;
     };
     public default List<Article> findByName(String name){
-
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE name= ?")) {
@@ -66,10 +67,12 @@ public interface ArticleDao {
         return Optional.empty();
     };
     public default List<Article> findBySellerId(long sellerId) {
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE seller_id = ?")) {
                 ps.setLong(1, sellerId);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     articles.add(articleMapper.map(rs));
@@ -83,6 +86,7 @@ public interface ArticleDao {
 
 
     public default void update(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -106,6 +110,7 @@ public interface ArticleDao {
     };
 
     public default void create(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -130,6 +135,7 @@ public interface ArticleDao {
     };
 
     public default void delete(long id) throws SQLException {
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(

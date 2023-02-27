@@ -13,13 +13,13 @@ import java.util.*;
 public enum JdbcSellerDao implements SellerDao {
     INSTANCE;
     ResultSetMapper<Seller> sellerMapper = SellerMapper.INSTANCE ;
-    List<Seller> sellers = new ArrayList<>();
 
     public void SellerDao(ResultSetMapper<Seller> sellerMapper) {
         this.sellerMapper = SellerMapper.INSTANCE;
     }
 
     public List<Seller> findAll() {
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from seller")) {
@@ -34,7 +34,7 @@ public enum JdbcSellerDao implements SellerDao {
         return sellers;
     }
     public List<Seller> findByName(String name){
-
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM seller WHERE name= ?")) {
@@ -67,6 +67,7 @@ public enum JdbcSellerDao implements SellerDao {
         return Optional.empty();
     }
     public void update(Seller seller){
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -87,6 +88,7 @@ public enum JdbcSellerDao implements SellerDao {
         }
     };
     public void create(Seller seller){
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -109,6 +111,7 @@ public enum JdbcSellerDao implements SellerDao {
     };
 
     public void delete(long id) throws SQLException {
+        List<Seller> sellers = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(

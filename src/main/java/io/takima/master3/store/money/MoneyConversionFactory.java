@@ -1,6 +1,5 @@
 package io.takima.master3.store.money;
 
-import io.takima.master3.store.money.ExchangeRateProvider;
 
 public enum MoneyConversionFactory {
     INSTANCE;

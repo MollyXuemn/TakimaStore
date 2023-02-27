@@ -12,13 +12,13 @@ import java.util.*;
 public enum JdbcArticleDao implements ArticleDao {
     INSTANCE;
     ResultSetMapper<Article> articleMapper = ArticleMapper.INSTANCE;
-    List<Article> articles = new ArrayList<>();
 
     void JdbcArticleDao() {
         this.articleMapper = ArticleMapper.INSTANCE;
     }
 
     public List<Article> findAll(){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from article")) {
@@ -33,7 +33,7 @@ public enum JdbcArticleDao implements ArticleDao {
         return articles;
     };
     public List<Article> findByName(String name){
-
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE name= ?")) {
@@ -71,7 +71,7 @@ public enum JdbcArticleDao implements ArticleDao {
             };
 
     public List<Article> findBySellerId(long sellerId) {
-
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE seller_id = ?")) {
@@ -88,6 +88,7 @@ public enum JdbcArticleDao implements ArticleDao {
     };
 
     public void update(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -110,6 +111,7 @@ public enum JdbcArticleDao implements ArticleDao {
         }
     };
     public void create(Article article){
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
@@ -134,6 +136,7 @@ public enum JdbcArticleDao implements ArticleDao {
     };
 
     public void delete(long id) throws SQLException {
+        List<Article> articles = new ArrayList<>();
         try (
                 var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(

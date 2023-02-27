@@ -1,4 +1,4 @@
-package io.takima.master3.store.money;
+package io.takima.master3.store.domain;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +12,4 @@ public record Money(
     public String toString() {
         return amount + " " + currency;
     }
-
-
-
 }
