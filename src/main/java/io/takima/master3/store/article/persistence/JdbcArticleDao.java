@@ -3,17 +3,24 @@ import io.takima.master3.store.ConnectionManager;
 import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.domain.Article;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Repository
+public class JdbcArticleDao implements ArticleDao {
+    ResultSetMapper<Article> articleMapper;
+    private final DataSource ds;
+    @Autowired
+    public JdbcArticleDao(DataSource ds) {
+        this.ds = ds;
+    }
 
-public enum JdbcArticleDao implements ArticleDao {
-    INSTANCE;
-    ResultSetMapper<Article> articleMapper = ArticleMapper.INSTANCE;
-
-    void JdbcArticleDao() {
+    public void JdbcArticleDao() {
         this.articleMapper = ArticleMapper.INSTANCE;
     }
 

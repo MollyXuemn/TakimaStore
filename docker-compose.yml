@@ -5,10 +5,8 @@ services:
     restart: unless-stopped
     networks:
       - db
-    environment:
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-madmin}
-      - POSTGRES_USER=${DATABASE_USER:-madmin}
-      - POSTGRES_DB=${DATABASE_NAME:-ma-store-db}
+    env_file:
+      - .env
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d:ro
@@ -16,7 +14,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${POSTGRES_DB}'",
+          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}'",
         ]
       interval: 10s
       timeout: 3s

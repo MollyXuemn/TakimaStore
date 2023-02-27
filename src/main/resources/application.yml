@@ -1,3 +1,16 @@
-jdbcUrl: jdbc:postgresql://localhost:5432/ma-store-db
-username: madmin
-password: madmin
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://db:52/ma_store_db}
+    username: ${DATABASE_USER:madmin}
+    password: ${DATABASE_PASSWORD:madmin}
+  ## Logger
+  output:
+    ansi:
+      enabled: always
+
+
+logging:
+  level:
+    root: info
+  pattern:
+    console: '%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger.%M - %msg%n'

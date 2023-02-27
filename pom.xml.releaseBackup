@@ -117,7 +117,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>io.takima.master3.store.MainApplication</mainClass>
+                <mainClass>io.takima.master3.store.MaStoreApplication</mainClass>
               </manifest>
             </archive>
           </configuration>
@@ -133,7 +133,7 @@
             <!-- MainClass in manifest make a jar executable -->
             <archive>
               <manifest>
-                <mainClass>io.takima.master3.store.MainApplication</mainClass>
+                <mainClass>io.takima.master3.store.MaStoreApplication</mainClass>
               </manifest>
             </archive>
           </configuration>

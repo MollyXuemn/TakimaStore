@@ -8,20 +8,24 @@ import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.SellerService;
 import io.takima.master3.store.seller.service.SellerServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+@Service
+public class ArticleServiceImpl implements ArticleService {
+    private final ArticleDao articleDao;
+    private final SellerService sellerService;
 
-public enum ArticleServiceImpl implements ArticleService {
-    INSTANCE;
-    private ArticleDao articleDao = JdbcArticleDao.INSTANCE;
-    private SellerService sellerService = SellerServiceImpl.INSTANCE;
-
-    ArticleServiceImpl() {
-        this.articleDao = JdbcArticleDao.INSTANCE;
+    @Autowired
+    public ArticleServiceImpl(ArticleDao articleDao, SellerService sellerService
+    ) {
+        this.articleDao = articleDao;
+        this.sellerService = sellerService;
     }
 
     @Override

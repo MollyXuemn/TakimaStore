@@ -1,18 +1,27 @@
 package io.takima.master3.store.seller.persistence;
 import io.takima.master3.store.domain.Seller;
 import io.takima.master3.store.ConnectionManager;
+import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.mapper.SellerMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.*;
 
+@Repository
+public class JdbcSellerDao implements SellerDao {
+    private final DataSource ds;
+    private ResultSetMapper<Seller> sellerMapper;
 
-public enum JdbcSellerDao implements SellerDao {
-    INSTANCE;
-    ResultSetMapper<Seller> sellerMapper = SellerMapper.INSTANCE ;
+    @Autowired
+    public JdbcSellerDao(DataSource ds) {
+        this.ds = ds;
+    }
 
     public void SellerDao(ResultSetMapper<Seller> sellerMapper) {
         this.sellerMapper = SellerMapper.INSTANCE;

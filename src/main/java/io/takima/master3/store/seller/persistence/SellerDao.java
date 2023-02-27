@@ -5,6 +5,7 @@ import io.takima.master3.store.domain.Seller;
 import io.takima.master3.store.ConnectionManager;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.mapper.SellerMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,6 @@ import java.sql.SQLException;
 import java.util.*;
 
  public interface SellerDao {
-     void SellerDao(ResultSetMapper<Seller> sellerMapper);
 
     List<Seller> findAll();
 

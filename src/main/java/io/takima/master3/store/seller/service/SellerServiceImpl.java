@@ -4,19 +4,18 @@ import io.takima.master3.store.domain.Article;
 import io.takima.master3.store.domain.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
 import io.takima.master3.store.seller.persistence.JdbcSellerDao;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+@Service
+public class SellerServiceImpl implements SellerService {
+    private SellerDao sellerDao;
 
-public enum SellerServiceImpl implements SellerService {
-    INSTANCE;
-
-    private SellerDao sellerDao = JdbcSellerDao.INSTANCE;
-
-    SellerServiceImpl() {
-        this.sellerDao = JdbcSellerDao.INSTANCE;
+    SellerServiceImpl(SellerDao sellerDao) {
+        this.sellerDao = sellerDao;
     }
 
     public List<Seller> findAll() {

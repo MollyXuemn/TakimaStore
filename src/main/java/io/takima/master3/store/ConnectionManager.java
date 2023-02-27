@@ -11,7 +11,7 @@ public enum ConnectionManager {
     private final HikariDataSource hikariDataSource;
 
     ConnectionManager() {
-        HikariConfig config = new HikariConfig("/application.yml");
+        HikariConfig config = new HikariConfig("/hikari.yml");
         this.hikariDataSource = new HikariDataSource(config);
     }
 
