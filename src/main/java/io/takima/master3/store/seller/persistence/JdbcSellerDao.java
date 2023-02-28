@@ -1,13 +1,12 @@
 package io.takima.master3.store.seller.persistence;
 import io.takima.master3.store.domain.Seller;
-import io.takima.master3.store.ConnectionManager;
-import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,22 +14,16 @@ import java.util.*;
 
 @Repository
 public class JdbcSellerDao implements SellerDao {
-    private final DataSource ds;
-    private ResultSetMapper<Seller> sellerMapper;
-
+    private SellerMapper sellerMapper;
+    private Connection conn;
     @Autowired
-    public JdbcSellerDao(DataSource ds) {
-        this.ds = ds;
+    public JdbcSellerDao(DataSource ds, SellerMapper sellerMapper) throws SQLException {
+        this.conn = ds.getConnection();
+        this.sellerMapper = sellerMapper;
     }
-
-    public void SellerDao(ResultSetMapper<Seller> sellerMapper) {
-        this.sellerMapper = SellerMapper.INSTANCE;
-    }
-
     public List<Seller> findAll() {
         List<Seller> sellers = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from seller")) {
             ps.executeQuery();
             ResultSet rs = ps.getResultSet();
@@ -45,7 +38,6 @@ public class JdbcSellerDao implements SellerDao {
     public List<Seller> findByName(String name){
         List<Seller> sellers = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM seller WHERE name= ?")) {
             ps.setString(1,"name");
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -63,7 +55,6 @@ public class JdbcSellerDao implements SellerDao {
 
     public Optional<Seller> findById(long id) {
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM seller WHERE id = ?")) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
@@ -78,7 +69,6 @@ public class JdbcSellerDao implements SellerDao {
     public void update(Seller seller){
         List<Seller> sellers = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "UPDATE seller set id, name, street, city, zipcode, country, iban WHERE id = ?")) {
             ps.setLong(1, Long.parseLong("id"));
@@ -99,7 +89,6 @@ public class JdbcSellerDao implements SellerDao {
     public void create(Seller seller){
         List<Seller> sellers = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "INSERT INTO seller (id, name, street, city, zipcode, country, iban) VALUES (?,?,?,?,?,?,?) ")) {
             ps.setLong(1, Long.parseLong("id"));
@@ -122,7 +111,6 @@ public class JdbcSellerDao implements SellerDao {
     public void delete(long id) throws SQLException {
         List<Seller> sellers = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "DELETE FROM seller WHERE id = ?")) {
             ps.setLong(1, id);

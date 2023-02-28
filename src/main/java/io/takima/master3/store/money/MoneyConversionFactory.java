@@ -1,9 +1,10 @@
 package io.takima.master3.store.money;
 
 
-public enum MoneyConversionFactory {
-    INSTANCE;
+import org.springframework.stereotype.Service;
 
+@Service
+public class MoneyConversionFactory {
     public static MoneyConversion getCurrencyConversion(String currency) {
         return new MoneyConversion(currency, new ExchangeRateProvider());
     }

@@ -5,8 +5,10 @@ services:
     restart: unless-stopped
     networks:
       - db
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-madmin}
+      - POSTGRES_USER=${DATABASE_USER:-madmin}
+      - POSTGRES_DB=${DATABASE_NAME:-ma_store_db}
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d:ro

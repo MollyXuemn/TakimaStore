@@ -1,5 +1,4 @@
 package io.takima.master3.store.article.persistence;
-import io.takima.master3.store.ConnectionManager;
 import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.domain.Article;
@@ -7,27 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 @Repository
 public class JdbcArticleDao implements ArticleDao {
-    ResultSetMapper<Article> articleMapper;
-    private final DataSource ds;
+    ArticleMapper articleMapper;
+    private final Connection conn;
     @Autowired
-    public JdbcArticleDao(DataSource ds) {
-        this.ds = ds;
-    }
-
-    public void JdbcArticleDao() {
-        this.articleMapper = ArticleMapper.INSTANCE;
+    public JdbcArticleDao(DataSource ds, ArticleMapper articleMapper) throws SQLException {
+        this.conn = ds.getConnection();
+        this.articleMapper = articleMapper;
     }
 
     public List<Article> findAll(){
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * from article")) {
             ps.executeQuery();
             ResultSet rs = ps.getResultSet();
@@ -42,7 +38,6 @@ public class JdbcArticleDao implements ArticleDao {
     public List<Article> findByName(String name){
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE name= ?")) {
                 ps.setString(1,"name");
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -58,17 +53,10 @@ public class JdbcArticleDao implements ArticleDao {
     }
     public Optional<Article> findById(long id){
             try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE id = ?")) {
                 ps.setLong(1, id);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-/*                    int articleId = rs.getInt("id");
-                    String name = rs.getString("name");
-                    String ref = rs.getString("name");
-                    String description = rs.getString("name");
-                    String image= rs.getString("name");
-                    int availableQuantity = rs.getInt("available_quantity");*/
                     return Optional.of(articleMapper.map(rs));
                 }
                 } catch (SQLException e) {
@@ -80,7 +68,6 @@ public class JdbcArticleDao implements ArticleDao {
     public List<Article> findBySellerId(long sellerId) {
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement("SELECT * FROM article WHERE seller_id = ?")) {
             ps.setLong(1, sellerId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -97,7 +84,6 @@ public class JdbcArticleDao implements ArticleDao {
     public void update(Article article){
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "UPDATE article set seller_id, name, description, ref, image, available_quantity, price, currency WHERE id = ?")) {
                 ps.setLong(1, Long.parseLong("id"));
@@ -120,7 +106,6 @@ public class JdbcArticleDao implements ArticleDao {
     public void create(Article article){
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "INSERT INTO article (id, seller_id, name, description, ref, image, available_quantity, price, currency) VALUES (?,?,?,?,?,?,?,?,?) ")) {
                 ps.setLong(1, Long.parseLong("id"));
@@ -145,7 +130,6 @@ public class JdbcArticleDao implements ArticleDao {
     public void delete(long id) throws SQLException {
         List<Article> articles = new ArrayList<>();
         try (
-                var conn = ConnectionManager.INSTANCE.getConnection();
                 var ps = conn.prepareStatement(
                         "DELETE FROM article WHERE id = ?")) {
             ps.setLong(1, id);

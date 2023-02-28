@@ -12,12 +12,7 @@ import java.util.Collections;
 @Configuration
 public class ApplicationContext {
 
-    @Bean
-    @Primary
-    Connection datasource() throws SQLException {
 
-        return ConnectionManager.INSTANCE.getConnection(); // YMMV
-    }
     @Bean
     ServletRegistrationBean<CliServlet> myServletRegistration () {
         ServletRegistrationBean<CliServlet> srb = new ServletRegistrationBean<>();
