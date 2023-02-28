@@ -1,13 +1,12 @@
-package io.takima.master3.store.article.service;
+package io.takima.master3.store.article.service.impl;
 
-import io.takima.master3.store.article.persistence.JdbcArticleDao;
-import io.takima.master3.store.domain.Article;
-import io.takima.master3.store.domain.Seller;
-import io.takima.master3.store.domain.Money;
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.seller.models.Seller;
+import io.takima.master3.store.core.models.Money;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.SellerService;
-import io.takima.master3.store.seller.service.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package io.takima.master3.store.seller.service;
 
-import io.takima.master3.store.domain.Seller;
+import io.takima.master3.store.seller.models.Seller;
 
 import java.sql.SQLException;
 import java.util.List;

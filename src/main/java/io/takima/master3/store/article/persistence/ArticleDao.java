@@ -1,6 +1,6 @@
 package io.takima.master3.store.article.persistence;
 
-import io.takima.master3.store.domain.Article;
+import io.takima.master3.store.article.models.Article;
 
 import java.sql.SQLException;
 import java.util.*;

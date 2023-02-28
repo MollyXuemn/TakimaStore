@@ -1,7 +1,6 @@
 package io.takima.master3.store.article.persistence;
 import io.takima.master3.store.mapper.ArticleMapper;
-import io.takima.master3.store.mapper.ResultSetMapper;
-import io.takima.master3.store.domain.Article;
+import io.takima.master3.store.article.models.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
