@@ -2,14 +2,13 @@ package io.takima.master3.store.mapper  ;
 
 import io.takima.master3.store.domain.Article;
 import io.takima.master3.store.domain.Seller;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public enum ArticleMapper implements ResultSetMapper<Article> {
-
-    INSTANCE;
-
+@Component
+public class ArticleMapper implements ResultSetMapper<Article> {
     @Override
     public Article map(ResultSet resultSet) throws SQLException {
         return Article.builder()

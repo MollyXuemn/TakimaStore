@@ -5,6 +5,7 @@ import io.takima.master3.store.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.event.EventListener;
 
 
 @SpringBootApplication
@@ -17,7 +18,9 @@ public class MaStoreApplication {
         this.sellerService = sellerService;
         this.articleService = articleService;
         // Put your old main code here
+        new MainApplication(this.articleService,this.sellerService).run();
     }
+
     public static void main(String[] args) {
         SpringApplication.run(MaStoreApplication.class, args);
     }

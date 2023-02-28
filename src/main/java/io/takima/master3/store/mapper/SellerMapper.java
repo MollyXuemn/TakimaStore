@@ -1,9 +1,12 @@
 package io.takima.master3.store.mapper;
 import io.takima.master3.store.domain.Seller;
+import org.springframework.stereotype.Component;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-public enum SellerMapper implements ResultSetMapper<Seller>  {
-    INSTANCE;
+
+@Component
+public class SellerMapper implements ResultSetMapper<Seller>  {
     public Seller map(ResultSet resultSet) throws SQLException {
         return Seller.builder()
                 .id(resultSet.getLong("id"))
