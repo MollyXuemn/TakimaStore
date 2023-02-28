@@ -18,7 +18,7 @@ public class MaStoreApplication {
         this.sellerService = sellerService;
         this.articleService = articleService;
         // Put your old main code here
-        new MainApplication(this.articleService,this.sellerService).run();
+        //new MainApplication(this.articleService,this.sellerService).run();
     }
 
     public static void main(String[] args) {

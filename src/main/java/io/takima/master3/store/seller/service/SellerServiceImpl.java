@@ -1,14 +1,11 @@
 package io.takima.master3.store.seller.service;
 
-import io.takima.master3.store.domain.Article;
-import io.takima.master3.store.domain.Seller;
+import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
-import io.takima.master3.store.seller.persistence.JdbcSellerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service

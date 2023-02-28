@@ -1,6 +1,5 @@
 package io.takima.master3.store.seller.persistence;
-import io.takima.master3.store.domain.Seller;
-import io.takima.master3.store.mapper.ResultSetMapper;
+import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.mapper.SellerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package io.takima.master3.store.mapper  ;
 
-import io.takima.master3.store.domain.Article;
-import io.takima.master3.store.domain.Seller;
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.seller.models.Seller;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;

@@ -1,7 +1,7 @@
 package io.takima.master3.store.article.service;
 
 
-import io.takima.master3.store.domain.Article;
+import io.takima.master3.store.article.models.Article;
 
 import java.util.List;
 import java.util.Optional;

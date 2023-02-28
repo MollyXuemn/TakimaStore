@@ -1,6 +1,6 @@
 package io.takima.master3.store.seller.persistence;
 
-import io.takima.master3.store.domain.Seller;
+import io.takima.master3.store.seller.models.Seller;
 
 import java.sql.SQLException;
 

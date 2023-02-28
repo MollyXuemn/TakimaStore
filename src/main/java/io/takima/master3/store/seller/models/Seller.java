@@ -1,4 +1,4 @@
-package io.takima.master3.store.domain;
+package io.takima.master3.store.seller.models;
 
 import java.util.Objects;
 

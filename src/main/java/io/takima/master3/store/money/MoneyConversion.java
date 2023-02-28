@@ -1,7 +1,7 @@
 package io.takima.master3.store.money;
 
 
-import io.takima.master3.store.domain.Money;
+import io.takima.master3.store.core.models.Money;
 
 public record MoneyConversion(
         String currency,
