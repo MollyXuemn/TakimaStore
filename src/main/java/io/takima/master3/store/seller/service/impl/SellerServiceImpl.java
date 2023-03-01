@@ -1,7 +1,8 @@
-package io.takima.master3.store.seller.service;
+package io.takima.master3.store.seller.service.impl;
 
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
+import io.takima.master3.store.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
