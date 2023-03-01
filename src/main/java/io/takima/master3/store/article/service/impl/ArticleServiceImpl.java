@@ -2,11 +2,13 @@ package io.takima.master3.store.article.service.impl;
 
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.core.utils.Monitored;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.core.models.Money;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.SellerService;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleDao articleDao;
@@ -54,6 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
         return newArticles;
 
     }
+    @Monitored
     @Override
     public List<Article> findBySellerId(long sellerId) {
         List<Article> articles = articleDao.findBySellerId(sellerId);
