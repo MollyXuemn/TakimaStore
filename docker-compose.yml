@@ -22,6 +22,26 @@ services:
       timeout: 3s
       retries: 3
 
+#  flyway-db-webadmin:
+#    image: adminer
+#    container_name: ma-db-webadmin
+#    restart: always
+#    ports:
+#      - 28080:8080
+#    networks:
+#      - db
+
+  flyway:
+    image: flyway/flyway:6.5.3-alpine
+    command: -connectRetries=60 baseline migrate infopublic
+    volumes:
+      - ./flyway/sql:/flyway/sql
+    env_file:
+      .env
+    depends_on:
+      - db
+    networks:
+      - db
 networks:
   db:
 volumes:
