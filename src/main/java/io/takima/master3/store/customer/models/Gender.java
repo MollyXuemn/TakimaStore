@@ -3,10 +3,7 @@ package io.takima.master3.store.customer.models;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-
-
 public enum Gender {
-
     MALE('m'),
     FEMALE('f');
 

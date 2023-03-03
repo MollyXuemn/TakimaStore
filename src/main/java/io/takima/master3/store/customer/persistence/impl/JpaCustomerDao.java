@@ -18,14 +18,13 @@ import java.util.Optional;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repository
-@Transactional
 public class JpaCustomerDao implements CustomerDao  {
     @PersistenceContext
-    private final EntityManager em;
-    @Autowired
+    private EntityManager em;
+/*    @Autowired
     public JpaCustomerDao(EntityManager em) {
         this.em = em;
-    }
+    }*/
 
     @Override
     public Optional<Customer> findById(long id) {
@@ -45,8 +44,6 @@ public class JpaCustomerDao implements CustomerDao  {
                 () -> { throw new NoSuchElementException(String.format("No customer with id: %d.", customerId)); });
         return customer;
     }
-
-
 
     /**
      * Get a page of Customer, searched by the given search term.
@@ -69,6 +66,7 @@ public class JpaCustomerDao implements CustomerDao  {
     /**
      * @see CustomerDao#findPage(java.lang.String, int, int)
      */
+    @Override
     public List<Customer> findPage(String search) {
         return findPage(search, Integer.MAX_VALUE, 0);
     }
@@ -76,6 +74,7 @@ public class JpaCustomerDao implements CustomerDao  {
     /**
      * @see CustomerDao#findPage(java.lang.String, int, int)
      */
+    @Override
     public List<Customer> findPage(String search, int offset) {
         return findPage(search, Integer.MAX_VALUE, offset);
     }
@@ -83,6 +82,7 @@ public class JpaCustomerDao implements CustomerDao  {
     /**
      * @see CustomerDao#findPage(java.lang.String, int, int)
      */
+    @Override
     public List<Customer> findPage(int offset) {
         return findPage("", Integer.MAX_VALUE, offset);
     }
@@ -90,6 +90,7 @@ public class JpaCustomerDao implements CustomerDao  {
     /**
      * @see CustomerDao#findPage(java.lang.String, int, int)
      */
+    @Override
     public List<Customer> findPage(int limit, int offset) {
         return findPage("", limit, offset);
     }
@@ -99,6 +100,7 @@ public class JpaCustomerDao implements CustomerDao  {
      * @param search the search term. Searches for both first name and last name, case unsensitive.
      * @return the number of element that matches the search term. ??
      */
+    @Transactional
     @Override
     public long count(String search){
         search = ("%" + search + "%").toUpperCase();
@@ -107,6 +109,8 @@ public class JpaCustomerDao implements CustomerDao  {
                 .setParameter("name", search)
                 .getSingleResult();
     }
+    @Transactional
+    @Override
     public long count() {
         return count("");
     }
@@ -115,6 +119,8 @@ public class JpaCustomerDao implements CustomerDao  {
      * Delete a customer by id
      * @param id the id of customer to delete
      */
+    @Transactional
+    @Override
     public void deleteById(Long id){
         em.remove(findById(id).orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", id))));
 

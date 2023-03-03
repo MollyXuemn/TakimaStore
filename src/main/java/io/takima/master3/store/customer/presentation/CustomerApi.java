@@ -37,7 +37,7 @@ public class CustomerApi {
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody
     @PostMapping(value = "/createCustomer", produces = "application/json")
-    public Customer create(@RequestBody() Customer customer) {
+    public Customer create(@RequestBody Customer customer) {
         if (customer.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
