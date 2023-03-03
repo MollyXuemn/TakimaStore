@@ -1,29 +1,54 @@
 package io.takima.master3.store.core.models;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Enumerated;
-
-import static javax.persistence.EnumType.STRING;
 
 @Embeddable
 public class Address {
-    @Column
     private String street;
-    @Column private String city;
-    @Column private String zipcode;
-    @Column
+    private String city;
+    private String zipcode;
     public String country;
 
-    public String toString () {
-
-        return country;
+    public Address() {
     }
-    public void setCountry(String country) {
+
+    public Address(String street, String city, String zipcode, String country) {
+        this.street = street;
+        this.city = city;
+        this.zipcode = zipcode;
         this.country = country;
     }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
     public String getCountry() {
         return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }
 
