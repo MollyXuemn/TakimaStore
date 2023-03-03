@@ -1,4 +1,5 @@
 package io.takima.master3.store.mapper;
+import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.seller.models.Seller;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +12,7 @@ public class SellerMapper implements ResultSetMapper<Seller>  {
         return Seller.builder()
                 .id(resultSet.getLong("id"))
                 .name(resultSet.getString("name"))
-                .street(resultSet.getString("street"))
-                .city(resultSet.getString("city"))
-                .zipcode(resultSet.getString("zipcode"))
-                .country(resultSet.getString("country"))
+                .address((Address) resultSet.getObject("address"))
                 .iban(resultSet.getString("iban"))
                 .build();
     }

@@ -1,5 +1,7 @@
 package io.takima.master3.store.customer.models;
 
+import io.takima.master3.store.core.models.Address;
+
 import javax.persistence.*;
 
 
@@ -11,7 +13,8 @@ public class Customer {
     @Column(unique = true)
     Long id;
     @Column
-    String gender;
+    @Convert( converter = Gender.GenderConverter.class )
+    Gender gender;
     @Column(name = "firstname")
     String firstName;
     @Column(name = "lastname")
@@ -20,13 +23,8 @@ public class Customer {
     @Column(unique = true)
     String email;
     @Column
-    String street;
-    @Column
-    String city;
-    @Column
-    String zipcode;
-    @Column
-    String country;
+    @Embedded
+    private Address address;
     @Column(unique = true)
     String iban;
     public void setLastName(String lastName) {
@@ -40,4 +38,6 @@ public class Customer {
     public Long getId() {
         return id;
     }
+
 }
+
