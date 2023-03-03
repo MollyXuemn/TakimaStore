@@ -2,6 +2,7 @@ package io.takima.master3.store.customer.persistence;
 
 import io.takima.master3.store.customer.models.Customer;
 
+import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.Optional;
 

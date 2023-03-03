@@ -94,7 +94,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         Seller seller = sellerService.findById(article.seller().id()).orElseThrow(() -> new NoSuchElementException("seller not found"));
 
-        String sellerCurrency = MoneyConversionFactory.getCurrency(seller.country());
+        String sellerCurrency = MoneyConversionFactory.getCurrency(seller.address().country);
         double newPrice = MoneyConversionFactory.getCurrencyConversion(sellerCurrency).convert(money).amount();
 
         return Article.builder()
