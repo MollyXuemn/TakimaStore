@@ -1,4 +1,5 @@
 package io.takima.master3.store.customer.models;
+import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 
 import javax.persistence.*;
@@ -18,12 +19,11 @@ public class Customer {
     String firstName;
     @Column(name = "lastname")
     String lastName;
-
     @Column(unique = true)
     String email;
     @Column
     @Embedded
-    private Address address;
+    Address address;
     @Column(unique = true)
     String iban;
 
@@ -38,8 +38,11 @@ public class Customer {
     }
 
     public Customer() {
-
     }
+
+    public Customer(Long id, Gender gender, String firstName, String lastName, String email, String iban, Address address) {
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -93,63 +96,74 @@ public class Customer {
         this.iban = iban;
     }
 
-}
-final class Builder {
-    @Column(unique = true)
-    Long id;
-    @Column
-    @Convert( converter = Gender.GenderConverter.class )
-    Gender gender;
-    @Column(name = "firstname")
-    String firstName;
-    @Column(name = "lastname")
-    String lastName;
 
-    @Column(unique = true)
-    String email;
-    @Column
-    @Embedded
-    private Address address;
-    @Column(unique = true)
-    String iban;
-    public Builder() {
-    }
-    public Builder(Long id, Gender gender, String firstName, String lastName, String email, Address address, String iban) {
-        this.id = id;
-        this.gender = gender;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.iban = iban;
-    }
-    public Builder id(Long id) {
-        this.id = id;
-        return this;
-    }
-    public Builder gender(Gender gender){
-        this.gender= gender;
-        return this;
-    }
-    public Builder fName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-    public Builder lName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
-    public Builder email(String email) {
-        this.email = email;
-        return this;
-    }
-    public Builder address(Address address) {
-        this.address = address;
-        return this;
-    }
-    public Builder ib(String iban) {
-        this.iban = iban;
-        return this;
-    }
+    public static Customer.Builder builder() {
 
+        return new Customer.Builder();
+    }
+    public static final class Builder {
+         Long id;
+
+        //Mandatory fields
+         Gender gender;
+         String firstName;
+         String lastName;
+         String email;
+         String iban;
+         Address address;
+
+        public Builder() {
+        }
+        public Builder(Gender gender, String firstName, String lastName, String email, String iban, Address address) {
+            this.gender=gender;
+            this.firstName=firstName;
+            this.lastName=lastName;
+            this.email=email;
+            this.iban = iban;
+            this.address = address;
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder gender(Gender gender) {
+            this.gender = gender;
+            return this;
+        }
+
+        public Builder firstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        public Builder iban(String iban) {
+            this.iban = iban;
+            return this;
+        }
+        public Builder address(Address address) {
+            this.address = address;
+            return this;
+        }
+
+
+        public Customer build(){
+            return new Customer(id, gender, firstName,lastName,email,iban,address);
+        }
+
+
+    }
 }
+
+
+

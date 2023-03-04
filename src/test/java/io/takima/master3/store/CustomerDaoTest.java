@@ -1,8 +1,9 @@
-package io.takima.master3.store.customer.persistence;
+package io.takima.master3.store;
 
 import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.models.Gender;
+import io.takima.master3.store.customer.persistence.CustomerDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -160,7 +161,7 @@ class CustomerDaoCreateMethodTest {
             .email("llucky@takima.fr")
             .gender(Gender.MALE)
             .address(Address.builder()
-                    .country(Country.US)
+                    .country("US")
                     .build())
             .build();
 

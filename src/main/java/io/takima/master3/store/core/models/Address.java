@@ -50,5 +50,18 @@ public class Address {
     public void setCountry(String country) {
         this.country = country;
     }
+    public static Address builder() {
+        return new Address();
+    }
+    public Address build() {
+        return this;
+    }
+
+    public Address country(String country) {
+        this.country = country;
+        return this;
+    }
+
+
 }
 
