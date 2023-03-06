@@ -106,8 +106,8 @@ class CustomerDaoTest {
             void shouldSearch() {
                 var customers = customerDao.findPage("DaLtO", 2, 1);
                 assertEquals(2, customers.size());
-                assertEquals("Jack", customers.get(0).getFirstName());
-                customers.forEach(c -> assertEquals("DALTON", c.getLastName()));
+                assertEquals("Jack", customers.get(0).getFirstName()); //get ???
+                customers.forEach(c -> assertEquals("DALTON", c.getLastName())); // c =>
             }
         }
     }

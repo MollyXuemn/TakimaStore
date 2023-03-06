@@ -1,14 +1,15 @@
 package io.takima.master3.store.article.service.impl;
 
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.models.Currency;
+import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.utils.Monitored;
+import io.takima.master3.store.money.MoneyConversion;
 import io.takima.master3.store.seller.models.Seller;
-import io.takima.master3.store.core.models.Money;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.SellerService;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,23 +91,24 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private Article changePrice(Article article){
-        Money money = new Money(article.price(),article.currency());
+        Currency currency = article.getPrice().currency;
+        Price money = new Price(article.price.amount, currency);
 
-        Seller seller = sellerService.findById(article.seller().id()).orElseThrow(() -> new NoSuchElementException("seller not found"));
+        Seller seller = sellerService.findById(article.seller_id).orElseThrow(() -> new NoSuchElementException("seller not found"));
 
-        String sellerCurrency = MoneyConversionFactory.getCurrency(seller.address().country);
-        double newPrice = MoneyConversionFactory.getCurrencyConversion(sellerCurrency).convert(money).amount();
+        String sellerCurrency = MoneyConversionFactory.getCurrency(seller.getAddress().country);
+        MoneyConversion moneyconversion = MoneyConversionFactory.getCurrencyConversion(Currency.valueOf(sellerCurrency));
+        Price newPrice = moneyconversion.convert(money);
 
         return Article.builder()
-                .id(article.id())
-                .seller(article.seller())
-                .ref(article.ref())
-                .name(article.name())
-                .description(article.description())
-                .image(article.image())
-                .availableQuantity(article.availableQuantity())
+                .id(article.id)
+                .seller_id(article.seller_id)
+                .ref(article.ref)
+                .name(article.name)
+                .description(article.description)
+                .image(article.image)
+                .availableQuantity(article.availableQuantity)
                 .price(newPrice)
-                .currency(sellerCurrency)
                 .build();
     }
 

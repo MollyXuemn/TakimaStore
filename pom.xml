@@ -79,8 +79,13 @@
 			<version>RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>in.yajnesh.util</groupId>
+            <artifactId>java-util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

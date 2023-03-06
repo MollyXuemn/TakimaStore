@@ -1,5 +1,4 @@
 package io.takima.master3.store.customer.models;
-import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 
 import javax.persistence.*;
@@ -24,7 +23,7 @@ public class Customer {
     @Column
     @Embedded
     Address address;
-    @Column(unique = true)
+    @Column
     String iban;
 
     public Customer(Long id, Gender gender, String firstName, String lastName, String email, Address address, String iban) {
@@ -158,6 +157,7 @@ public class Customer {
 
 
         public Customer build(){
+
             return new Customer(id, gender, firstName,lastName,email,iban,address);
         }
 

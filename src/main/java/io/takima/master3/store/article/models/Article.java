@@ -1,27 +1,43 @@
 package io.takima.master3.store.article.models;
 
-import io.takima.master3.store.seller.models.Seller;
+import io.takima.master3.store.core.models.Price;
 
+import javax.persistence.*;
 import java.util.Objects;
+@Table(name = "article")
+@Entity
+public class Article {
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
+        public Long id;
+        public Long seller_id;
+        @Column
+        public String ref;
+        @Column
+        public
+        String name;
+        @Column
+        public String description;
+        @Column
+        public String image;
+        @Column
+        public int availableQuantity;
+        @Column
+        @Embedded
+        public Price price;
 
-public record Article(
-        Long id,
-        Seller seller,
-        String ref,
-        String name,
-        String description,
-        String image,
-        int availableQuantity,
-        double price,
-        String currency
-) {
-
-    public static Builder builder() {
-        return new Builder();
+    public Article(Long id, Long seller_id, String ref, String name, String description, String image, int availableQuantity, Price price) {
+        this.id = id;
+        this.seller_id = seller_id;
+        this.ref = ref;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.availableQuantity = availableQuantity;
+        this.price = price;
     }
 
-    public static Builder builder(Article article) {
-        return new Builder(article);
+    public Article() {
     }
 
     @Override
@@ -36,31 +52,44 @@ public record Article(
     public int hashCode() {
         return Objects.hash(id);
     }
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder builder(Article article) {
+        return new Builder(article);
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
 
     public static final class Builder {
         private Long id;
-        private Seller seller;
+        private Long seller_id;
         private String ref;
         private String name;
         private String description;
         private String image;
         private int availableQuantity;
-        private double price;
-        private String currency;
+        private Price price;
 
         public Builder() {
         }
 
         public Builder(Article article) {
             this.id = article.id;
-            this.seller = article.seller;
+            this.seller_id = article.seller_id;
             this.ref = article.ref;
             this.name = article.name;
             this.description = article.description;
             this.image = article.image;
             this.availableQuantity = article.availableQuantity;
             this.price = article.price;
-            this.currency= article.currency;
         }
 
         public Builder id(Long id) {
@@ -68,8 +97,8 @@ public record Article(
             return this;
         }
 
-        public Builder seller(Seller seller) {
-            this.seller = seller;
+        public Builder seller_id(Long seller_id) {
+            this.seller_id = seller_id;
             return this;
         }
 
@@ -98,17 +127,13 @@ public record Article(
             return this;
         }
 
-        public Builder price(double price) {
+        public Builder price(Price price) {
             this.price = price;
-            return this;
-        }
-        public Builder currency(String  currency) {
-            this.currency = currency;
             return this;
         }
 
         public Article build() {
-            return new Article(id, seller, ref, name, description, image, availableQuantity, price, currency);
+            return new Article(id, seller_id, ref, name, description, image, availableQuantity, price);
         }
 
     }
