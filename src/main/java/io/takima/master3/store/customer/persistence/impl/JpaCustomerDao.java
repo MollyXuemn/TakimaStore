@@ -2,21 +2,14 @@ package io.takima.master3.store.customer.persistence.impl;
 
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repository
 public class JpaCustomerDao implements CustomerDao  {
     @PersistenceContext

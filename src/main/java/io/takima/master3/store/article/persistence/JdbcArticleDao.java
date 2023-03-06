@@ -1,144 +1,55 @@
 package io.takima.master3.store.article.persistence;
-import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.article.models.Article;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.*;
 
 @Repository
 public class JdbcArticleDao implements ArticleDao {
-    ArticleMapper articleMapper;
-    private final Connection conn;
-    @Autowired
-    public JdbcArticleDao(DataSource ds, ArticleMapper articleMapper) throws SQLException {
-        this.conn = ds.getConnection();
-        this.articleMapper = articleMapper;
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     public List<Article> findAll(){
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement("SELECT * from article")) {
-            ps.executeQuery();
-            ResultSet rs = ps.getResultSet();
-            while (rs.next()) {
-                articles.add(articleMapper.map(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return articles;
-    };
+        return em.createQuery("SELECT a FROM Article a", Article.class).getResultList();
+    }
     public List<Article> findByName(String name){
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement("SELECT * FROM article WHERE name= ?")) {
-                ps.setString(1,"name");
-            try (ResultSet resultSet = ps.executeQuery()) {
-                while (resultSet.next()) {
-                    articles.add(articleMapper.map(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Impossible to insert site " +
-                    name, e);
-        }
-        return articles;
+        return em.createQuery("SELECT a FROM Article a WHERE a.name = :name", Article.class)
+                .setParameter("name",name)
+                .getResultList();
+
     }
     public Optional<Article> findById(long id){
-            try (
-                var ps = conn.prepareStatement("SELECT * FROM article WHERE id = ?")) {
-                ps.setLong(1, id);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    return Optional.of(articleMapper.map(rs));
-                }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                return Optional.empty();
-            };
+        return Optional.ofNullable(em.find(Article.class, id));
+    };
 
     public List<Article> findBySellerId(long sellerId) {
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement("SELECT * FROM article WHERE seller_id = ?")) {
-            ps.setLong(1, sellerId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    articles.add(articleMapper.map(rs));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return articles;
+        return em.createQuery("SELECT a FROM Article a JOIN a.seller WHERE a.seller.id = :id", Article.class)
+                .setParameter("id",sellerId)
+                .getResultList();
+
     };
 
-    public void update(Article article){
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement(
-                        "UPDATE article set seller_id, name, description, ref, image, available_quantity, price, currency WHERE id = ?")) {
-                ps.setLong(1, Long.parseLong("id"));
-                ps.setString(2,"name");
-                ps.setString(3,"description");
-                ps.setString(4,"ref");
-                ps.setString(5,"image");
-                ps.setInt(6, Integer.parseInt("available_quantity"));
-                ps.setDouble(7, Double.parseDouble("price"));
-                ps.setString(8,"currency");
-                ps.setLong(9, Long.parseLong("seller_id"));
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    articles.add(articleMapper.map(rs));
-                }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    };
-    public void create(Article article){
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement(
-                        "INSERT INTO article (id, seller_id, name, description, ref, image, available_quantity, price, currency) VALUES (?,?,?,?,?,?,?,?,?) ")) {
-                ps.setLong(1, Long.parseLong("id"));
-                ps.setString(2,"name");
-                ps.setString(3,"description");
-                ps.setString(4,"ref");
-                ps.setString(5,"image");
-                ps.setInt(6, Integer.parseInt("available_quantity"));
-                ps.setDouble(7, Double.parseDouble("price"));
-                ps.setString(8,"currency");
-                ps.setLong(9, Long.parseLong("seller_id"));
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    articles.add(articleMapper.map(rs));
-                }
+    public Article update(Article article){
+        Long articleId = article.getId();
+        Optional<Article> optionalArticle = findById(articleId);
+        optionalArticle.ifPresentOrElse(c -> em.merge(article), //the managed instance that the state was merged to
+                () -> { throw new NoSuchElementException(String.format("No customer with id: %d.", articleId)); });
+        return article;
 
-                } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     };
-
+    @Override
+    public Article create(Article article){
+        em.persist(article);
+        return article;
+    };
+    @Transactional
     public void delete(long id) throws SQLException {
-        List<Article> articles = new ArrayList<>();
-        try (
-                var ps = conn.prepareStatement(
-                        "DELETE FROM article WHERE id = ?")) {
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                articles.add(articleMapper.map(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        em.remove(findById(id).orElseThrow(() ->
+                new NoSuchElementException(String.format("no article with id %d", id))));
     };
 
 };

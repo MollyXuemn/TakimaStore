@@ -5,13 +5,15 @@ import io.takima.master3.store.article.models.Article;
 import java.sql.SQLException;
 import java.util.*;
 
+ public interface ArticleDao {
+    List<Article> findAll();
+    List<Article> findByName(String name);
+    Optional<Article> findById(long id);
 
-public interface ArticleDao {
-    public List<Article> findAll();
-    public List<Article> findByName(String name);
-    public Optional<Article> findById(long id);
-    public List<Article> findBySellerId(long sellerId);
-    public void update(Article article);
-    public void create(Article article);
-    public void delete(long id) throws SQLException ;
+    List<Article> findBySellerId(long sellerId);
+
+    Article update(Article article);
+    Article create(Article article);
+
+    void delete(long id) throws SQLException;
 }
