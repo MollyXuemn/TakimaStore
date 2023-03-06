@@ -1,5 +1,6 @@
-package io.takima.master3.store.article.persistence;
+package io.takima.master3.store.article.persistence.impl;
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.persistence.ArticleDao;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-public class JdbcArticleDao implements ArticleDao {
+public class JpaArticleDao implements ArticleDao {
     @PersistenceContext
     private EntityManager em;
 
@@ -20,7 +21,6 @@ public class JdbcArticleDao implements ArticleDao {
         return em.createQuery("SELECT a FROM Article a WHERE a.name = :name", Article.class)
                 .setParameter("name",name)
                 .getResultList();
-
     }
     public Optional<Article> findById(long id){
         return Optional.ofNullable(em.find(Article.class, id));
@@ -41,7 +41,7 @@ public class JdbcArticleDao implements ArticleDao {
         return article;
 
     };
-    @Override
+
     public Article create(Article article){
         em.persist(article);
         return article;
