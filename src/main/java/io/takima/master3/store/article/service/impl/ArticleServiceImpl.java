@@ -26,7 +26,6 @@ public class ArticleServiceImpl implements ArticleService {
     };
     public List<Article> findByName(String name){
         return articleDao.findByName(name);
-
     }
     public Optional<Article> findById(long id){
         return articleDao.findById(id);

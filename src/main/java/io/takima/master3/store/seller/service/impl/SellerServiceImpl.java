@@ -6,6 +6,7 @@ import io.takima.master3.store.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -28,15 +29,15 @@ public class SellerServiceImpl implements SellerService {
     public Optional<Seller> findById(long id) {
         return sellerDao.findById(id);
     }
-
+    @Transactional
     public void update(Seller seller) {
         sellerDao.update(seller);
     }
-
+    @Transactional
     public void create(Seller seller) {
         sellerDao.create(seller);
     }
-
+    @Transactional
     public void delete(long id) throws SQLException {
         sellerDao.delete(id);
     }

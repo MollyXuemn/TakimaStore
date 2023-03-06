@@ -9,16 +9,9 @@ import java.util.*;
  public interface SellerDao {
 
     List<Seller> findAll();
-
-
     List<Seller> findByName(String name);
-
-
     Optional<Seller> findById(long id);
-
-    void update(Seller seller);
-
-     void create(Seller seller) ;
-
-     void delete(long id) throws SQLException ;
+    Seller update(Seller seller);
+    Seller create(Seller seller) ;
+    void delete(long id) throws SQLException ;
 }
