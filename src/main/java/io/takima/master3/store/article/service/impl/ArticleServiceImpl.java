@@ -52,21 +52,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     private Article changePrice(Article article){
         Currency currency = article.getPrice().currency;
-        Price money = new Price(article.price.amount, currency);
-        Seller seller = sellerService.findById(article.seller.getId()).orElseThrow(() -> new NoSuchElementException("seller not found"));
+        Price money = new Price(article.getPrice().amount, currency);
+        Seller seller = sellerService.findById(article.getSeller().getId()).orElseThrow(() -> new NoSuchElementException("seller not found"));
 
         String sellerCurrency = MoneyConversionFactory.getCurrency(seller.getAddress().country);
         MoneyConversion moneyconversion = MoneyConversionFactory.getCurrencyConversion(Currency.valueOf(sellerCurrency));
         Price newPrice = moneyconversion.convert(money);
 
         return Article.builder()
-                .id(article.id)
-                .seller(article.seller)
-                .ref(article.ref)
-                .name(article.name)
-                .description(article.description)
-                .image(article.image)
-                .availableQuantity(article.availableQuantity)
+                .id(article.getId())
+                .seller(article.getSeller())
+                .product(article.getProduct())
+                .availableQuantity(article.getAvailableQuantity())
                 .price(newPrice)
                 .build();
     }

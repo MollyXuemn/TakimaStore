@@ -11,7 +11,6 @@ services:
       - POSTGRES_DB=${DATABASE_NAME:-ma_store_db}
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test:
         [
@@ -32,12 +31,14 @@ services:
 #      - db
 
   flyway:
-    image: flyway/flyway:6.5.3-alpine
-    command: -connectRetries=60 baseline migrate infopublic
+    image: flyway/flyway:9-alpine
+    command: -connectRetries=60 -baselineVersion="0.0" baseline migrate info
     volumes:
-      - ./flyway/sql:/flyway/sql
-    env_file:
-      .env
+      - ./db:/flyway/sql:ro
+    environment:
+      FLYWAY_URL: ${DATABASE_URL}
+      FLYWAY_USER: ${DATABASE_USER}
+      FLYWAY_PASSWORD: ${DATABASE_PASSWORD}
     depends_on:
       - db
     networks:
