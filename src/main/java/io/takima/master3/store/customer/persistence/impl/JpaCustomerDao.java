@@ -103,7 +103,7 @@ public class JpaCustomerDao implements CustomerDao  {
     @Transactional
     @Override
     public long count(String search){
-        search = ("%" + search + "%").toUpperCase();
+        search = ("%" + search + "%").toUpperCase(); // % means?
         return em.createQuery(
                         "SELECT COUNT(c) FROM Customer c WHERE UPPER(CONCAT(c.firstName, c.lastName)) LIKE UPPER(CONCAT('%', :name, '%'))", Long.class) //???
                 .setParameter("name", search)

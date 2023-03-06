@@ -2,22 +2,50 @@ package io.takima.master3.store.seller.models;
 
 import io.takima.master3.store.core.models.Address;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.util.Objects;
 
 import static javax.persistence.EnumType.STRING;
-
-public record Seller (
-        Long id,
-        String name,
+@Table(name = "seller")
+@Entity
+public class Seller {
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seller_id_seq")
+        Long id;
+        @Column
+        String name;
         @Column
         @Embedded
-        Address address,
-        String iban
+        Address address;
+        @Column
+        String iban;
 
-) {
+    public Seller(Long id, String name, Address address, String iban) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.iban = iban;
+    }
+
+    public Seller() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public static Builder builder() {
         return new Builder();
     }

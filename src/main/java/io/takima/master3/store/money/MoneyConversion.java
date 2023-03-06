@@ -1,15 +1,16 @@
 package io.takima.master3.store.money;
 
 
-import io.takima.master3.store.core.models.Money;
+import io.takima.master3.store.article.models.Currency;
+import io.takima.master3.store.core.models.Price;
 
 public record MoneyConversion(
-        String currency,
+        Currency currency,
         ExchangeRateProvider exchangeRateProvider) {
 
-    public Money convert(Money price) {
-        double targetCurrencyRate = exchangeRateProvider().getExchangeRateForCurrency(currency);
-        double currentCurrencyRate = exchangeRateProvider().getExchangeRateForCurrency(price.currency());
-        return new Money((price.amount() / currentCurrencyRate) * targetCurrencyRate, currency);
+    public Price convert(Price price) {
+        double targetCurrencyRate = exchangeRateProvider().getExchangeRateForCurrency(String.valueOf(currency));
+        double currentCurrencyRate = exchangeRateProvider().getExchangeRateForCurrency(String.valueOf(price.currency));
+        return new Price((price.amount / currentCurrencyRate) * targetCurrencyRate, currency);
     }
 }
