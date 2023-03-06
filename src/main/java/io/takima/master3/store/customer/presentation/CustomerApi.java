@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api")
 @AllArgsConstructor
 public class CustomerApi {
-
     private final CustomerService customerService;
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
@@ -25,7 +24,6 @@ public class CustomerApi {
 
         return customerService.findPage(search, limit, offset);
     }
-
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody
     @GetMapping(value = "/getCustomer", produces = "application/json")
@@ -41,7 +39,6 @@ public class CustomerApi {
         if (customer.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
-
         customerService.create(customer);
 
         return customer;
@@ -54,7 +51,6 @@ public class CustomerApi {
         if (customer.getId() == null) {
             throw new IllegalArgumentException("did not specify the ID of customer to update");
         }
-
         customerService.update(customer);
 
         return customer;

@@ -4,96 +4,56 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.models.Currency;
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.article.service.ArticleService;
-import io.takima.master3.store.core.utils.Monitored;
 import io.takima.master3.store.money.MoneyConversion;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
-import io.takima.master3.store.seller.service.SellerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.takima.master3.store.seller.service.impl.SellerServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
-    private final ArticleDao articleDao;
-    private final SellerService sellerService;
-
-    @Autowired
-    public ArticleServiceImpl(ArticleDao articleDao, SellerService sellerService
-    ) {
-        this.articleDao = articleDao;
-        this.sellerService = sellerService;
-    }
-
-    @Override
-    public List<Article> findAll() {
-        List<Article> newArticles = new ArrayList<>();
-        List<Article> articles = articleDao.findAll();
-        for(Article article : articles) {
-            newArticles.add(changePrice(article));
-        }
-        return newArticles;
+    private ArticleDao articleDao;
+    SellerServiceImpl sellerService;
+    public List<Article> findAll(){
+        return articleDao.findAll();
+    };
+    public List<Article> findByName(String name){
+        return articleDao.findByName(name);
 
     }
+    public Optional<Article> findById(long id){
+        return articleDao.findById(id);
+    };
 
-    @Override
-    public Optional<Article> findById(long id) {
-        return Optional.of(this.changePrice(articleDao.findById(id).orElse(null)));
-
-    }
-
-    @Override
-    public List<Article> findByName(String name) {
-        List<Article> newArticles = new ArrayList<>();
-        List<Article> articles = articleDao.findByName(name);
-        for(Article article :  articles){
-            newArticles.add(this.changePrice(article));
-        }
-        return newArticles;
-
-    }
-    @Monitored
-    @Override
     public List<Article> findBySellerId(long sellerId) {
-        List<Article> articles = articleDao.findBySellerId(sellerId);
-        List<Article> newArticles = new ArrayList<>();
-        for(Article article :  articles){
-            //System.err.println(article.toString());
-            newArticles.add(this.changePrice(article));
-        }
-        return newArticles;
-    }
-
+        return articleDao.findBySellerId(sellerId);
+    };
     @Override
-    public void update(Article article) {
+    @Transactional
+    public void update(Article article){
         articleDao.update(article);
-    }
-
+    };
     @Override
-    public void create(Article article) {
+    @Transactional
+    public void create(Article article){
         articleDao.create(article);
-    }
-
-    @Override
-    public void delete(long id)  {
-        try {
-            articleDao.delete(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    };
+    @Transactional
+    public void delete(long id) throws SQLException {
+        articleDao.delete(id);
+    };
 
 
     private Article changePrice(Article article){
         Currency currency = article.getPrice().currency;
         Price money = new Price(article.price.amount, currency);
-
         Seller seller = sellerService.findById(article.seller.getId()).orElseThrow(() -> new NoSuchElementException("seller not found"));
 
         String sellerCurrency = MoneyConversionFactory.getCurrency(seller.getAddress().country);

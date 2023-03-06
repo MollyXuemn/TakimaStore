@@ -1,5 +1,6 @@
 package io.takima.master3.store.seller.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 
@@ -22,6 +23,7 @@ public class Seller {
         @Column
         String iban;
         @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+        @JsonIgnore
         private List<Article> articles;
 
     public Seller(Long id, String name, Address address, String iban) {

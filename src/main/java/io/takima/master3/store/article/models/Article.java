@@ -61,7 +61,12 @@ public class Article {
     public static Builder builder(Article article) {
         return new Builder(article);
     }
-
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     public Price getPrice() {
         return price;
     }
