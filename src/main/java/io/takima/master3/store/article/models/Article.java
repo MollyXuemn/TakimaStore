@@ -1,6 +1,7 @@
 package io.takima.master3.store.article.models;
 
 import io.takima.master3.store.core.models.Price;
+import io.takima.master3.store.seller.models.Seller;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,7 +11,8 @@ public class Article {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
         public Long id;
-        public Long seller_id;
+        @ManyToOne
+        public Seller seller;
         @Column
         public String ref;
         @Column
@@ -26,9 +28,9 @@ public class Article {
         @Embedded
         public Price price;
 
-    public Article(Long id, Long seller_id, String ref, String name, String description, String image, int availableQuantity, Price price) {
+    public Article(Long id, Seller seller, String ref, String name, String description, String image, int availableQuantity, Price price) {
         this.id = id;
-        this.seller_id = seller_id;
+        this.seller = seller;
         this.ref = ref;
         this.name = name;
         this.description = description;
@@ -70,7 +72,7 @@ public class Article {
 
     public static final class Builder {
         private Long id;
-        private Long seller_id;
+        private Seller seller;
         private String ref;
         private String name;
         private String description;
@@ -83,7 +85,7 @@ public class Article {
 
         public Builder(Article article) {
             this.id = article.id;
-            this.seller_id = article.seller_id;
+            this.seller = article.seller;
             this.ref = article.ref;
             this.name = article.name;
             this.description = article.description;
@@ -97,8 +99,8 @@ public class Article {
             return this;
         }
 
-        public Builder seller_id(Long seller_id) {
-            this.seller_id = seller_id;
+        public Builder seller(Seller seller) {
+            this.seller = seller;
             return this;
         }
 
@@ -133,7 +135,7 @@ public class Article {
         }
 
         public Article build() {
-            return new Article(id, seller_id, ref, name, description, image, availableQuantity, price);
+            return new Article(id, seller, ref, name, description, image, availableQuantity, price);
         }
 
     }

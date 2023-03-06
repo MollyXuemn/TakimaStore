@@ -1,8 +1,10 @@
 package io.takima.master3.store.seller.models;
 
+import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 import static javax.persistence.EnumType.STRING;
@@ -19,6 +21,8 @@ public class Seller {
         Address address;
         @Column
         String iban;
+        @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+        private List<Article> articles;
 
     public Seller(Long id, String name, Address address, String iban) {
         this.id = id;

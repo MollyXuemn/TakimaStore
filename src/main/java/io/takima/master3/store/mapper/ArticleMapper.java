@@ -21,7 +21,7 @@ public class ArticleMapper implements ResultSetMapper<Article> {
                 .image(resultSet.getString("image"))
                 .availableQuantity(resultSet.getInt("available_quantity"))
                 .price(price)
-                .seller_id(resultSet.getLong("seller_id"))
+                .seller(Seller.builder().id(resultSet.getLong("seller_id")).build())
                 .build();
     }
 }
