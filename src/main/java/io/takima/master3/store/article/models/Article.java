@@ -2,39 +2,29 @@ package io.takima.master3.store.article.models;
 
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.seller.models.Seller;
-
 import javax.persistence.*;
-import java.util.Objects;
+
 @Table(name = "article")
 @Entity
 public class Article {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
-        public Long id;
+        private Long id;
         @ManyToOne
-        public Seller seller;
+        private Seller seller;
         @Column
-        public String ref;
-        @Column
-        public
-        String name;
-        @Column
-        public String description;
-        @Column
-        public String image;
-        @Column
-        public int availableQuantity;
-        @Column
-        @Embedded
-        public Price price;
+        private int availableQuantity;
 
-    public Article(Long id, Seller seller, String ref, String name, String description, String image, int availableQuantity, Price price) {
+        @Embedded
+        private Price price;
+        @ManyToOne
+        private Product product;
+
+
+    public Article(Long id, Seller seller, Product product, int availableQuantity, Price price) {
         this.id = id;
         this.seller = seller;
-        this.ref = ref;
-        this.name = name;
-        this.description = description;
-        this.image = image;
+        this.product = product;
         this.availableQuantity = availableQuantity;
         this.price = price;
     }
@@ -42,25 +32,6 @@ public class Article {
     public Article() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Article article = (Article) o;
-        return Objects.equals(id, article.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static Builder builder(Article article) {
-        return new Builder(article);
-    }
     public Long getId() {
         return id;
     }
@@ -75,13 +46,42 @@ public class Article {
         this.price = price;
     }
 
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder builder(Article article) {
+        return new Builder(article);
+    }
+
     public static final class Builder {
         private Long id;
         private Seller seller;
-        private String ref;
-        private String name;
-        private String description;
-        private String image;
+        private Product product;
         private int availableQuantity;
         private Price price;
 
@@ -91,10 +91,7 @@ public class Article {
         public Builder(Article article) {
             this.id = article.id;
             this.seller = article.seller;
-            this.ref = article.ref;
-            this.name = article.name;
-            this.description = article.description;
-            this.image = article.image;
+            this.product = article.product;
             this.availableQuantity = article.availableQuantity;
             this.price = article.price;
         }
@@ -109,23 +106,8 @@ public class Article {
             return this;
         }
 
-        public Builder ref(String ref) {
-            this.ref = ref;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder image(String image) {
-            this.image = image;
+        public Builder product(Product product) {
+            this.product = product;
             return this;
         }
 
@@ -140,7 +122,7 @@ public class Article {
         }
 
         public Article build() {
-            return new Article(id, seller, ref, name, description, image, availableQuantity, price);
+            return new Article(id, seller, product, availableQuantity, price);
         }
 
     }
