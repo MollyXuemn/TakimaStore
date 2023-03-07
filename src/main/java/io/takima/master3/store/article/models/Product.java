@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(
-        strategy = /* InheritanceType.JOINED, InheritanceType.SINGLE_TABLE or InheritanceType.TABLE_PER_CLASS */
+        strategy = InheritanceType.JOINED
 )
 public class Product {
     @Id
@@ -161,9 +161,7 @@ public class Product {
 
 
     public static class Builder {
-
         private Product p = new Product();
-
         public Builder id(Long id) {
             this.p.id = id;
             return this;
