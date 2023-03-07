@@ -2,10 +2,11 @@ package io.takima.master3.store.seller.persistence.impl;
 
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;

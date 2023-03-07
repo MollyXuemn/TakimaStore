@@ -1,6 +1,7 @@
 package io.takima.master3.store.core.models;
 
-import javax.persistence.Embeddable;
+
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Address {

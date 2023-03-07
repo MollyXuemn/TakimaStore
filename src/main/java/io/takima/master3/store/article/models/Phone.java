@@ -1,9 +1,8 @@
 package io.takima.master3.store.article.models;
 
 import io.takima.master3.store.core.models.Price;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Phone extends Product{

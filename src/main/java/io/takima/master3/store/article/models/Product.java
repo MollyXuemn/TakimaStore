@@ -1,8 +1,8 @@
 package io.takima.master3.store.article.models;
 
 import io.takima.master3.store.core.models.Price;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Inheritance(
@@ -14,14 +14,19 @@ public class Product {
     private Long id;
 
     @Column(unique = true)
+    @NotBlank
     private String ref;
     @Column
+    @NotBlank
     private String name;
     @Column
+    @NotBlank
     private String brand;
     @Column
+    @NotBlank
     private String description;
     @Column
+    @NotBlank
     private String image;
     @Column
     private String tagsCsv;

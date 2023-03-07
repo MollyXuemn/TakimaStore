@@ -9,9 +9,9 @@ import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.impl.SellerServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
