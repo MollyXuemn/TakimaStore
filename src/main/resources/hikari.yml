@@ -1,3 +1,0 @@
-jdbcUrl: jdbc:postgresql://localhost:5433/ma-store-db
-username: madmin
-password: madmin

@@ -1,11 +1,10 @@
 package io.takima.master3.store.article.persistence.impl;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.*;
 

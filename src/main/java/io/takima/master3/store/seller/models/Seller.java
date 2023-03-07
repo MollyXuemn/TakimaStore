@@ -3,12 +3,13 @@ package io.takima.master3.store.seller.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-import static javax.persistence.EnumType.STRING;
+import static jakarta.persistence.EnumType.STRING;
+
 @Table(name = "seller")
 @Entity
 public class Seller {

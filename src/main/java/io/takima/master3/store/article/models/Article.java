@@ -2,7 +2,7 @@ package io.takima.master3.store.article.models;
 
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.seller.models.Seller;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "article")
 @Entity

@@ -2,11 +2,11 @@ package io.takima.master3.store.customer.persistence.impl;
 
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;

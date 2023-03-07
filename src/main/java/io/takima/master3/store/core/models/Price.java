@@ -1,10 +1,11 @@
 package io.takima.master3.store.core.models;
 
 import io.takima.master3.store.article.models.Currency;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+
 @Embeddable
 @Getter
 public class Price {

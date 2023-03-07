@@ -3,11 +3,11 @@ package io.takima.master3.store.customer.services.impl;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
 import io.takima.master3.store.customer.services.CustomerService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 

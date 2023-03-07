@@ -3,10 +3,10 @@ package io.takima.master3.store.seller.service.impl;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
 import io.takima.master3.store.seller.service.SellerService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

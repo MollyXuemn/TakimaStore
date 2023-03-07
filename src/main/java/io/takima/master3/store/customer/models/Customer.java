@@ -1,7 +1,7 @@
 package io.takima.master3.store.customer.models;
 import io.takima.master3.store.core.models.Address;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 
 @Table(name = "customer")
@@ -15,15 +15,19 @@ public class Customer {
     @Convert( converter = Gender.GenderConverter.class )
     Gender gender;
     @Column(name = "firstname")
+    @NotBlank
     String firstName;
     @Column(name = "lastname")
+    @NotBlank
     String lastName;
     @Column(unique = true)
     String email;
     @Column
     @Embedded
+    @NotBlank
     Address address;
     @Column
+    @NotBlank
     String iban;
 
     public Customer(Long id, Gender gender, String firstName, String lastName, String email, Address address, String iban) {
