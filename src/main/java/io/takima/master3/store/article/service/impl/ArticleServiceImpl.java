@@ -48,7 +48,9 @@ public class ArticleServiceImpl implements ArticleService {
     public void delete(long id) throws SQLException {
         articleDao.delete(id);
     };
-
+    public Article findById(long articleId) {
+        return articleDa
+    };
 
     private Article changePrice(Article article){
         Currency currency = article.getPrice().currency;

@@ -15,5 +15,6 @@ public interface ArticleService {
     public void update(Article article);
     public void create(Article article);
     public void delete(long id) throws SQLException;
+    public Article findById(long articleId);
 
 }

@@ -1,5 +1,5 @@
 package io.takima.master3.store.customer.models;
-import io.takima.master3.store.cart.Cart;
+import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.core.models.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

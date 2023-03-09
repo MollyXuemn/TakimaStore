@@ -1,4 +1,4 @@
-package io.takima.master3.store.cart;
+package io.takima.master3.store.cart.models;
 import io.takima.master3.store.article.models.Article;
 import jakarta.persistence.*;
 import java.io.Serializable;
