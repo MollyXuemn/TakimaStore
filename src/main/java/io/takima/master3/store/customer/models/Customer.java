@@ -1,4 +1,5 @@
 package io.takima.master3.store.customer.models;
+import io.takima.master3.store.cart.Cart;
 import io.takima.master3.store.core.models.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,6 +30,16 @@ public class Customer {
     @Column
     @NotBlank
     String iban;
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    Cart cart;
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 
     public Customer(Long id, Gender gender, String firstName, String lastName, String email, Address address, String iban) {
         this.id = id;
@@ -114,6 +125,7 @@ public class Customer {
          String email;
          String iban;
          Address address;
+
 
         public Builder() {
         }

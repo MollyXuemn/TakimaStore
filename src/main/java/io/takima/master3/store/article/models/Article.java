@@ -69,6 +69,30 @@ public class Article {
     public void setProduct(Product product) {
         this.product = product;
     }
+    public String getRef() {
+        return product.getRef();
+    }
+
+    public String getName() {
+        return product.getName();
+    }
+
+    public String getDescription() {
+        return product.getDescription();
+    }
+
+    public String getBrand() {
+        return product.getBrand();
+    }
+
+    public String[] getTags() {
+        return product.getTags();
+    }
+
+    public String getImage() {
+        return product.getImage();
+    }
+
 
     public static Builder builder() {
         return new Builder();

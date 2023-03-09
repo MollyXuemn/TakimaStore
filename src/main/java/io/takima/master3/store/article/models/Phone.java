@@ -22,13 +22,11 @@ public class Phone extends Product{
         this.backCamMpix = phone.backCamMpix;
         this.frontCamMpix = phone.frontCamMpix;
     }
-
     public Phone(Phone phone) {
         this(phone,phone);
     }
 
     public Phone() {
-
     }
 
     public static class Builder {
