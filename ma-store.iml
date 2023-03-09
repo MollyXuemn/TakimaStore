@@ -132,5 +132,6 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:10.1.5" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:8.0.0.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.microjpa:microjpa:1.2.4" level="project" />
   </component>
 </module>

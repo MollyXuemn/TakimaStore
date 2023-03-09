@@ -4,6 +4,7 @@ import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.models.Gender;
 import io.takima.master3.store.customer.persistence.CustomerDao;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
