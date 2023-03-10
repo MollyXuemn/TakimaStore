@@ -17,7 +17,7 @@ stages:
 
 include: /generic-config-template.yml
 
-.backend:build:
+backend:build:
   image: $MAVEN_IMAGE
   stage: build
   extends: .backend_cache_config
@@ -29,10 +29,10 @@ include: /generic-config-template.yml
     - cd $MA_STORE
     - mvn package -DskipTests
 
-.backend:test:
+backend:test:
   image: $MAVEN_IMAGE
   stage: test
-  needs: []
+  needs: [ ]
   services:
     - mysql:8
   variables:
@@ -48,9 +48,9 @@ include: /generic-config-template.yml
   cache:
     policy: pull
 
-.backend:package:
+backend:package:
   extends: .common_package_config
-  needs: ["backend:build"]
+  needs: [ "backend:build" ]
   cache:
     policy: pull
   dependencies:
