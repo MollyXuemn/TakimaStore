@@ -14,11 +14,6 @@ import java.util.Optional;
 public class JpaCustomerDao implements CustomerDao  {
     @PersistenceContext
     private EntityManager em;
-/*    @Autowired
-    public JpaCustomerDao(EntityManager em) {
-        this.em = em;
-    }*/
-
     @Override
     public Optional<Customer> findById(long id) {
         return Optional.ofNullable(em.find(Customer.class, id)); //Search for an entity of the specified class and primary key
@@ -53,7 +48,6 @@ public class JpaCustomerDao implements CustomerDao  {
                 .setFirstResult(offset)
                 .setMaxResults(limit)
                 .getResultList();
-
     }
 
     /**

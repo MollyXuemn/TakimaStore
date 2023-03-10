@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  ma-store:
+    image: registry.master3.takima.io/mxue1/takima-store/app
+    networks:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: on-failure
   db:
     image: postgres:15.2-alpine
     restart: unless-stopped
@@ -8,27 +19,18 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-madmin}
       - POSTGRES_USER=${DATABASE_USER:-madmin}
-      - POSTGRES_DB=${DATABASE_NAME:-ma_store_db}
+      - POSTGRES_DB=${DATABASE_DB:-ma_store_db}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}'",
+          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}'",
         ]
       interval: 10s
       timeout: 3s
       retries: 3
-
-#  flyway-db-webadmin:
-#    image: adminer
-#    container_name: ma-db-webadmin
-#    restart: always
-#    ports:
-#      - 28080:8080
-#    networks:
-#      - db
 
   flyway:
     image: flyway/flyway:9-alpine
@@ -36,7 +38,7 @@ services:
     volumes:
       - ./db:/flyway/sql:ro
     environment:
-      FLYWAY_URL: ${DATABASE_URL}
+      FLYWAY_URL: ${MA_DB_URL}
       FLYWAY_USER: ${DATABASE_USER}
       FLYWAY_PASSWORD: ${DATABASE_PASSWORD}
     depends_on:

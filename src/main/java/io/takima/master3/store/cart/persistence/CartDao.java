@@ -10,7 +10,7 @@ public interface CartDao {
 
     Optional<Cart> getForCustomer(Customer customer);
 
-    void create(Cart cart);
+    Cart create(Cart cart);
 
-    void update(Cart cart);
+    Cart update(Cart cart);
 }

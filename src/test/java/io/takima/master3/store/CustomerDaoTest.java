@@ -12,8 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,14 +41,14 @@ class CustomerDaoTest {
             }
 
             // TODO uncomment when in milestone hibernate-02.
-//            @Test
-//            @DisplayName("should return the customer with its cart")
-//            void shouldReturnCustomerCart() {
-//                var customer = customerDao.findById(customerId);
-//
-//                assertTrue(customer.isPresent());
-//                assertNotNull(customer.get().getCart());
-//            }
+            @Test
+            @DisplayName("should return the customer with its cart")
+            void shouldReturnCustomerCart() {
+                var customer = customerDao.findById(customerId);
+
+                assertTrue(customer.isPresent());
+                assertNotNull(customer.get().getCart());
+            }
         }
         @Nested
         @DisplayName("given an id that does not exist")

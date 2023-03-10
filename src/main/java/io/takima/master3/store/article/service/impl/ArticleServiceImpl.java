@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -27,10 +26,10 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> findByName(String name){
         return articleDao.findByName(name);
     }
-    public Optional<Article> findById(long id){
+   /* public Optional<Article> findById(long id){
         return articleDao.findById(id);
     };
-
+*/
     public List<Article> findBySellerId(long sellerId) {
         return articleDao.findBySellerId(sellerId);
     };
@@ -49,7 +48,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleDao.delete(id);
     };
     public Article findById(long articleId) {
-        return articleDa
+        return articleDao.findById(articleId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", articleId)));
     };
 
     private Article changePrice(Article article){

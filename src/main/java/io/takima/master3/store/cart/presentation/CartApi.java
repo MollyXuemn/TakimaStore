@@ -1,8 +1,9 @@
 package io.takima.master3.store.cart.presentation;
 
-import io.takima.master3.ma.article.services.ArticleService;
-import io.takima.master3.ma.cart.models.Cart;
-import io.takima.master3.ma.cart.services.CartService;
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.cart.models.Cart;
+import io.takima.master3.store.cart.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.MediaType;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,20 +31,28 @@ public class CartApi {
     @ResponseBody
     @GetMapping(value = "/getCart", produces = "application/json")
     public Cart getCart(@RequestParam() long id) {
-        // TODO implement
+        return cartService.findById(id);
     }
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody
     @GetMapping(value = "/addCartArticle", produces = "application/json")
     public Cart addCartArticle(@RequestParam long cartId, long articleId, int quantity) {
-        // TODO implement
+        var article = articleService.findById(articleId);
+        var cart = cartService.findById(cartId);
+        cart.addArticle(article,quantity);
+        cartService.save(cart);
+        return cart;
     }
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody
     @GetMapping(value = "/deleteCartArticle", produces = "application/json")
     public Cart deleteCartArticle(@RequestParam() long cartId, long articleId, int quantity) {
-        // TODO implement
+        var article = articleService.findById(articleId);
+        var cart = cartService.findById(cartId);
+        cart.removeArticle(article, quantity);
+        cartService.save(cart);
+        return cart;
     }
 }

@@ -2,6 +2,7 @@ package io.takima.master3.store.cart.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.models.Product;
 import io.takima.master3.store.customer.models.Customer;
 import jakarta.persistence.*;
 
@@ -104,10 +105,8 @@ public class Cart {
     @PreUpdate
     @PrePersist
     private void updateDate() {
-        // TODO
         this.date = LocalDateTime.now();
     }
-
 
     public Cart(Long id, LocalDateTime date, List<Article> articles, Customer customer) {
         this.id = id;
@@ -115,7 +114,12 @@ public class Cart {
         this.articles = (Map<Article, Integer>) articles;
         this.customer = customer;
     }
-
+    public Cart(Cart c) {
+        this.id = c.id;
+        this.date = c.date;
+        this.articles = (Map<Article, Integer>) c.articles;
+        this.customer = c.customer;
+    }
     public Long getId() {
         return id;
     }
@@ -132,12 +136,39 @@ public class Cart {
         this.date = date;
     }
 
-
     public Customer getCustomer() {
         return customer;
     }
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public static class Builder {
+        private Cart c = new Cart();
+
+        public Cart.Builder id(Long id) {
+            this.c.id = id;
+            return this;
+        }
+
+        public Cart.Builder date(LocalDateTime date) {
+            this.c.date = date;
+            return this;
+        }
+
+        public Cart.Builder articles(Map<Article, Integer> articles) {
+            this.c.articles = articles;
+            return this;
+        }
+
+        public Cart.Builder customer(Customer customer) {
+            this.c.customer = customer;
+            return this;
+        }
+
+        public Cart build() {
+            return new Cart(c);
+        }
+
     }
 }
