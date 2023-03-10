@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   ma-store:
-    image: registry.master3.takima.io/mxue1/takima-store
+    image: registry.master3.takima.io/mxue1/takima-store/app
     networks:
       - db
     depends_on:
@@ -19,14 +19,14 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-madmin}
       - POSTGRES_USER=${DATABASE_USER:-madmin}
-      - POSTGRES_DB=${DATABASE_NAME:-ma-store-db}
+      - POSTGRES_DB=${DATABASE_DB:-ma_store_db}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}'",
+          "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}'",
         ]
       interval: 10s
       timeout: 3s
