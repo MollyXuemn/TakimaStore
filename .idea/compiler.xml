@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="takima-store" options="--add-modules java.sql" />
+      <module name="takima-store" options="" />
     </option>
   </component>
 </project>
