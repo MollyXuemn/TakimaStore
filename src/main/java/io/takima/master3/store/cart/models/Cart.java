@@ -2,7 +2,6 @@ package io.takima.master3.store.cart.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.takima.master3.store.article.models.Article;
-import io.takima.master3.store.article.models.Product;
 import io.takima.master3.store.customer.models.Customer;
 import jakarta.persistence.*;
 
@@ -125,7 +124,7 @@ public class Cart {
         this.date = LocalDateTime.now();
     }
 
-    public Cart(Long id, LocalDateTime date, List<Article> articles, Customer customer) {
+    public Cart(LocalDateTime date, Customer customer) {
         this.id = id;
         this.date = date;
         this.articles = (Map<Article, Integer>) articles;

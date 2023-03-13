@@ -29,11 +29,12 @@ public class JpaCartDao implements CartDao {
      * @return the existing cart , if found, or a newly created cart.
      */
     public Optional<Cart> getForCustomer(Customer customer){
-        return em.createQuery(
-                        "SELECT DISTINCT c FROM Cart c JOIN FETCH c.customer LEFT OUTER JOIN FETCH c.cartArticles a WHERE c.customer = :customer", Cart.class)
-                .setParameter("customer ",customer)
-                .getResultList()
-                .stream().findFirst();
+        Cart cart = customer.getCart();
+        if (cart == null) {
+            return Optional.empty();
+        }
+        return findById(cart.getId());
+
     };
 
     public Cart create(Cart cart) {

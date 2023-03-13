@@ -12,7 +12,7 @@ public class Article {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
         private Long id;
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         private Seller seller;
         @Column
         private int availableQuantity;

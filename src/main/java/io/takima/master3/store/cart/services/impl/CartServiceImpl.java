@@ -9,7 +9,10 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -23,15 +26,17 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", customerId)));
 
         // get cart by customer id
-        return cartDao.getForCustomer(customer).orElseGet(() -> {
-            // get customer the cart belongs to
-            // if customer has no cart, assign a cart to it.
-            Cart c = new Cart();
-            customer.setCart(c);
-            customerDao.update(customer);
-            return c;
-        });
-
+        Optional<Cart> cart = cartDao.getForCustomer(customer);
+        if (cart.isPresent()) {
+            return cart.get();
+        }
+        else {
+            Cart newCart = new Cart(LocalDateTime.now(), customer);
+            customer.setCart(newCart);
+            cartDao.create(newCart);
+            cart = cartDao.getForCustomer(customer);
+            return cart.get();
+        }
     };
 
     @Override
