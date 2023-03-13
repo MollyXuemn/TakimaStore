@@ -135,5 +135,7 @@
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.microjpa:microjpa:1.2.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.ttddyy:datasource-proxy:1.8.1" level="project" />
+    <orderEntry type="library" name="Maven: com.hazelcast:hazelcast:5.1.5" level="project" />
+    <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-hibernate53:5.0.0" level="project" />
   </component>
 </module>

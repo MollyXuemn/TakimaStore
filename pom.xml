@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>19</java.version>
 		<datasource-proxy.version>1.8.1</datasource-proxy.version>
+		<hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -98,6 +99,15 @@
 			<artifactId>datasource-proxy</artifactId>
 			<scope>test</scope>
 			<version>${datasource-proxy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId> <!-- the hazelcast core -->
+		</dependency>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-hibernate53</artifactId>
+			<version>${hazelcast-hibernate53.version}</version>
 		</dependency>
 
 

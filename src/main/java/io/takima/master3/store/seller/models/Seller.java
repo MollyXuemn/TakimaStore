@@ -10,18 +10,15 @@ import java.util.Objects;
 
 import static jakarta.persistence.EnumType.STRING;
 
-@Table(name = "seller")
+@Cacheable
 @Entity
 public class Seller {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seller_id_seq")
         Long id;
-        @Column
         String name;
-        @Column
         @Embedded
         Address address;
-        @Column
         String iban;
         @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
         @JsonIgnore
