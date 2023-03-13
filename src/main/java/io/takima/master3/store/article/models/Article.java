@@ -4,6 +4,8 @@ import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.seller.models.Seller;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Table(name = "article")
 @Entity
 public class Article {
@@ -20,6 +22,20 @@ public class Article {
         @ManyToOne
         private Product product;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Article article = (Article) o;
+
+        return Objects.equals(id, article.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 
     public Article(Long id, Seller seller, Product product, int availableQuantity, Price price) {
         this.id = id;

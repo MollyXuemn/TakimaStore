@@ -34,6 +34,19 @@ public class Cart {
     private Customer customer;
     @Transient
     private Map<Article, Integer> articles;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return Objects.equals(id, cart.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 
     // will only get called by hibernate on load
     private synchronized void setCartArticles(List<CartArticle> cartArticles) {
