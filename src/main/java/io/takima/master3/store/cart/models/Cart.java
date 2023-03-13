@@ -21,7 +21,7 @@ public class Cart {
     private LocalDateTime date;
     @Access(AccessType.PROPERTY)
     @OneToMany(                                                                  // by this
-            fetch = FetchType.LAZY,                                          //
+            fetch = FetchType.EAGER,                                         //
             mappedBy = "cart",                                               //
             cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
