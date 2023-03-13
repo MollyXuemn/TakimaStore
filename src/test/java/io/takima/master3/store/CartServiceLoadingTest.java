@@ -1,7 +1,7 @@
 package io.takima.master3.store;
 
-import io.takima.master3.store.cart.services.CartService;
-import io.takima.master3.store.core.utils.DatasourceSpy;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.takima.master3.store.cart.services.CartService;
+import io.takima.master3.store.core.utils.DatasourceSpy;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -28,7 +29,6 @@ class CartServiceLoadingTest {
     void resetSafeGuard() {
         this.spy.reset();
     }
-
 
     @Test
     @DisplayName("should issue no more than 1 query method 'findById(Long id)' when adding an article to the cart")

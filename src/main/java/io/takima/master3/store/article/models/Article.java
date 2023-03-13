@@ -1,31 +1,39 @@
 package io.takima.master3.store.article.models;
 
-import io.takima.master3.store.core.models.Price;
-import io.takima.master3.store.seller.models.Seller;
-import jakarta.persistence.*;
-
 import java.util.Objects;
 
-@Table(name = "article")
+import io.takima.master3.store.core.models.Price;
+import io.takima.master3.store.seller.models.Seller;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
 @Entity
 public class Article {
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
-        private Long id;
-        @ManyToOne(fetch = FetchType.LAZY)
-        private Seller seller;
-        @Column
-        private int availableQuantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_seq")
+    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Seller seller;
+    @Column
+    private int availableQuantity;
 
-        @Embedded
-        private Price price;
-        @ManyToOne
-        private Product product;
+    @Embedded
+    private Price price;
+    @ManyToOne
+    private Product product;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Article article = (Article) o;
 
@@ -51,9 +59,11 @@ public class Article {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public Price getPrice() {
         return price;
     }
@@ -85,6 +95,7 @@ public class Article {
     public void setProduct(Product product) {
         this.product = product;
     }
+
     public String getRef() {
         return product.getRef();
     }
@@ -108,7 +119,6 @@ public class Article {
     public String getImage() {
         return product.getImage();
     }
-
 
     public static Builder builder() {
         return new Builder();

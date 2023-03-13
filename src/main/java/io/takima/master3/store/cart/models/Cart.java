@@ -1,14 +1,29 @@
 package io.takima.master3.store.cart.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.takima.master3.store.article.models.Article;
-import io.takima.master3.store.customer.models.Customer;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.customer.models.Customer;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderColumn;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Cart {
@@ -18,25 +33,21 @@ public class Cart {
 
     @Column
     private LocalDateTime date;
-    @Access(AccessType.PROPERTY)
-    @OneToMany(                                                                  // by this
-            fetch = FetchType.EAGER,                                         //
-            mappedBy = "cart",                                               //
-            cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
     private List<CartArticle> cartArticles;
-
 
     @JsonIgnore
     @JoinColumn(name = "customer_id")
     @OneToOne
     private Customer customer;
-    @Transient
-    private Map<Article, Integer> articles;
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Cart cart = (Cart) o;
         return Objects.equals(id, cart.id);
     }
@@ -46,75 +57,47 @@ public class Cart {
         return Objects.hash(id);
     }
 
-
-    // will only get called by hibernate on load
-    private synchronized void setCartArticles(List<CartArticle> cartArticles) {
-        this.cartArticles = cartArticles;
-    }
-
-    // will only get called by hibernate on save
-    private synchronized List<CartArticle> getCartArticles() {
-        if (articles != null) {
-                // TODO use the stream api to convert from the Map<Article, Integer> to the List<CartArticle>
-            this.cartArticles.clear();
-            this.cartArticles = articles.entrySet()
-                                .stream()
-                                .map(entry -> new CartArticle(this, entry.getKey(), entry.getValue()))
-                                .collect(Collectors.toList());
-
-            articles = null;
-        }
-
-        return cartArticles;
-    }
-
-    public synchronized Map<Article, Integer> getArticles() {
-        if (this.cartArticles == null) {
-            return null;
-        }
-        if (this.articles == null) {
-            this.articles = new LinkedHashMap<>();
-            this.cartArticles.stream().filter(Objects::nonNull)
-                    .forEach(cartArticle -> this.articles.put(cartArticle.getArticle(), cartArticle.getQuantity()));
-        }
-        return this.articles;
-
-    }
-
     public Cart() {
     }
-    public void addArticle(Article article) {
-        addArticle(article,1);
+
+    public Map<Article, Integer> getArticles() {
+        return this.cartArticles.stream()
+                .collect(Collectors.toMap(ca -> ca.getArticle(), ca -> ca.getQuantity()));
     }
+
+    public void addArticle(Article article) {
+        addArticle(article, 1);
+
+    }
+
     public void addArticle(Article article, int quantity) {
-        getArticles().merge(article, quantity, Integer::sum);
-//        compute(article, (a, qty) -> {
-//            if (qty == null) {
-//                qty = 0;
-//            }
-//            return qty + quantity;
-//        });
+
+        // if cartarticle for this article already exists
+        Optional<CartArticle> existingCa = cartArticles.stream().filter(ca -> ca.getArticle().equals(article))
+                .findAny();
+        if (existingCa.isPresent()) {
+            existingCa.get().setQuantity(existingCa.get().getQuantity() + quantity);
+        } else {
+            this.cartArticles.add(new CartArticle(this, article, quantity));
+        }
     }
 
     public void removeArticle(Article article) {
-        int currentQty = Optional.ofNullable(getArticles().get(article))
-                .orElseThrow(() -> new NoSuchElementException(String.format("Cart does not have article %s", article.getName())));
-        removeArticle(article, currentQty);
+        this.removeArticle(article, 1);
     }
 
     public void removeArticle(Article article, int quantity) {
-        int currentQty = Optional.ofNullable(getArticles().get(article))
-                .orElseThrow(() -> new NoSuchElementException(String.format("Cart does not have article %s", article.getName())));
-            currentQty -= quantity;
 
-        if (currentQty < 0) {
-            currentQty = 0;
-        }
+        // if cartarticle for this article already exists
+        Optional<CartArticle> existingCa = cartArticles.stream().filter(ca -> ca.getArticle().equals(article))
+                .findAny();
+        if (existingCa.isPresent()) {
 
-        if (currentQty == 0) {
-            getArticles().remove(article);
-        } else {
-            getArticles().put(article, currentQty);
+            if (existingCa.get().getQuantity() <= quantity) {
+                cartArticles.remove(existingCa.get());
+            } else {
+                existingCa.get().setQuantity(existingCa.get().getQuantity() - quantity);
+            }
         }
     }
 
@@ -127,15 +110,15 @@ public class Cart {
     public Cart(LocalDateTime date, Customer customer) {
         this.id = id;
         this.date = date;
-        this.articles = (Map<Article, Integer>) articles;
         this.customer = customer;
     }
+
     public Cart(Cart c) {
         this.id = c.id;
         this.date = c.date;
-        this.articles = (Map<Article, Integer>) c.articles;
         this.customer = c.customer;
     }
+
     public Long getId() {
         return id;
     }
@@ -155,6 +138,7 @@ public class Cart {
     public Customer getCustomer() {
         return customer;
     }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
@@ -172,11 +156,6 @@ public class Cart {
             return this;
         }
 
-        public Cart.Builder articles(Map<Article, Integer> articles) {
-            this.c.articles = articles;
-            return this;
-        }
-
         public Cart.Builder customer(Customer customer) {
             this.c.customer = customer;
             return this;
@@ -187,4 +166,5 @@ public class Cart {
         }
 
     }
+
 }
