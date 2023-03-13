@@ -5,7 +5,6 @@ import io.takima.master3.store.customer.persistence.CustomerDao;
 import io.takima.master3.store.customer.services.CustomerService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
