@@ -33,7 +33,7 @@ public class CartServiceImpl implements CartService {
         });
 
     };
-    @Transactional
+
     @Override
     public Cart findById(long id) {
         return cartDao.findById(id)

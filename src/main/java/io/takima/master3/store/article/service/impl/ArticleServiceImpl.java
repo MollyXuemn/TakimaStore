@@ -10,6 +10,7 @@ import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
 import io.takima.master3.store.seller.service.impl.SellerServiceImpl;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -20,6 +21,12 @@ import java.util.NoSuchElementException;
 public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
     SellerServiceImpl sellerService;
+
+    @Autowired
+    public ArticleServiceImpl(ArticleDao articleDao, SellerServiceImpl sellerService) {
+        this.articleDao = articleDao;
+    }
+
     public List<Article> findAll(){
         return articleDao.findAll();
     };
@@ -47,9 +54,9 @@ public class ArticleServiceImpl implements ArticleService {
     public void delete(long id) throws SQLException {
         articleDao.delete(id);
     };
-    public Article findById(long articleId) {
-        return articleDao.findById(articleId)
-                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", articleId)));
+    public Article findById(long id) {
+        return articleDao.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", id)));
     };
 
     private Article changePrice(Article article){

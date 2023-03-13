@@ -57,13 +57,16 @@ public class Cart {
     }
 
     public synchronized Map<Article, Integer> getArticles() {
+        if (this.cartArticles == null) {
+            return null;
+        }
         if (this.articles == null) {
             this.articles = new LinkedHashMap<>();
-            this.articles = cartArticles.stream()
-                    .collect(Collectors.toMap(CartArticle::getArticle, CartArticle::getQuantity, (k1,k2)-> k1));
-
+            this.cartArticles.stream().filter(Objects::nonNull)
+                    .forEach(cartArticle -> this.articles.put(cartArticle.getArticle(), cartArticle.getQuantity()));
         }
         return this.articles;
+
     }
 
     public Cart() {
@@ -72,12 +75,13 @@ public class Cart {
         addArticle(article,1);
     }
     public void addArticle(Article article, int quantity) {
-        getArticles().compute(article, (a, qty) -> {
-            if (qty == null) {
-                qty = 0;
-            }
-            return qty + quantity;
-        });
+        getArticles().merge(article, quantity, Integer::sum);
+//        compute(article, (a, qty) -> {
+//            if (qty == null) {
+//                qty = 0;
+//            }
+//            return qty + quantity;
+//        });
     }
 
     public void removeArticle(Article article) {

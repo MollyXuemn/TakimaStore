@@ -1,6 +1,5 @@
 package io.takima.master3.store.cart.presentation;
 
-import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.cart.services.CartService;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,7 +38,7 @@ public class CartApi {
         var article = articleService.findById(articleId);
         var cart = cartService.findById(cartId);
         cart.addArticle(article,quantity);
-        cartService.save(cart);
+        //cartService.save(cart);
         return cart;
     }
 
