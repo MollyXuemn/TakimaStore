@@ -25,7 +25,7 @@ public class JpaArticleDao implements ArticleDao {
 
         query.setParameter("name", pageSearch.getSearch());
         countQuery.setParameter("name", pageSearch.getSearch());
-        query.setFirstResult(pageSearch.getOffset());
+        query.setFirstResult((int) pageSearch.getOffset());
         query.setMaxResults(pageSearch.getLimit());
         List<Article> content = query.getResultList();
         var totalElements = countQuery.getFirstResult();

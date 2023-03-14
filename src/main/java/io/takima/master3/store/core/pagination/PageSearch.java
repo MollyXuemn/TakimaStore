@@ -1,13 +1,18 @@
 package io.takima.master3.store.core.pagination;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-public class PageSearch<T> {
+import java.util.Objects;
+
+public class PageSearch<T> implements Pageable{
     private int limit;
     private int offset;
     private String search ;
-    private Sort sort;
+    private Sort sort = Sort.unsorted();
 
     public PageSearch(int limit, int offset, String search, Sort sort) {
+        super();
         this.limit = limit;
         this.offset = offset;
         this.search = search;
@@ -23,22 +28,54 @@ public class PageSearch<T> {
         );
     }
 
-    public PageSearch() {
-
-    }
-
     public String getSearch() {
         return search;
     }
     public int getLimit() {
         return limit;
     }
-    public int getOffset() {
-        return offset;
+
+    @Override
+    public int getPageNumber() {
+        return 0;
     }
 
+    @Override
+    public int getPageSize() {
+        return 0;
+    }
+
+    public long getOffset() {
+        return offset;
+    }
+    @Override
     public Sort getSort() {
         return sort;
+    }
+
+    @Override
+    public Pageable next() {
+        return null;
+    }
+
+    @Override
+    public Pageable previousOrFirst() {
+        return null;
+    }
+
+    @Override
+    public Pageable first() {
+        return null;
+    }
+
+    @Override
+    public Pageable withPage(int pageNumber) {
+        return null;
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        return false;
     }
 
 
@@ -46,7 +83,7 @@ public class PageSearch<T> {
         private int limit;
         private int offset;
         private String search ;
-        private Sort sort;
+        private Sort sort=Sort.unsorted();
 
         public Builder() {
         }
@@ -72,5 +109,18 @@ public class PageSearch<T> {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        PageSearch<?> that = (PageSearch<?>) o;
+
+        return offset == that.offset && limit == that.limit && Objects.equals(search, that.search);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(offset, limit, search);
+    }
 }

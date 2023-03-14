@@ -4,7 +4,6 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
-import io.takima.master3.store.core.pagination.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,8 +27,8 @@ public class ArticleApi {
     public PageResponse<Article> getAllArticles(
             @RequestParam(required = false,defaultValue = "20") int offset,
             @RequestParam(required = false,defaultValue = "10") int limit,
-            @RequestParam(required = false,defaultValue = "10") String search,
-            @RequestParam(required = false,defaultValue = "DESC") Sort sort
+            @RequestParam(required = false,defaultValue = "") String search,
+            @SortDefault Sort sort
     ) {
 
         return articleService.findAll(new PageSearch
