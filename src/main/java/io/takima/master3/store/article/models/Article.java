@@ -18,11 +18,9 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_seq")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Seller seller;
-    @Column
     private int availableQuantity;
-
     @Embedded
     private Price price;
     @ManyToOne

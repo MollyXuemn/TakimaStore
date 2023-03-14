@@ -1,19 +1,25 @@
 package io.takima.master3.store.core.models;
 
 
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
 
 @Embeddable
 public class Address {
+    @NotBlank
     private String street;
+    @NotBlank
     private String city;
+    @NotBlank
     private String zipcode;
-    public String country;
+    @Convert(converter = Country.CountryConverter.class)
+    public Country country;
 
     public Address() {
     }
 
-    public Address(String street, String city, String zipcode, String country) {
+    public Address(String street, String city, String zipcode, Country country) {
         this.street = street;
         this.city = city;
         this.zipcode = zipcode;
@@ -44,11 +50,11 @@ public class Address {
         this.zipcode = zipcode;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
     public static Address builder() {
@@ -58,9 +64,42 @@ public class Address {
         return this;
     }
 
-    public Address country(String country) {
+    public Address country(Country country) {
         this.country = country;
         return this;
+    }
+    public static final class Builder {
+        private String street;
+        private String city;
+        private String zipcode;
+        private Country country;
+
+        public Builder() {
+        }
+
+        public Builder street(String street) {
+            this.street = street;
+            return this;
+        }
+
+        public Builder city(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public Builder zipCode(String zipcode) {
+            this.zipcode = zipcode;
+            return this;
+        }
+
+        public Builder country(Country country) {
+            this.country = country;
+            return this;
+        }
+
+        public Address build() {
+            return new Address(this.street, this.city, this.zipcode, this.country);
+        }
     }
 
 

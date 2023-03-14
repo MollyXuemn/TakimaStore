@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ArticleService {
-    public List<Article> findAll();
-    public List<Article> findByName(String name);
-    public Article findById(long articleId);
-    public List<Article> findBySellerId(long sellerId);
-    public void update(Article article);
-    public void create(Article article);
-    public void delete(long id) throws SQLException;
+     List<Article> findAll(int offset,int limit);
+     List<Article> findByName(String name);
+     Article findById(long articleId);
+     List<Article> findBySellerId(long sellerId);
+     void update(Article article);
+     void create(Article article);
+     void delete(long id) throws SQLException;
 
 
 }

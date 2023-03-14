@@ -1,7 +1,7 @@
 package io.takima.master3.store.core.models;
 
-import io.takima.master3.store.article.models.Currency;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
@@ -9,10 +9,10 @@ import lombok.Getter;
 @Embeddable
 @Getter
 public class Price {
-    @Column
-    public final Currency currency;
+    @Convert(converter = Currency.CurrencyConverter.class)
+    public Currency currency;
     @Column(name = "price")
-    public final double amount;
+    public double amount;
 
     public Price() {
         this(0.0);
@@ -33,6 +33,23 @@ public class Price {
         this.currency = Currency.fromSymbol(currency);
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+
+
     public Price convertTo(Currency currency) {
         if (this.currency.equals(currency)) {
             return this;
@@ -44,5 +61,28 @@ public class Price {
     public String toString() {
         return currency.symbol + amount;
     }
+
+    public static final class Builder {
+        private double amount;
+        private Currency currency;
+
+        public Builder() {
+        }
+
+        public Builder amount(double amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public Builder currency(Currency currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public Price build() {
+            return new Price(this.amount, this.currency);
+        }
+    }
 }
+
 

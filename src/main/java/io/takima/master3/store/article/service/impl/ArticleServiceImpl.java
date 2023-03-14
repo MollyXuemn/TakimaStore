@@ -1,14 +1,10 @@
 package io.takima.master3.store.article.service.impl;
 
 import io.takima.master3.store.article.models.Article;
-import io.takima.master3.store.article.models.Currency;
-import io.takima.master3.store.core.models.Price;
-import io.takima.master3.store.article.service.ArticleService;
-import io.takima.master3.store.money.MoneyConversion;
-import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.article.persistence.ArticleDao;
-import io.takima.master3.store.money.MoneyConversionFactory;
-import io.takima.master3.store.seller.service.impl.SellerServiceImpl;
+import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.core.models.Currency;
+import io.takima.master3.store.core.models.Price;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +16,14 @@ import java.util.NoSuchElementException;
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
-    SellerServiceImpl sellerService;
 
     @Autowired
-    public ArticleServiceImpl(ArticleDao articleDao, SellerServiceImpl sellerService) {
+    public ArticleServiceImpl(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
 
-    public List<Article> findAll(){
-        return articleDao.findAll();
+    public List<Article> findAll(int offset,int limit){
+        return articleDao.findAll( offset, limit);
     };
     public List<Article> findByName(String name){
         return articleDao.findByName(name);
@@ -60,13 +55,11 @@ public class ArticleServiceImpl implements ArticleService {
     };
 
     private Article changePrice(Article article){
-        Currency currency = article.getPrice().currency;
-        Price money = new Price(article.getPrice().amount, currency);
-        Seller seller = sellerService.findById(article.getSeller().getId()).orElseThrow(() -> new NoSuchElementException("seller not found"));
 
-        String sellerCurrency = MoneyConversionFactory.getCurrency(seller.getAddress().country);
-        MoneyConversion moneyconversion = MoneyConversionFactory.getCurrencyConversion(Currency.valueOf(sellerCurrency));
-        Price newPrice = moneyconversion.convert(money);
+        Currency sellerCurrency = article.getSeller().getAddress().getCountry().currency;
+
+         Price newPrice = article.getPrice().convertTo(sellerCurrency);
+
 
         return Article.builder()
                 .id(article.getId())

@@ -1,10 +1,10 @@
-package io.takima.master3.store.article.models;
+package io.takima.master3.store.core.models;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.*;
 
-public enum Currency {
+public enum     Currency {
     DOLLAR("USD", 1.0),
     EURO("EUR", 0.88),
     JPY("JPY", 113.22),

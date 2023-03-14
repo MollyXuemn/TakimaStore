@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.*;
 
  public interface ArticleDao {
-    List<Article> findAll();
+    List<Article> findAll(int offset,int limit);
     List<Article> findByName(String name);
     Optional<Article> findById(long id);
 

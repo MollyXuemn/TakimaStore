@@ -8,16 +8,20 @@ import org.springframework.stereotype.Repository;
 import java.sql.SQLException;
 import java.util.*;
 
+
 @Repository
 public class JpaArticleDao implements ArticleDao {
     @PersistenceContext
     private EntityManager em;
 
-    public List<Article> findAll(){
-        return em.createQuery("SELECT a FROM Article a", Article.class).getResultList();
+    public List findAll(int offset,int limit){
+        return em.createQuery("select a FROM Article a", Article.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
     public List<Article> findByName(String name){
-        return em.createQuery("SELECT a FROM Article a WHERE a.name = :name", Article.class)
+        return em.createQuery("SELECT a FROM Article a WHERE a.product.name = :name", Article.class)
                 .setParameter("name",name)
                 .getResultList();
     }
