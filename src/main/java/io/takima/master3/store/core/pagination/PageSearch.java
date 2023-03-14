@@ -1,11 +1,8 @@
 package io.takima.master3.store.core.pagination;
 
 
-public class PageSearch {
-
+public class PageSearch<T> {
     private int limit;
-
-
     private int offset;
     private String search ;
     private Sort sort;
@@ -24,6 +21,10 @@ public class PageSearch {
             pageSearch.search,
             pageSearch.sort
         );
+    }
+
+    public PageSearch() {
+
     }
 
     public String getSearch() {
@@ -50,23 +51,23 @@ public class PageSearch {
         public Builder() {
         }
 
-        public PageSearch.Builder limit(long limit) {
-            this.limit = Builder.this.limit;
+        public PageSearch.Builder limit(int limit) {
+            this.limit = limit;
             return this;
         }
-        public PageSearch.Builder offset(long offset) {
-            this.offset = Builder.this.offset;
+        public PageSearch.Builder offset(int offset) {
+            this.offset = offset;
             return this;
         }
         public PageSearch.Builder search(String search) {
-            this.search = Builder.this.search;
+            this.search = search;
             return this;
-        }public PageSearch.Builder sort(long sort) {
-            this.sort = Builder.this.sort;
+        }public PageSearch.Builder sort(Sort sort) {
+            this.sort = sort;
             return this;
         }
         public PageSearch build() {
-            return new PageSearch(this.limit, this.offset, this.search, this.sort);
+            return new PageSearch<T>(this.limit, this.offset, this.search, this.sort);
         }
     }
 

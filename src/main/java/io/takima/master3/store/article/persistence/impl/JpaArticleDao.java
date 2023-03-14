@@ -5,8 +5,8 @@ import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import java.sql.SQLException;
 import java.util.*;
@@ -19,8 +19,9 @@ public class JpaArticleDao implements ArticleDao {
 
     @Override
     public PageResponse<Article> findAll(PageSearch pageSearch) {
-        var query = em.createQuery("SELECT a FROM Article a WHERE a.product.name LIKE :name", Article.class);
+        TypedQuery query = em.createQuery("SELECT a FROM Article a WHERE LOWER(a.product.name) LIKE LOWER(CONCAT('%', :name, '%'))", Article.class);
         var countQuery = em.createQuery("SELECT COUNT(a) FROM Article a WHERE a.product.name LIKE :name", Integer.class);
+
 
         query.setParameter("name", pageSearch.getSearch());
         countQuery.setParameter("name", pageSearch.getSearch());
@@ -28,10 +29,8 @@ public class JpaArticleDao implements ArticleDao {
         query.setMaxResults(pageSearch.getLimit());
         List<Article> content = query.getResultList();
         var totalElements = countQuery.getFirstResult();
-
-        return new PageResponse<>(
-                pageSearch, content, totalElements
-        );
+        PageResponse<Article> pageResponse = new PageResponse<Article>(pageSearch, content,totalElements);
+        return pageResponse;
     }
 
     public List<Article> findByName(String name){
@@ -43,13 +42,26 @@ public class JpaArticleDao implements ArticleDao {
         return Optional.ofNullable(em.find(Article.class, id));
     };
 
-    public List<Article> findBySellerId(long sellerId) {
-        return em.createQuery("SELECT a FROM Article a JOIN a.seller WHERE a.seller.id = :id", Article.class)
-                .setParameter("id",sellerId)
-                .getResultList();
+    public PageResponse<Article> findBySellerId(long sellerId) {
+        TypedQuery query = em.createQuery("SELECT a FROM Article a JOIN a.seller WHERE a.seller.id = :id", Article.class);
+        query.setParameter("id",sellerId);
+        List<Article> content = query.getResultList();
+        return new PageResponse(content);
+
 
     };
+    public long count(PageSearch pageSearch){
+        final String jpql = "SELECT a FROM Article a WHERE LOWER(a.product.name) LIKE LOWER(CONCAT('%', :name, '%')) ORDER BY a.product.name ";
+        TypedQuery<Article> query = em.createQuery(jpql, Article.class);
+        query.setParameter("name", pageSearch.getSearch());
 
+        List<Article> content = query.getResultList();
+        PageResponse<Article> pageResponse = new PageResponse<>(content);
+        pageResponse.setTotalElements(content.size());
+
+        return pageResponse.getTotalElements();
+
+    };
     public Article update(Article article){
         Long articleId = article.getId();
         Optional<Article> optionalArticle = findById(articleId);

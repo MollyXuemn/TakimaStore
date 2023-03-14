@@ -7,13 +7,14 @@ import io.takima.master3.store.core.pagination.PageSearch;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
+
 
 public interface ArticleService {
      PageResponse<Article> findAll(PageSearch pageSearch);
+     long count(PageSearch<Article> pageSearch);
      List<Article> findByName(String name);
      Article findById(long articleId);
-     List<Article> findBySellerId(long sellerId);
+     PageResponse<Article> findBySellerId(long sellerId);
      void update(Article article);
      void create(Article article);
      void delete(long id) throws SQLException;

@@ -11,11 +11,11 @@ import java.util.*;
  public interface ArticleDao {
     //long count(PageSearch);
     PageResponse<Article> findAll(PageSearch pageSearch);
-
+    long count(PageSearch page);
     List<Article> findByName(String name);
     Optional<Article> findById(long id);
 
-    List<Article> findBySellerId(long sellerId);
+    PageResponse<Article> findBySellerId(long sellerId);
 
     Article update(Article article);
     Article create(Article article);

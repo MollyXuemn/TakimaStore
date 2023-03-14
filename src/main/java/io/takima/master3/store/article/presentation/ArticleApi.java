@@ -4,7 +4,9 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.core.pagination.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +28,19 @@ public class ArticleApi {
     @ResponseBody
     @GetMapping(value = "/getAllArticles",  produces = "application/json")
     public PageResponse<Article> getAllArticles(
-                                        @RequestParam(required = false,defaultValue = "") PageSearch pageSearch
-                                        ) {
+            @RequestParam(required = false,defaultValue = "20") int offset,
+            @RequestParam(required = false,defaultValue = "10") int limit,
+            @RequestParam(required = false,defaultValue = "10") String search,
+            @RequestParam(required = false,defaultValue = "DESC") Sort sort
+    ) {
 
-        return articleService.findAll(pageSearch);
+        return articleService.findAll(new PageSearch
+                .Builder<Article>()
+                .offset(offset)
+                .limit(limit)
+                .search(search)
+                .sort(sort)
+                .build());
+
     }
 }
