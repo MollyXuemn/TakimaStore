@@ -2,13 +2,15 @@ package io.takima.master3.store.article.service;
 
 
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.pagination.PageResponse;
+import io.takima.master3.store.core.pagination.PageSearch;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface ArticleService {
-     List<Article> findAll(int offset,int limit);
+     PageResponse<Article> findAll(PageSearch pageSearch);
      List<Article> findByName(String name);
      Article findById(long articleId);
      List<Article> findBySellerId(long sellerId);

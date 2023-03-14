@@ -5,6 +5,8 @@ import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
+import io.takima.master3.store.core.pagination.PageResponse;
+import io.takima.master3.store.core.pagination.PageSearch;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ public class ArticleServiceImpl implements ArticleService {
         this.articleDao = articleDao;
     }
 
-    public List<Article> findAll(int offset,int limit){
-        return articleDao.findAll( offset, limit);
+    public PageResponse<Article> findAll(PageSearch pageSearch){
+        return articleDao.findAll(pageSearch);
     };
     public List<Article> findByName(String name){
         return articleDao.findByName(name);

@@ -1,9 +1,12 @@
 package io.takima.master3.store.article.persistence.impl;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;
+import io.takima.master3.store.core.pagination.PageResponse;
+import io.takima.master3.store.core.pagination.PageSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import java.sql.SQLException;
 import java.util.*;
@@ -14,12 +17,23 @@ public class JpaArticleDao implements ArticleDao {
     @PersistenceContext
     private EntityManager em;
 
-    public List findAll(int offset,int limit){
-        return em.createQuery("select a FROM Article a", Article.class)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .getResultList();
+    @Override
+    public PageResponse<Article> findAll(PageSearch pageSearch) {
+        var query = em.createQuery("SELECT a FROM Article a WHERE a.product.name LIKE :name", Article.class);
+        var countQuery = em.createQuery("SELECT COUNT(a) FROM Article a WHERE a.product.name LIKE :name", Integer.class);
+
+        query.setParameter("name", pageSearch.getSearch());
+        countQuery.setParameter("name", pageSearch.getSearch());
+        query.setFirstResult(pageSearch.getOffset());
+        query.setMaxResults(pageSearch.getLimit());
+        List<Article> content = query.getResultList();
+        var totalElements = countQuery.getFirstResult();
+
+        return new PageResponse<>(
+                pageSearch, content, totalElements
+        );
     }
+
     public List<Article> findByName(String name){
         return em.createQuery("SELECT a FROM Article a WHERE a.product.name = :name", Article.class)
                 .setParameter("name",name)
