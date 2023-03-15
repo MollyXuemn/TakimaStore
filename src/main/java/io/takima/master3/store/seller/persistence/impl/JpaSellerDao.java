@@ -4,7 +4,6 @@ import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -20,15 +19,15 @@ public class JpaSellerDao implements SellerDao {
         return em.createQuery("SELECT a FROM Seller a", Seller.class).getResultList();
     }
     public List<Seller> findByName(String name){
-        return em.createQuery("SELECT a FROM Seller a WHERE a.name = :name", Seller.class)
-                .setParameter("name",name)
+        return em.createQuery("SELECT a FROM Seller a WHERE UPPER(a.name) LIKE UPPER(CONCAT('%', :name, '%')) ", Seller.class)
+                .setParameter("name",name.toUpperCase())
                 .getResultList();
     }
 
     public Optional<Seller> findById(long id) {
         return Optional.ofNullable(em.find(Seller.class, id));
     }
-    @Transactional
+
     public Seller update(Seller seller){
         Long sellerId = seller.getId();
         Optional<Seller> optionalSeller = findById(sellerId);
@@ -36,12 +35,12 @@ public class JpaSellerDao implements SellerDao {
                 () -> { throw new NoSuchElementException(String.format("No customer with id: %d.", sellerId)); });
         return seller;
     }
-    @Transactional
+
     public Seller create(Seller seller){
         em.persist(seller);
         return seller;
     }
-    @Transactional
+
     public void delete(long id) throws SQLException {
         em.remove(findById(id).orElseThrow(() ->
                 new NoSuchElementException(String.format("no seller with id %d", id))));

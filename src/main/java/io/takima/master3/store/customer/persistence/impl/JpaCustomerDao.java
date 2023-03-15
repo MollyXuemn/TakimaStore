@@ -4,7 +4,6 @@ import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -93,16 +92,15 @@ public class JpaCustomerDao implements CustomerDao  {
      * @param search the search term. Searches for both first name and last name, case unsensitive.
      * @return the number of element that matches the search term. ??
      */
-    @Transactional
+
     @Override
     public long count(String search){
-        search = ("%" + search + "%").toUpperCase(); // % means?
         return em.createQuery(
                         "SELECT COUNT(c) FROM Customer c WHERE UPPER(CONCAT(c.firstName, c.lastName)) LIKE UPPER(CONCAT('%', :name, '%'))", Long.class) //???
                 .setParameter("name", search)
                 .getSingleResult();
     }
-    @Transactional
+
     @Override
     public long count() {
         return count("");
@@ -112,7 +110,7 @@ public class JpaCustomerDao implements CustomerDao  {
      * Delete a customer by id
      * @param id the id of customer to delete
      */
-    @Transactional
+
     @Override
     public void deleteById(Long id){
         em.remove(findById(id).orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", id))));

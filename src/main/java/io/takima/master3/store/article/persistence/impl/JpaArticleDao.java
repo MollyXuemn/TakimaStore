@@ -3,9 +3,7 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import java.sql.SQLException;
 import java.util.*;
 
 @Repository
@@ -17,8 +15,8 @@ public class JpaArticleDao implements ArticleDao {
         return em.createQuery("SELECT a FROM Article a", Article.class).getResultList();
     }
     public List<Article> findByName(String name){
-        return em.createQuery("SELECT a FROM Article a WHERE a.name = :name", Article.class)
-                .setParameter("name",name)
+        return em.createQuery("SELECT a FROM Article a WHERE UPPER(a.product.name) LIKE UPPER(CONCAT('%', :name, '%'))", Article.class)
+                .setParameter("name",name.toUpperCase())
                 .getResultList();
     }
     public Optional<Article> findById(long id){
@@ -45,8 +43,7 @@ public class JpaArticleDao implements ArticleDao {
         em.persist(article);
         return article;
     };
-    @Transactional
-    public void delete(long id) throws SQLException {
+    public void delete(long id) {
         em.remove(findById(id).orElseThrow(() ->
                 new NoSuchElementException(String.format("no article with id %d", id))));
     };

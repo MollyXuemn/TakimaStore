@@ -4,21 +4,23 @@ import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.seller.models.Seller;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Table(name = "article")
 @Entity
 public class Article {
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="article_id_seq")
-        private Long id;
-        @ManyToOne
-        private Seller seller;
-        @Column
-        private int availableQuantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_seq")
+    private Long id;
+    @ManyToOne
+    private Seller seller;
+    @Column
+    private int availableQuantity;
 
-        @Embedded
-        private Price price;
-        @ManyToOne
-        private Product product;
+    @Embedded
+    private Price price;
+    @ManyToOne
+    private Product product;
 
 
     public Article(Long id, Seller seller, Product product, int availableQuantity, Price price) {
@@ -35,9 +37,11 @@ public class Article {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public Price getPrice() {
         return price;
     }
@@ -125,5 +129,20 @@ public class Article {
             return new Article(id, seller, product, availableQuantity, price);
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Article article = (Article) o;
+            return Objects.equals(id, article.id);
+
+        }
     }
 }
+

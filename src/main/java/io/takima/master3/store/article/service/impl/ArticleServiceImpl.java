@@ -53,7 +53,7 @@ public class ArticleServiceImpl implements ArticleService {
     private Article changePrice(Article article){
         Currency currency = article.getPrice().currency;
         Price money = new Price(article.getPrice().amount, currency);
-        Seller seller = sellerService.findById(article.getSeller().getId()).orElseThrow(() -> new NoSuchElementException("seller not found"));
+        Seller seller = article.getSeller();
 
         String sellerCurrency = MoneyConversionFactory.getCurrency(seller.getAddress().country);
         MoneyConversion moneyconversion = MoneyConversionFactory.getCurrencyConversion(Currency.valueOf(sellerCurrency));
