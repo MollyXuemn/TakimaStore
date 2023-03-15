@@ -5,10 +5,10 @@ import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
-import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -23,14 +23,14 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleServiceImpl(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
-
-    public PageResponse<Article> findAll(PageSearch pageSearch){
+    @Override
+    public Page<Article> findAll(PageSearch pageSearch){
         return articleDao.findAll(pageSearch);
     };
     public List<Article> findByName(String name){
         return articleDao.findByName(name);
     }
-    public PageResponse<Article> findBySellerId(long sellerId) {
+    public Page<Article> findBySellerId(long sellerId) {
         return articleDao.findBySellerId(sellerId);
     };
     public long count(PageSearch<Article> pageSearch){return articleDao.count(pageSearch);};

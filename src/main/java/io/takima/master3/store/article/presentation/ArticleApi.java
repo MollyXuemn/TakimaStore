@@ -5,6 +5,8 @@ import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,7 @@ public class ArticleApi {
 
     @ResponseBody
     @GetMapping(value = "/getAllArticles",  produces = "application/json")
-    public PageResponse<Article> getAllArticles(
+    public Page<Article> getAllArticles(
             @RequestParam(required = false,defaultValue = "20") int offset,
             @RequestParam(required = false,defaultValue = "10") int limit,
             @RequestParam(required = false,defaultValue = "") String search,

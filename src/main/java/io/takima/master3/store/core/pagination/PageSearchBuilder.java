@@ -1,5 +1,7 @@
 package io.takima.master3.store.core.pagination;
 
+import org.springframework.data.domain.Sort;
+
 public class PageSearchBuilder<T> {
     private int limit;
     private int offset;

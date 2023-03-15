@@ -5,7 +5,6 @@ import io.takima.master3.store.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.event.EventListener;
 
 
 @SpringBootApplication

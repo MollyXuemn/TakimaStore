@@ -28,6 +28,9 @@ public class PageSearch<T> implements Pageable{
         );
     }
 
+    public PageSearch() {
+    }
+
     public String getSearch() {
         return search;
     }

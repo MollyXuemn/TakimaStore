@@ -10,7 +10,7 @@ import java.util.*;
 
  public interface ArticleDao {
     //long count(PageSearch);
-    PageResponse<Article> findAll(PageSearch pageSearch);
+    Page<Article> findAll(PageSearch pageSearch);
     long count(PageSearch page);
     List<Article> findByName(String name);
     Optional<Article> findById(long id);
