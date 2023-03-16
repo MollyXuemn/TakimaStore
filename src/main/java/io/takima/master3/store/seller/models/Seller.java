@@ -20,7 +20,7 @@ public class Seller {
         @Embedded
         Address address;
         String iban;
-        @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL,orphanRemoval = true)
         @JsonIgnore
         private List<Article> articles;
 

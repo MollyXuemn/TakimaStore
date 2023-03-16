@@ -34,16 +34,19 @@ backend:test:
   stage: test
   needs: [ ]
   services:
-    - postgresql
+    - postgres:14
   variables:
     DATABASE_DB: 'ma_store_db'
     DATABASE_USER: 'madmin'
     DATABASE_PASSWORD: 'madmin'
+    POSTGRES_DB: 'ma_store_db'
+    POSTGRES_USER: 'madmin'
+    POSTGRES_PASSWORD: 'madmin'
     MA_DB_URL: jdbc:postgresql://localhost:5433/ma_store_db
     MA_DB_HOST: postgresql
     MA_DB_PORT: 5433
   script:
-    - mvn verify -f $MA_STORE
+    - mvn verify
   extends: .backend_cache_config
   cache:
     policy: pull

@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findByProductName(name);
     }
 
-    public Page<Article> findAllBySeller(Seller seller) { //need to note
+    public Page<Article> findAllBySeller(Seller seller) { //Noted: for find Seller, need to apply search specificaiton
         return articleDao.findAll(new PageSearch
                 .Builder<Article>()
                 .search(new BySellerSpecification(seller))

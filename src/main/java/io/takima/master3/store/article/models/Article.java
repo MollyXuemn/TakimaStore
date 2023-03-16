@@ -43,6 +43,13 @@ public class Article {
         return id != null ? id.hashCode() : 0;
     }
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "seller=" + seller +
+                '}';
+    }
+
     public Article(Long id, Seller seller, Product product, int availableQuantity, Price price) {
         this.id = id;
         this.seller = seller;
