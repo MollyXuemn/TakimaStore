@@ -1,6 +1,7 @@
 package io.takima.master3.store;
 
 import io.takima.master3.store.core.models.Address;
+import io.takima.master3.store.core.models.Country;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.models.Gender;
 import io.takima.master3.store.customer.persistence.CustomerDao;
@@ -160,7 +161,7 @@ class CustomerDaoCreateMethodTest {
             .email("llucky@takima.fr")
             .gender(Gender.MALE)
             .address(Address.builder()
-                    .country("US")
+                    .country(Country.BELGIUM)
                     .build())
             .build();
 

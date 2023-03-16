@@ -41,9 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .Builder<Article>()
                 .search(new BySellerSpecification(seller))
                 .build());
-    }
-
-    ;
+    };
 
     public long count(PageSearch<Article> pageSearch) {
         return articleDao.count(pageSearch);
