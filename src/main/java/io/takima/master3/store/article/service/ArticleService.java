@@ -14,10 +14,8 @@ public interface ArticleService {
      long count(PageSearch<Article> pageSearch);
      List<Article> findByName(String name);
      Article findById(long articleId);
-     Page<Article> findBySellerId(long sellerId);
      void update(Article article);
      void create(Article article);
      void delete(long id) throws SQLException;
-
-
+     Page<Article> findAllBySeller(PageSearch  page);
 }

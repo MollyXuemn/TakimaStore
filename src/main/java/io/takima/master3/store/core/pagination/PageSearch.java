@@ -1,17 +1,20 @@
 package io.takima.master3.store.core.pagination;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Objects;
 
 public class PageSearch<T> implements Pageable{
     private int limit;
     private int offset;
-    private String search ;
+    @JsonIgnore
+    private final Specification<T> search;;
     private Sort sort = Sort.unsorted();
 
-    public PageSearch(int limit, int offset, String search, Sort sort) {
+    public PageSearch(int limit, int offset, Specification<T>  search, Sort sort) {
         super();
         this.limit = limit;
         this.offset = offset;
@@ -19,7 +22,7 @@ public class PageSearch<T> implements Pageable{
         this.sort = sort;
     }
 
-    public PageSearch(PageSearch pageSearch) {
+    public PageSearch(PageSearch pageSearch, Specification<T> search) {
         this(
             pageSearch.limit,
             pageSearch.offset,
@@ -28,10 +31,12 @@ public class PageSearch<T> implements Pageable{
         );
     }
 
-    public PageSearch() {
+    public PageSearch(Specification<T> search) {
+
+        this.search = search;
     }
 
-    public String getSearch() {
+    public Specification<T>  getSearch() {
         return search;
     }
     public int getLimit() {
@@ -81,11 +86,10 @@ public class PageSearch<T> implements Pageable{
         return false;
     }
 
-
     public static final class Builder<T> {
         private int limit;
         private int offset;
-        private String search ;
+        private Specification<T>  search ;
         private Sort sort=Sort.unsorted();
 
         public Builder() {
@@ -99,7 +103,7 @@ public class PageSearch<T> implements Pageable{
             this.offset = offset;
             return this;
         }
-        public PageSearch.Builder search(String search) {
+        public PageSearch.Builder search(Specification<T>  search) {
             this.search = search;
             return this;
         }public PageSearch.Builder sort(Sort sort) {

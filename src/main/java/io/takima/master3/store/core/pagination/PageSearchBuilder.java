@@ -1,11 +1,12 @@
 package io.takima.master3.store.core.pagination;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 public class PageSearchBuilder<T> {
     private int limit;
     private int offset;
-    private String search;
+    private Specification search;
     private Sort sort;
 
     public PageSearchBuilder setLimit(int limit) {
@@ -18,7 +19,7 @@ public class PageSearchBuilder<T> {
         return this;
     }
 
-    public PageSearchBuilder setSearch(String search) {
+    public PageSearchBuilder setSearch(Specification search) {
         this.search = search;
         return this;
     }

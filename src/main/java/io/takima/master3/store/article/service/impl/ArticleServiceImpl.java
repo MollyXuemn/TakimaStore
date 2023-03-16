@@ -6,12 +6,12 @@ import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.seller.models.Seller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,25 +28,25 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findAll(pageSearch);
     };
     public List<Article> findByName(String name){
-        return articleDao.findByName(name);
+        return articleDao.findByProductName(name);
     }
-    public Page<Article> findBySellerId(long sellerId) {
-        return articleDao.findBySellerId(sellerId);
+    public Page<Article> findAllBySeller(PageSearch page) {
+        return articleDao.findAll(page);
     };
     public long count(PageSearch<Article> pageSearch){return articleDao.count(pageSearch);};
     @Override
     @Transactional
     public void update(Article article){
-        articleDao.update(article);
+        articleDao.save(article);
     };
     @Override
     @Transactional
     public void create(Article article){
-        articleDao.create(article);
+        articleDao.save(article);
     };
     @Transactional
-    public void delete(long id) throws SQLException {
-        articleDao.delete(id);
+    public void delete(long id){
+        articleDao.deleteById(id);
     };
     public Article findById(long id) {
         return articleDao.findById(id)

@@ -86,7 +86,7 @@ staging:
     - ssh rocky@$STAGING_HOST "docker compose pull"
     - ssh rocky@$STAGING_HOST "docker compose up -d --force-recreate --no-build"
   rules:
-    - if: $CI_COMMIT_BRANCH == "hibernate2"
+    - if: $CI_COMMIT_BRANCH == "pagination"
 #...
 prod:
   stage: deploy

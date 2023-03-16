@@ -7,6 +7,7 @@ import io.takima.master3.store.core.pagination.PageSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class ArticleApi {
     public Page<Article> getAllArticles(
             @RequestParam(required = false,defaultValue = "20") int offset,
             @RequestParam(required = false,defaultValue = "10") int limit,
-            @RequestParam(required = false,defaultValue = "") String search,
+            @RequestParam(required = false,defaultValue = "") Specification search,
             @SortDefault Sort sort
     ) {
 

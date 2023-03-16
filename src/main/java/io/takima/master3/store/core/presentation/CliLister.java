@@ -2,10 +2,12 @@ package io.takima.master3.store.core.presentation;
 
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.service.SellerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public class CliLister {
 
         LOGGER.info("gathering articles data...");
         // get all products for all sellers
-        sellers.forEach(seller -> map.computeIfAbsent(seller, s -> articleService.findBySellerId(s.getId()).getContent()));
+        sellers.forEach(seller -> map.computeIfAbsent(seller, s -> articleService.findAllBySeller().getContent()));
         LOGGER.info("got {} articles", map.values().stream().mapToInt(List::size).sum());
 
         return map;
