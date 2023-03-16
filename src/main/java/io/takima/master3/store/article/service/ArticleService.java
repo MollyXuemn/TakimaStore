@@ -3,6 +3,7 @@ package io.takima.master3.store.article.service;
 
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.seller.models.Seller;
 import org.springframework.data.domain.Page;
 
 import java.sql.SQLException;
@@ -17,5 +18,5 @@ public interface ArticleService {
      void update(Article article);
      void create(Article article);
      void delete(long id) throws SQLException;
-     Page<Article> findAllBySeller(PageSearch  page);
+     Page<Article> findAllBySeller(Seller seller);
 }

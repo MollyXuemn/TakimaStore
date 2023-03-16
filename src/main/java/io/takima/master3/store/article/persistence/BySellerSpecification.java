@@ -9,7 +9,7 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 
-class BySellerSpecification implements Specification<Article> {
+public class BySellerSpecification implements Specification<Article> {
 
     private final Seller seller;
 

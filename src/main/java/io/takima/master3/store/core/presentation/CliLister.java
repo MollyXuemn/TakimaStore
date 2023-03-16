@@ -41,7 +41,7 @@ public class CliLister {
 
         LOGGER.info("gathering articles data...");
         // get all products for all sellers
-        sellers.forEach(seller -> map.computeIfAbsent(seller, s -> articleService.findAllBySeller().getContent()));
+        sellers.forEach(seller -> map.computeIfAbsent(seller, s -> articleService.findAllBySeller(s).getContent()));
         LOGGER.info("got {} articles", map.values().stream().mapToInt(List::size).sum());
 
         return map;
