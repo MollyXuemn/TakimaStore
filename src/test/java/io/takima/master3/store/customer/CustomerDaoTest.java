@@ -1,14 +1,13 @@
-package io.takima.master3.store;
+package io.takima.master3.store.customer;
 
 import io.takima.master3.store.customer.models.Customer;
+import io.takima.master3.store.customer.models.Gender;
+import io.takima.master3.store.customer.persistence.CustomerDao;
 import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.core.models.Country;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.core.utils.DatasourceSpy;
-import io.takima.master3.store.customer.models.Customer;
-import io.takima.master3.store.customer.models.Gender;
-import io.takima.master3.store.customer.persistence.CustomerDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

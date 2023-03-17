@@ -1,4 +1,4 @@
-package io.takima.master3.store;
+package io.takima.master3.store.cart;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,4 +1,4 @@
-package io.takima.master3.store;
+package io.takima.master3.store.article;
 
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;

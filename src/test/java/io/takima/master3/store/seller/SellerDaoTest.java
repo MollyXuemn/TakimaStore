@@ -1,4 +1,4 @@
-package io.takima.master3.store;
+package io.takima.master3.store.seller;
 
 import io.takima.master3.store.core.utils.DatasourceSpy;
 import io.takima.master3.store.seller.persistence.SellerDao;
