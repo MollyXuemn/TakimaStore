@@ -1,6 +1,8 @@
 package io.takima.master3.store.seller.persistence;
 
+import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.seller.models.Seller;
+import org.springframework.data.domain.Page;
 
 import java.sql.SQLException;
 
@@ -8,10 +10,10 @@ import java.util.*;
 
  public interface SellerDao {
 
-    List<Seller> findAll();
-    List<Seller> findByName(String name);
+    Page<Seller> findAll(PageSearch pageSearch);
+    Page<Seller> findByName(String name);
     Optional<Seller> findById(long id);
-    Seller update(Seller seller);
-    Seller create(Seller seller) ;
-    void delete(long id) throws SQLException ;
+    Seller save(Seller seller);
+
+    void deleteById(long id);
 }

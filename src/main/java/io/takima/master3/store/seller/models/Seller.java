@@ -42,6 +42,10 @@ public class Seller {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Address getAddress() {
         return address;
     }

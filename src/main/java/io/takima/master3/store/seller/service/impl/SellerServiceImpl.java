@@ -1,10 +1,15 @@
 package io.takima.master3.store.seller.service.impl;
 
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
 import io.takima.master3.store.seller.service.SellerService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -18,12 +23,16 @@ public class SellerServiceImpl implements SellerService {
         this.sellerDao = sellerDao;
     }
 
-    public List<Seller> findAll() {
-        return sellerDao.findAll();
+    public Page<Seller> findAll(PageSearch pageSearch) {
+        return sellerDao.findAll(pageSearch);
     }
 
-    public List<Seller> findByName(String name) {
-        return sellerDao.findByName(name);
+    public Page<Seller> findByName(String name) {
+        Specification<Seller> spec = (name != null) ? SearchSpecification.parse(name) : Specification.where(null);
+        return sellerDao.findAll(new PageSearch
+                .Builder<Seller>()
+                .search(spec)
+                .build());
     }
 
     public Optional<Seller> findById(long id) {
@@ -31,14 +40,14 @@ public class SellerServiceImpl implements SellerService {
     }
     @Transactional
     public void update(Seller seller) {
-        sellerDao.update(seller);
+        sellerDao.save(seller);
     }
     @Transactional
     public void create(Seller seller) {
-        sellerDao.create(seller);
+        sellerDao.save(seller);
     }
     @Transactional
-    public void delete(long id) throws SQLException {
-        sellerDao.delete(id);
+    public void deleteById(long id) {
+        sellerDao.deleteById(id);
     }
 }

@@ -30,7 +30,7 @@ public class CliLister {
         this.sellerService = sellerService;
     }
 
-    public Map<Seller, List<Article>> list() {
+/*    public Map<Seller, List<Article>> list() {
 
         // get all sellers
         LOGGER.info("gathering seller data...");
@@ -45,5 +45,5 @@ public class CliLister {
         LOGGER.info("got {} articles", map.values().stream().mapToInt(List::size).sum());
 
         return map;
-    }
+    }*/
 }
