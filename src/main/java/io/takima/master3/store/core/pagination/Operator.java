@@ -8,6 +8,10 @@ public enum Operator {
     GTE("^(.*?)>=(.*?)$"),
     GT("^(.*?)>(.*?)$"),
     NULL("^(.*?)=null$"),
+    NOT_GTE("^(.*?)<(.*?)$"),
+    NOT_GT("^(.*?)<=(.*?)$"),
+    NOT_LTE("^(.*?)>(.*?)$"),
+    NOT_LT("^(.*?)>=(.*?)$"),
     EQ("^(.*?)=(.*?)$");
 
     private final Pattern pattern;

@@ -32,7 +32,6 @@ public class PageSearch<T> implements Pageable{
     }
 
     public PageSearch(Specification<T> search) {
-
         this.search = search;
     }
 
@@ -50,7 +49,7 @@ public class PageSearch<T> implements Pageable{
 
     @Override
     public int getPageSize() {
-        return 0;
+        return limit;
     }
 
     public long getOffset() {
@@ -87,9 +86,9 @@ public class PageSearch<T> implements Pageable{
     }
 
     public static final class Builder<T> {
-        private int limit;
-        private int offset;
-        private Specification<T>  search ;
+        private int limit = 1;
+        private int offset=0;
+        private Specification<T>  search = Specification.where(null);
         private Sort sort=Sort.unsorted();
 
         public Builder() {
@@ -129,5 +128,15 @@ public class PageSearch<T> implements Pageable{
     @Override
     public int hashCode() {
         return Objects.hash(offset, limit, search);
+    }
+
+    @Override
+    public String toString() {
+        return "PageSearch{" +
+                "limit=" + limit +
+                ", offset=" + offset +
+                ", search=" + search +
+                ", sort=" + sort +
+                '}';
     }
 }

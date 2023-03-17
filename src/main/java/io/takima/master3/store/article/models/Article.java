@@ -46,7 +46,10 @@ public class Article {
     @Override
     public String toString() {
         return "Article{" +
-                "seller=" + seller +
+                "id=" + id +
+                ", availableQuantity=" + availableQuantity +
+                ", price=" + price +
+                ", product=" + product +
                 '}';
     }
 

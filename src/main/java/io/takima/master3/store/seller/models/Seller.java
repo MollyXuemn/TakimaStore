@@ -70,6 +70,17 @@ public class Seller {
         return Objects.hash(id);
     }
 
+    @Override
+    public String toString() {
+        return "Seller{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address=" + address +
+                ", iban='" + iban + '\'' +
+                ", articles=" + articles +
+                '}';
+    }
+
     public static final class Builder {
         private Long id;
         private String name;
