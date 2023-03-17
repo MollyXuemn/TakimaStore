@@ -1,13 +1,15 @@
 package io.takima.master3.store.customer.services.impl;
 
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
 import io.takima.master3.store.customer.services.CustomerService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +21,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDao.findById(id);
     }
 
-    @Override
     @Transactional
-    public List<Customer> findPage(String search, int limit, int offset) {
-        return customerDao.findPage(search, limit, offset);
+    public Page<Customer> findPage(PageSearch pageSearch) {
+        return customerDao.findPage(pageSearch);
     }
-
+    @Transactional
+    public long count(PageSearch<Customer> pageSearch){
+        return customerDao.count(pageSearch);
+    };
     @Override
     @Transactional
     public void deleteById(long customerId) {
@@ -34,12 +38,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public Customer create(Customer customer) {
-        return customerDao.create(customer);
+        return customerDao.save(customer);
     }
 
     @Override
     @Transactional
     public Customer update(Customer customer) {
-        return customerDao.update(customer);
+        return customerDao.save(customer);
     }
 }

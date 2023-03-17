@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 
 public interface DataJpaArticleDao extends ArticleDao, JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
+
     default Page<Article> findAll(PageSearch page) {
         return findAll(page.getSearch(), page);
     }

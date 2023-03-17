@@ -24,7 +24,7 @@ public enum Operator {
     EW("^(.*?)=%(.*?)$"),
     NULL("^(.*?)=null$"),
     EQ("^(.*?)=(.*?)$");
-
+   // LIKE("^(.*?)=%(.*?)%$");
 
     private final Pattern pattern;
 

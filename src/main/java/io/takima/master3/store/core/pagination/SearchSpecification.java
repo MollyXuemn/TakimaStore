@@ -49,6 +49,8 @@ public class SearchSpecification<T> implements Specification<T> {
                 return cb.greaterThanOrEqualTo(path, value.toString());
             case EQ:
                 return cb.equal(path, value);
+            case LIKE: // why Operator doesn't accept the regExp LIKE ??
+                return cb.like(cb.lower(path), "%" + value.toString().toLowerCase() + "%");
             default:
                 throw new UnsupportedOperationException("Unsupported operator: " + operator);
                 // TODO complete with operators you need.

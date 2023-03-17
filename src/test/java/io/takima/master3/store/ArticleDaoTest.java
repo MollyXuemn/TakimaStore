@@ -1,23 +1,21 @@
 package io.takima.master3.store;
 
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.core.utils.DatasourceSpy;
-import io.takima.master3.store.article.persistence.ArticleDao;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)

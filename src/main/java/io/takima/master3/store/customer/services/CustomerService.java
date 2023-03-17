@@ -1,14 +1,16 @@
 package io.takima.master3.store.customer.services;
 
+import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.customer.models.Customer;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
     Optional<Customer> findById(long id);
 
-    List<Customer> findPage(String search, int limit, int offset);
+    Page<Customer> findPage(PageSearch pageSearch);
+    long count(PageSearch<Customer> pageSearch);
 
     void deleteById(long customerId);
 

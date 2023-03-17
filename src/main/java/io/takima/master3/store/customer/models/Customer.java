@@ -110,6 +110,19 @@ public class Customer {
         this.iban = iban;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", gender=" + gender +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", address=" + address +
+                ", iban='" + iban + '\'' +
+                ", cart=" + cart +
+                '}';
+    }
 
     public static Customer.Builder builder() {
 

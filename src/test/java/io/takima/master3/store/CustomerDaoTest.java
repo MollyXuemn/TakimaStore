@@ -1,7 +1,11 @@
 package io.takima.master3.store;
 
+import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.core.models.Country;
+import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.core.pagination.SearchSpecification;
+import io.takima.master3.store.core.utils.DatasourceSpy;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.models.Gender;
 import io.takima.master3.store.customer.persistence.CustomerDao;
@@ -22,7 +26,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("class CustomerDao")
 class CustomerDaoTest {
     @Autowired
+    DatasourceSpy spy;
+    @Autowired
     CustomerDao customerDao;
+    private PageSearch.Builder<Customer> psb;
+
+    @BeforeEach
+    void setupBuilder() {
+        psb = new PageSearch.Builder<>();
+    }
+
+    @BeforeEach
+    void resetSpy() {
+        this.spy.reset();
+    }
 
     @DisplayName("method 'findById(Long id)'")
     @Nested
@@ -78,9 +95,9 @@ class CustomerDaoTest {
             @Test
             @DisplayName("should return a list with at most 'limit' element")
             void shouldLimitResults() {
-                var customers = customerDao.findPage("", limit, 0);
+                var customers = customerDao.findPage(psb.limit(limit).build());
+                assertEquals(10, customers.getContent().size());
 
-                assertEquals(limit, customers.size());
             }
 
         }
@@ -91,10 +108,10 @@ class CustomerDaoTest {
             int offset = 2;
 
             @Test
-            @DisplayName("should return a list with at that skips elements by 'offset'")
+            @DisplayName("should return a list that skips elements by 'offset'")
             void shouldOffsetResults() {
-                var customers = customerDao.findPage("", offset);
-                assertEquals("William", customers.get(0).getFirstName());
+                var customers = customerDao.findPage(psb.offset(offset).build());
+                assertEquals("William", customers.getContent().get(0).getFirstName());
             }
         }
 
@@ -104,9 +121,15 @@ class CustomerDaoTest {
             @Test
             @DisplayName("should return a list with at most 'limit' element")
             void shouldSearch() {
-                var customers = customerDao.findPage("DaLtO", 2, 1);
-                assertEquals(2, customers.size());
-                assertEquals("Jack", customers.get(0).getFirstName()); //get ???
+                var customers = customerDao.findPage(new PageSearch
+                        .Builder<Customer>()
+                        .search(SearchSpecification.parse("lastName=%DaLtO%"))
+                        .limit(2)
+                        .offset(1)
+                        .build());
+
+                assertEquals(2, customers.getContent().size());
+                assertEquals("Jack", customers.getContent().get(0).getFirstName()); //get ???
                 customers.forEach(c -> assertEquals("DALTON", c.getLastName())); // c =>
             }
         }
@@ -118,7 +141,10 @@ class CustomerDaoTest {
         @Test
         @DisplayName("should return proper item count")
         void shouldCount() {
-            var count = customerDao.count("DaLtO");
+            var count = customerDao.count(new PageSearch
+                    .Builder<Customer>()
+                    .search(SearchSpecification.parse("lastName=%DaLtO%"))
+                    .build());
             assertEquals(4, count);
         }
     }
@@ -170,7 +196,7 @@ class CustomerDaoCreateMethodTest {
     void shouldCreate() {
         long oldCount = customerDao.count();
 
-        customerDao.create(customer);
+        customerDao.save(customer);
         assertEquals(oldCount + 1, customerDao.count());
     }
 
@@ -178,7 +204,7 @@ class CustomerDaoCreateMethodTest {
     @DisplayName("should assign a new ID")
     void shouldAssignId() {
         assertNull(customer.getId());
-        customerDao.create(customer);
+        customerDao.save(customer);
         assertNotNull(customer.getId());
     }
 }
@@ -205,7 +231,7 @@ class CustomerDaoUpdateMethodTest {
         customer.setFirstName("Jane");
         customer.setLastName("CALAMITY");
 
-        customerDao.update(customer);
+        customerDao.save(customer);
 
         customer = customerDao.findById(1L).get();
         assertEquals("Jane", customer.getFirstName());

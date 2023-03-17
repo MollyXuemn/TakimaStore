@@ -1,12 +1,18 @@
 package io.takima.master3.store.customer.presentation;
 
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.services.CustomerService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -18,11 +24,16 @@ public class CustomerApi {
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody
     @GetMapping(value = "/getAllCustomers", produces = "application/json")
-    public List<Customer> findPage(@RequestParam(required = false, defaultValue = "") String search,
-                                  @RequestParam(required = false, defaultValue = "20") int limit,
-                                  @RequestParam(required = false, defaultValue = "0") int offset) {
-
-        return customerService.findPage(search, limit, offset);
+    public Page<Customer> findPage(@RequestParam(defaultValue = "20")int limit,
+                                   @RequestParam(defaultValue = "0")int offset,
+                                   @RequestParam(required = false) String search,
+                                   @SortDefault Sort sort) {
+        Specification<Customer> spec = (search != null) ? SearchSpecification.parse(search) : Specification.where(null);
+        return customerService.findPage(new PageSearch.Builder<Customer>()
+                .limit(limit)
+                .offset(offset)
+                .search(spec)
+                .sort(sort).build());
     }
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @ResponseBody

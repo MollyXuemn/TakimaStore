@@ -2,7 +2,6 @@ package io.takima.master3.store.article.service.impl;
 
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;
-import io.takima.master3.store.article.persistence.BySellerSpecification;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
