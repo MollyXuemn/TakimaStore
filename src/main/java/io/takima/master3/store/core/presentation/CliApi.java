@@ -21,9 +21,9 @@ public class CliApi {
         this.cli = cli;
     }
 
-    @ResponseBody
+/*    @ResponseBody
     @GetMapping(value = "/cli",  produces = "application/json")// execute this method when `/api/cli` is reached
     public Map<Seller, List<Article>> list() {
         return cli.list();
-    }
+    }*/
 }

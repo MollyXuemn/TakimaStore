@@ -8,10 +8,10 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.Objects;
 
 public class PageSearch<T> implements Pageable{
-    private int limit;
-    private int offset;
+    private int limit =1;
+    private int offset=0;
     @JsonIgnore
-    private final Specification<T> search;;
+    private final Specification<T> search;
     private Sort sort = Sort.unsorted();
 
     public PageSearch(int limit, int offset, Specification<T>  search, Sort sort) {
@@ -44,7 +44,7 @@ public class PageSearch<T> implements Pageable{
 
     @Override
     public int getPageNumber() {
-        return 0;
+        return (int) Math.ceil(offset/limit);
     }
 
     @Override

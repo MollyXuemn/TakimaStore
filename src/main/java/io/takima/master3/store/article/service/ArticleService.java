@@ -17,6 +17,7 @@ public interface ArticleService {
      Article findById(long articleId);
      void update(Article article);
      void create(Article article);
-     void delete(long id) throws SQLException;
+     void deleteById(long id);
      Page<Article> findAllBySeller(Seller seller);
+     
 }

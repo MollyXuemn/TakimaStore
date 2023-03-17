@@ -13,7 +13,10 @@ public interface DataJpaArticleDao extends ArticleDao, JpaRepository<Article, Lo
         return findAll(page.getSearch(), page);
     }
     default long count(PageSearch page) {
-        return 0;
-        // TODO uncomment later in step 3 // return count(page.getSearch());
+        return count(page.getSearch());
     }
+    Article save(Article article);
+    void deleteById(Long id);
+
+
 }

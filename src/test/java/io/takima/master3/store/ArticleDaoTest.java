@@ -97,21 +97,21 @@ class ArticleDaoTest {
             }
 
             // TODO uncomment in Step 3.2
-//            @Nested
-//            @DisplayName("with filter on seller.id")
-//            class WithSellerIdFilter {
-//                @Test
-//                @DisplayName("should filter across the given spec")
-//                void shouldFilter() {
-//                    var articles = articleDao.findAll(
-//                            psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
-//                                    .sort(Sort.by("product.name").ascending())
-//                                    .build()
-//                    );
-//
-//                    assertEquals(Long.valueOf(165), articles.getContent().get(0).getId());
-//                }
-//            }
+            @Nested
+            @DisplayName("with filter on seller.id")
+            class WithSellerIdFilter {
+                @Test
+                @DisplayName("should filter across the given spec")
+                void shouldFilter() {
+                    var articles = articleDao.findAll(
+                            psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
+                                    .sort(Sort.by("product.name").ascending())
+                                    .build()
+                    );
+
+                    assertEquals(Long.valueOf(165), articles.getContent().get(0).getId());
+                }
+            }
         }
 
         // TODO uncomment in Step 5.1

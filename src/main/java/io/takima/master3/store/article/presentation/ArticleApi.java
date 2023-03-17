@@ -2,8 +2,8 @@ package io.takima.master3.store.article.presentation;
 
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
-import io.takima.master3.store.core.pagination.PageResponse;
 import io.takima.master3.store.core.pagination.PageSearch;
+import io.takima.master3.store.core.pagination.SearchSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -11,10 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,21 +25,86 @@ public class ArticleApi {
     }
 
     @ResponseBody
-    @GetMapping(value = "/getAllArticles",  produces = "application/json")
-    public Page<Article> getAllArticles(
-            @RequestParam(required = false,defaultValue = "20") int offset,
-            @RequestParam(required = false,defaultValue = "10") int limit,
-            @RequestParam(required = false,defaultValue = "") Specification search,
-            @SortDefault Sort sort
-    ) {
-
-        return articleService.findAll(new PageSearch
-                .Builder<Article>()
-                .offset(offset)
-                .limit(limit)
-                .search(search)
-                .sort(sort)
-                .build());
-
+    @GetMapping(value = "/getArticle", produces = "application/json")
+    public Article getArticle(@RequestParam() long id) {
+        return articleService.findById(id);
     }
+
+    @ResponseBody
+    @GetMapping(value = "/getAllArticles", produces = "application/json")
+    public Page<Article> findAll(
+            @RequestParam(defaultValue = "20") int limit,
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(required = false) String search,
+            @SortDefault Sort sort) {
+
+        Specification<Article> spec = (search != null) ? SearchSpecification.parse(search) : Specification.where(null);
+
+        return articleService.findAll(new PageSearch.Builder<Article>()
+                .limit( limit)
+                .offset( offset)
+                .search(spec)
+                .sort(sort).build());
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/getAllArticlesBySeller", produces = "application/json")
+    public Page<Article> findAllBySeller(
+            @RequestParam(defaultValue = "20")int limit,
+            @RequestParam(defaultValue = "0")int offset,
+            @RequestParam(required = false) String id,
+            @SortDefault Sort sort) {
+
+        Specification<Article> spec = SearchSpecification.parse("seller.id="+id);
+
+        return articleService.findAll(new PageSearch.Builder<Article>()
+                .limit(limit)
+                .offset(offset)
+                .search(spec)
+                .sort(sort).build());
+    }
+
+//    Map<Seller, Page<Article>>
+
+    @ResponseBody
+    @GetMapping(value = "/countAllArticles", produces = "application/json")
+    public long findCount(PageSearch pageSearch) {
+
+        return articleService.count(pageSearch);
+    }
+
+
+    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @ResponseBody
+    @PostMapping(value = "/createArticle", produces = "application/json")
+    public Article create(@RequestBody() Article article) {
+        if (article.getId() != null) {
+            throw new IllegalArgumentException("cannot create a customer and specify the ID");
+        }
+
+        articleService.create(article);
+
+        return article;
+    }
+
+    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @ResponseBody
+    @PostMapping(value = "/updateArticle", produces = "application/json")
+    public Article update(@RequestBody() Article article) {
+        if (article.getId() == null) {
+            throw new IllegalArgumentException("did not specify the ID of article to update");
+        }
+
+        articleService.update(article);
+
+        return article;
+    }
+
+    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @ResponseBody
+    @GetMapping(value = "/deleteArticle", produces = "application/json")
+    public void delete(@RequestParam() long id) {
+        articleService.deleteById(id);
+    }
+
 }
