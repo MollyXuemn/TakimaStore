@@ -34,7 +34,7 @@ backend:test:
   stage: test
   needs: [ ]
   services:
-    - mysql:8
+    - postgresql
   variables:
     DATABASE_DB: 'ma_store_db'
     DATABASE_USER: 'madmin'
