@@ -21,10 +21,10 @@ backend:build:
   image: $MAVEN_IMAGE
   stage: build
   extends: .backend_cache_config
-  artifacts:
-    paths:
-      - $MA_STORE/target/*.jar
-    expire_in: 1h
+#  artifacts:
+#    paths:
+#      - $MA_STORE/target/*.jar
+#    expire_in: 1h
   script:
     - cd $MA_STORE
     - mvn package -DskipTests

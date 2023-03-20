@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 @Embeddable
@@ -65,7 +67,33 @@ public class Price {
         if (this.currency.equals(currency)) {
             return this;
         }
-        return new Price((amount * 1.0 / this.currency.rate) * currency.rate, currency);
+
+         double roundedAmount = BigDecimal.valueOf((amount * 1.0 / this.currency.rate) * currency.rate)
+                    .setScale(2,RoundingMode.HALF_EVEN)
+                    .doubleValue();
+        return new Price(roundedAmount, currency);
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Price price = (Price) o;
+
+        if (Double.compare(price.amount, amount) != 0) return false;
+        return currency == price.currency;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = currency != null ? currency.hashCode() : 0;
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
     @Override
