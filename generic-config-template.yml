@@ -2,9 +2,7 @@
 .backend_cache_config:
   cache:
     paths:
-      - .m2/repository
-      - $MA_STORE/target/
-
+      - target/
 
 
 .common_package_config:

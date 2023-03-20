@@ -1,5 +1,4 @@
 variables:
-  MA_STORE: './'
   MAVEN_IMAGE: 'maven:3.9.0-amazoncorretto-19'
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:debug"
 
@@ -16,12 +15,11 @@ backend:build:
   image: $MAVEN_IMAGE
   stage: build
   extends: .backend_cache_config
-  artifacts:
-    paths:
-      - $MA_STORE/target/*.jar
-    expire_in: 1h
+  #artifacts:
+  #  paths:
+  #    - target/*.jar
+  #  expire_in: 1h
   script:
-    - cd $MA_STORE
     - mvn package -DskipTests
 
 backend:test:
