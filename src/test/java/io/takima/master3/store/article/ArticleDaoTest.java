@@ -15,7 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -113,30 +118,30 @@ class ArticleDaoTest {
         }
 
         // TODO uncomment in Step 5.1
-//        @DisplayName("should not produce N+1 fetch issue")
-//        @Test
-//        void shouldJoinFetchEntities() {
-//            articleDao.findAll(
-//                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
-//                            .sort(Sort.by("product.name").ascending())
-//                            .build()
-//            );
-//
-//            Pattern pattern = Pattern.compile("SELECT\\s(article|seller|product).+", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-//            assertThat(Arrays.stream(spy.getQueries()).filter(q -> pattern.matcher(q).matches()).count()).isLessThanOrEqualTo(1);
-//        }
+        @DisplayName("should not produce N+1 fetch issue")
+        @Test
+        void shouldJoinFetchEntities() {
+            articleDao.findAll(
+                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
+                            .sort(Sort.by("product.name").ascending())
+                            .build()
+            );
+
+            Pattern pattern = Pattern.compile("SELECT\\s(article|seller|product).+", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+            assertThat(Arrays.stream(spy.getQueries()).filter(q -> pattern.matcher(q).matches()).count()).isLessThanOrEqualTo(1);
+        }
 
         // TODO uncomment in Step 5.2
-//        @Test
-//        @DisplayName("should not issue a COUNT query")
-//        void shouldNotIssueCountQuery() {
-//            articleDao.findAll(
-//                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
-//                            .sort(Sort.by("product.name").ascending())
-//                            .build()
-//            );
-//            Pattern pattern = Pattern.compile("COUNT\\(.*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-//            assertFalse(Arrays.stream(spy.getQueries()).anyMatch(q -> pattern.matcher(q).find()));
-//        }
+        @Test
+        @DisplayName("should not issue a COUNT query")
+        void shouldNotIssueCountQuery() {
+            articleDao.findAll(
+                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
+                            .sort(Sort.by("product.name").ascending())
+                            .build()
+            );
+            Pattern pattern = Pattern.compile("COUNT\\(.*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+            assertFalse(Arrays.stream(spy.getQueries()).anyMatch(q -> pattern.matcher(q).find()));
+        }
     }
 }

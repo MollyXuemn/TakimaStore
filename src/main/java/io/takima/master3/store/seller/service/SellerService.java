@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface SellerService {
     Page<Seller> findAll(PageSearch pageSearch);
 
-    Page<Seller> findByName(String name);
+    List<Seller> findByName(String name);
     Optional<Seller> findById(long id);
     void update(Seller seller);
     void create(Seller seller);

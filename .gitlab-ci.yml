@@ -1,5 +1,4 @@
 variables:
-  MA_STORE: './'
   KARMA_IMAGE: "trion/ng-cli-karma:14.1.1"
   MAVEN_IMAGE: 'maven:3.9.0-amazoncorretto-19'
   MAVEN_OPTS: '-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository'
@@ -23,10 +22,9 @@ backend:build:
   extends: .backend_cache_config
   artifacts:
     paths:
-      - $MA_STORE/target/*.jar
+      - target/*.jar
     expire_in: 1h
   script:
-    - cd $MA_STORE
     - mvn package -DskipTests
 
 backend:test:
@@ -36,15 +34,12 @@ backend:test:
   services:
     - postgres:14
   variables:
-    DATABASE_DB: 'ma_store_db'
     DATABASE_USER: 'madmin'
     DATABASE_PASSWORD: 'madmin'
     POSTGRES_DB: 'ma_store_db'
     POSTGRES_USER: 'madmin'
     POSTGRES_PASSWORD: 'madmin'
     MA_DB_URL: jdbc:postgresql://localhost:5433/ma_store_db
-    MA_DB_HOST: postgresql
-    MA_DB_PORT: 5433
   script:
     - mvn verify
   extends: .backend_cache_config
@@ -60,8 +55,8 @@ backend:package:
     - backend:build
   script:
     - /kaniko/executor
-      --context "$CI_PROJECT_DIR/$MA_STORE"
-      --dockerfile "$CI_PROJECT_DIR/$MA_STORE/Dockerfile"
+      --context "$CI_PROJECT_DIR"
+      --dockerfile "$CI_PROJECT_DIR/Dockerfile"
       --destination "$CI_REGISTRY_IMAGE/app:${CI_COMMIT_TAG:-latest}"
       --cache=true
 

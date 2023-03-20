@@ -16,9 +16,6 @@ public interface DataJpaSellerDao extends SellerDao, JpaRepository<Seller, Long>
         return findAll(pageSearch.getSearch(), pageSearch);
     }
 
-    default long count(PageSearch page) {
-        return count(page.getSearch());
-    }
     Seller save(Seller seller);
     void deleteById(Long id);
 

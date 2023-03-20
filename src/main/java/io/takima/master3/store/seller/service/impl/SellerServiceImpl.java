@@ -27,12 +27,8 @@ public class SellerServiceImpl implements SellerService {
         return sellerDao.findAll(pageSearch);
     }
 
-    public Page<Seller> findByName(String name) {
-        Specification<Seller> spec = (name != null) ? SearchSpecification.parse(name) : Specification.where(null);
-        return sellerDao.findAll(new PageSearch
-                .Builder<Seller>()
-                .search(spec)
-                .build());
+    public List<Seller> findByName(String name) {
+        return sellerDao.findByName(name);
     }
 
     public Optional<Seller> findById(long id) {

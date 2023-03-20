@@ -11,7 +11,7 @@ import java.util.*;
  public interface SellerDao {
 
     Page<Seller> findAll(PageSearch pageSearch);
-    Page<Seller> findByName(String name);
+    List<Seller> findByName(String name);
     Optional<Seller> findById(long id);
     Seller save(Seller seller);
 
