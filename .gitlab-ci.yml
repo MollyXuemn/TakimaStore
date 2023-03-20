@@ -1,10 +1,5 @@
 variables:
-  KARMA_IMAGE: "trion/ng-cli-karma:14.1.1"
   MAVEN_IMAGE: 'maven:3.9.0-amazoncorretto-19'
-  MAVEN_OPTS: '-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository'
-  DOCKER_IMAGE: 'docker:20.10.21'
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/"
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:debug"
 
 
