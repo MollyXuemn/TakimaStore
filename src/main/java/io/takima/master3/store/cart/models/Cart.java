@@ -1,15 +1,14 @@
 package io.takima.master3.store.cart.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.core.models.Currency;
+import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.customer.models.Customer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,7 +30,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_id_seq")
     private Long id;
 
-    @Column
     private LocalDateTime date;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
@@ -143,8 +141,25 @@ public class Cart {
         this.customer = customer;
     }
 
-    public boolean getTotal() {
-        return false;
+    public List<CartArticle> getCartArticles() {
+        return cartArticles;
+    }
+
+    public void setCartArticles(List<CartArticle> cartArticles) {
+        this.cartArticles = cartArticles;
+    }
+
+    public Price getTotal() {
+        // give the total amount of the articles in the cart
+        List<CartArticle> cartArticles = getCartArticles();
+        Currency currency= customer.getAddress().getCountry().getCurrency();
+        Price prices = new Price(0,currency);
+        for (CartArticle ca : cartArticles) {
+            int qty = ca.getQuantity();
+            Price p = ca.getArticle().getPrice();
+            prices = prices.plus(p.multiply(qty));
+        }
+        return prices;
     }
 
     public static class Builder {

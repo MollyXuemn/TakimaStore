@@ -53,6 +53,10 @@ public enum Country {
         );
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
     @Converter(autoApply = true)
     public static class CountryConverter
             implements AttributeConverter<Country, String> {

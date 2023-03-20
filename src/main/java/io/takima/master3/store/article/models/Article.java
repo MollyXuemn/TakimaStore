@@ -26,6 +26,9 @@ public class Article {
     @ManyToOne
     private Product product;
 
+    public Article(Article article) {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
