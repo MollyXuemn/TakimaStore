@@ -3,7 +3,7 @@
   cache:
     paths:
       - .m2/repository
-      - $MA_STORE/target/
+      - target/
 
 
 .common_package_config:
@@ -13,6 +13,4 @@
   stage: package
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-  rules:
-    - if: $CI_COMMIT_BRANCH == "pagination"
-    - if: $CI_COMMIT_TAG
+
