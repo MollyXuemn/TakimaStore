@@ -83,7 +83,7 @@ staging:
     - ssh rocky@$STAGING_HOST "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
     - ssh rocky@$STAGING_HOST "docker compose pull"
     - ssh rocky@$STAGING_HOST "docker compose up -d --force-recreate --no-build"
-    -
+
 #...
 prod:
   stage: deploy
