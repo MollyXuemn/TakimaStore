@@ -4,6 +4,7 @@ import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.persistence.SellerDao;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -15,7 +16,7 @@ public interface DataJpaSellerDao extends SellerDao, JpaRepository<Seller, Long>
     default Page<Seller> findAll(PageSearch pageSearch) {
         return findAll(pageSearch.getSearch(), pageSearch);
     }
-
+    Page<Seller> findByName(String name, Pageable pageable);
     default long count(PageSearch page) {
         return count(page.getSearch());
     }

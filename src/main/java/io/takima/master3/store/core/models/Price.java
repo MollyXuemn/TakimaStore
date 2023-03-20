@@ -48,6 +48,17 @@ public class Price {
         this.amount = amount;
     }
 
+    public Price plus(Price price) {
+        return new Price(amount + price.convertTo(currency).amount, currency);
+    }
+
+    public Price minus(Price price) {
+        return new Price(amount - price.convertTo(currency).amount, currency);
+    }
+
+    public Price multiply(double ratio) {
+        return new Price(amount * ratio, currency);
+    }
 
 
     public Price convertTo(Currency currency) {

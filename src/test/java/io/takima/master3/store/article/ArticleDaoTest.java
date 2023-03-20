@@ -112,19 +112,19 @@ class ArticleDaoTest {
             }
         }
 
-        // TODO uncomment in Step 5.1
-//        @DisplayName("should not produce N+1 fetch issue")
-//        @Test
-//        void shouldJoinFetchEntities() {
-//            articleDao.findAll(
-//                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
-//                            .sort(Sort.by("product.name").ascending())
-//                            .build()
-//            );
-//
-//            Pattern pattern = Pattern.compile("SELECT\\s(article|seller|product).+", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-//            assertThat(Arrays.stream(spy.getQueries()).filter(q -> pattern.matcher(q).matches()).count()).isLessThanOrEqualTo(1);
-//        }
+//         TODO uncomment in Step 5.1
+        @DisplayName("should not produce N+1 fetch issue")
+        @Test
+        void shouldJoinFetchEntities() {
+            articleDao.findAll(
+                    psb.search(SearchSpecification.parse("seller.id<150,seller.id>20"))
+                            .sort(Sort.by("product.name").ascending())
+                            .build()
+            );
+
+            Pattern pattern = Pattern.compile("SELECT\\s(article|seller|product).+", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+            assertThat(Arrays.stream(spy.getQueries()).filter(q -> pattern.matcher(q).matches()).count()).isLessThanOrEqualTo(1);
+        }
 
         // TODO uncomment in Step 5.2
 //        @Test
