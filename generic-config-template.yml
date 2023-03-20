@@ -2,7 +2,6 @@
 .backend_cache_config:
   cache:
     paths:
-      - .m2/repository
       - target/
 
 
