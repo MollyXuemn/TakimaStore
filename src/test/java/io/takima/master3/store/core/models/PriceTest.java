@@ -5,7 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class PriceTest {
@@ -58,13 +59,45 @@ class PriceTest {
             );
         }
     }
-
-    @Test
-    @DisplayName("should multiply the amount")
-    void multiplyShouldBeOk() {
-        assertEquals(
-                new Price(5, Currency.DOLLAR).multiply(2),
-                new Price(10, Currency.DOLLAR)
-        );
+    @Nested
+    @DisplayName("Test multiply method")
+    class MultiplyTest {
+        @Test
+        @DisplayName("should multiply the amount")
+        void multiplyShouldBeOk() {
+            assertEquals(
+                    new Price(5, Currency.DOLLAR).multiply(2),
+                    new Price(10, Currency.DOLLAR)
+            );
+        }
     }
+
+
+    @Nested
+    @DisplayName("method 'compareTo(Price)'")
+    class CompareToMethod {
+        @Test
+        @DisplayName("should return anything < 0 if given price is higher")
+        void shouldCompareWithSuperior() {
+            assertThat(new Price(1.13, Currency.DOLLAR)
+                    .compareTo(new Price(1, Currency.EURO))).isLessThan(0);
+        }
+
+        @Test
+        @DisplayName("should return anything > 0 if given price is lower")
+        void shouldCompareWithInferior() {
+            assertThat(new Price(1.15, Currency.DOLLAR)
+                    .compareTo(new Price(1, Currency.EURO))).isGreaterThan(0);
+        }
+
+        @Test
+        @DisplayName("should return 0 if given price is of same value")
+        void shouldCompareWithEqual() {
+            assertThat(new Price(1.14, Currency.DOLLAR)
+                    .compareTo(new Price(1, Currency.EURO))
+            ).isEqualTo(0);
+        }
+
+    }
+
 }

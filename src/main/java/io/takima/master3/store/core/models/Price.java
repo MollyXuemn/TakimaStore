@@ -71,7 +71,10 @@ public class Price {
                     .setScale(2,RoundingMode.HALF_EVEN)
                     .doubleValue();
         return new Price(roundedAmount, currency);
+    }
 
+    public int compareTo(Price price){
+        return Double.compare(this.getAmount(), price.convertTo(this.currency).getAmount());
     }
 
     @Override
