@@ -109,6 +109,10 @@
 			<artifactId>hazelcast-hibernate53</artifactId>
 			<version>${hazelcast-hibernate53.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 
 
 	</dependencies>
