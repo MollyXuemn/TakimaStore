@@ -143,6 +143,10 @@ public class Cart {
         this.customer = customer;
     }
 
+    public boolean getTotal() {
+        return false;
+    }
+
     public static class Builder {
         private Cart c = new Cart();
 
