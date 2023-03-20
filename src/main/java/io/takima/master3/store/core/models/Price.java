@@ -67,7 +67,6 @@ public class Price {
         if (this.currency.equals(currency)) {
             return this;
         }
-
          double roundedAmount = BigDecimal.valueOf((amount * 1.0 / this.currency.rate) * currency.rate)
                     .setScale(2,RoundingMode.HALF_EVEN)
                     .doubleValue();

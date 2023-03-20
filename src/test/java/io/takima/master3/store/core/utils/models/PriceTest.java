@@ -9,37 +9,58 @@ import static org.junit.Assert.assertEquals;
 
 
 class PriceTest {
-    @Test
-    void convertDollarToEuroShouldBeOk() {
-        assertEquals(
-                new Price(.88, Currency.EURO),
-                new Price(1, Currency.DOLLAR).convertTo(Currency.EURO)
-        );
+    @Nested
+    @DisplayName("should convert currency")
+    class ConvertTest {
+        @Test
+        @DisplayName("should convert the currency Dollar To Euro ")
+        void convertDollarToEuroShouldBeOk() {
+            assertEquals(
+                    new Price(.88, Currency.EURO),
+                    new Price(1, Currency.DOLLAR).convertTo(Currency.EURO)
+            );
+        }
+        @Test
+        @DisplayName("should convert the currency Euro To Dollar")
+        void convertEuroDollarShouldBeOk() {
+            assertEquals(
+                    new Price(1.14, Currency.DOLLAR),
+                    new Price(1, Currency.EURO).convertTo(Currency.DOLLAR)
+            );
+        }
     }
-    @Test
+    @Nested
+    @DisplayName("should add currency")
+    class AddTest{
+        @Test
+        @DisplayName("should add the amount")
+        void plusShouldBeOk() {
+            assertEquals(
+                    new Price(1, Currency.DOLLAR).plus(new Price(2, Currency.DOLLAR)),
+                    new Price(3, Currency.DOLLAR)
+            );
 
-    void convertEuroDollarShouldBeOk() {
-        assertEquals(
-                new Price(1.14, Currency.DOLLAR),
-                new Price(1, Currency.EURO).convertTo(Currency.DOLLAR)
-        );
+            assertEquals(
+                    new Price(2, Currency.EURO).plus(new Price(3, Currency.EURO)),
+                    new Price(5, Currency.EURO)
+            );
+        }
     }
-    @Test
-    @DisplayName("should add the amount")
-    void plusShouldBeOk() {
-        assertEquals(
-                new Price(1, Currency.DOLLAR).plus(new Price(2, Currency.DOLLAR)),
-                new Price(3, Currency.DOLLAR)
-        );
+    @Nested
+    @DisplayName("Test subtract method")
+    class SubtractTest{
+        @Test
+        @DisplayName("should minus the amount")
+        void minusShouldBeOk() {
+            assertEquals(
+                    new Price(5, Currency.DOLLAR).minus(new Price(2, Currency.DOLLAR)),
+                    new Price(3, Currency.DOLLAR)
+            );
+        }
     }
+
     @Test
-    void minusShouldBeOk() {
-        assertEquals(
-                new Price(5, Currency.DOLLAR).minus(new Price(2, Currency.DOLLAR)),
-                new Price(3, Currency.DOLLAR)
-        );
-    }
-    @Test
+    @DisplayName("should multiply the amount")
     void multiplyShouldBeOk() {
         assertEquals(
                 new Price(5, Currency.DOLLAR).multiply(2),
