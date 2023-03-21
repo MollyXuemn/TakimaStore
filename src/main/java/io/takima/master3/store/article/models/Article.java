@@ -27,6 +27,12 @@ public class Article {
     private Product product;
 
     public Article(Article article) {
+        this.id = article.getId();
+        this.seller = article.getSeller();
+        this.availableQuantity = article.getAvailableQuantity();
+        this.price = article.getPrice();
+        this.product = article.getProduct();
+
     }
 
     @Override
@@ -38,7 +44,7 @@ public class Article {
 
         Article article = (Article) o;
 
-        return Objects.equals(id, article.id);
+        return id.equals(article.id);
     }
 
     @Override

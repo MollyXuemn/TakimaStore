@@ -81,7 +81,6 @@ public class Seller {
                 ", name='" + name + '\'' +
                 ", address=" + address +
                 ", iban='" + iban + '\'' +
-                ", articles=" + articles +
                 '}';
     }
 

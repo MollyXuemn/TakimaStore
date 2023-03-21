@@ -33,7 +33,7 @@ public class Cart {
     private LocalDateTime date;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
-    private List<CartArticle> cartArticles;
+    private List<CartArticle> cartArticles = new ArrayList<>();
 
     @JsonIgnore
     @JoinColumn(name = "customer_id")
@@ -81,7 +81,13 @@ public class Cart {
     }
 
     public void removeArticle(Article article) {
-        this.removeArticle(article, 1);
+        Optional<CartArticle> existingCa = cartArticles.stream().filter(ca -> ca.getArticle().equals(article))
+                .findAny();
+        if (existingCa.isPresent()) {
+            cartArticles.remove(existingCa.get());
+        }else {
+            throw new NoSuchElementException("aaaaaaa");
+        }
     }
 
     public void removeArticle(Article article, int quantity) {
@@ -96,6 +102,8 @@ public class Cart {
             } else {
                 existingCa.get().setQuantity(existingCa.get().getQuantity() - quantity);
             }
+        }else {
+            throw new NoSuchElementException("aaaaaaa");
         }
     }
 
@@ -112,9 +120,10 @@ public class Cart {
     }
 
     public Cart(Cart c) {
-        this.id = c.id;
-        this.date = c.date;
-        this.customer = c.customer;
+        this.id = c.getId();
+        this.date = c.getDate();
+        this.customer = c.getCustomer();
+        this.cartArticles = c.getCartArticles();
     }
 
     public Long getId() {
@@ -152,7 +161,7 @@ public class Cart {
     public Price getTotal() {
         // give the total amount of the articles in the cart
         List<CartArticle> cartArticles = getCartArticles();
-        Currency currency= customer.getAddress().getCountry().getCurrency();
+        Currency currency = this.getCustomer().getAddress().getCountry().getCurrency();
         Price prices = new Price(0,currency);
         for (CartArticle ca : cartArticles) {
             int qty = ca.getQuantity();

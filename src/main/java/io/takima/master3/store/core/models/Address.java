@@ -98,7 +98,7 @@ public class Address {
         }
 
         public Address build() {
-            return new Address(this.street, this.city, this.zipcode, this.country);
+            return new Address(street, city, zipcode, country);
         }
     }
 

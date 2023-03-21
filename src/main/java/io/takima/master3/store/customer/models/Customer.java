@@ -54,9 +54,6 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, Gender gender, String firstName, String lastName, String email, String iban, Address address) {
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -142,14 +139,6 @@ public class Customer {
 
         public Builder() {
         }
-        public Builder(Gender gender, String firstName, String lastName, String email, String iban, Address address) {
-            this.gender=gender;
-            this.firstName=firstName;
-            this.lastName=lastName;
-            this.email=email;
-            this.iban = iban;
-            this.address = address;
-        }
 
         public Builder id(Long id) {
             this.id = id;
@@ -187,7 +176,7 @@ public class Customer {
 
         public Customer build(){
 
-            return new Customer(id, gender, firstName,lastName,email,iban,address);
+            return new Customer(id, gender, firstName,lastName,email,address,iban);
         }
 
 
