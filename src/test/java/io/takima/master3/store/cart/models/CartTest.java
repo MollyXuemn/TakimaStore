@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -40,10 +41,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ContextConfiguration
 class CartTest {
 
-    @Autowired
+    @MockBean
     CartDao cartDao;
 
-    @Autowired
+    @MockBean
     ArticleDao articleDao;
 
     private Cart cart;
@@ -208,13 +209,4 @@ class CartTest {
     }
 }
 
-@Configuration
-@ContextConfiguration
-class CartTestContext {
-    @Bean
-    @Primary
-    public CartDao cartDaoMock() {
-        return Mockito.mock(CartDao.class);
-    }
-}
 
