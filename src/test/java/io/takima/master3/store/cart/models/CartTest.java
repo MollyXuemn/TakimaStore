@@ -35,10 +35,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(classes = MaStoreApplication.class)
+
 @ExtendWith(SpringExtension.class)
 @DisplayName("class Cart")
-@ContextConfiguration
 class CartTest {
 
     @MockBean
@@ -63,10 +62,25 @@ class CartTest {
                                 .build())
                         .build()));
 
+        Mockito.when(articleDao.findById(10L)).thenReturn(
+                Optional.of(new Article.Builder()
+                        .id(10L)
+                        .build()));
+        Mockito.when(articleDao.findById(20L)).thenReturn(
+                Optional.of(new Article.Builder()
+                        .id(20L)
+                        .build()));
+        Mockito.when(articleDao.findById(30L)).thenReturn(
+                Optional.of(new Article.Builder()
+                        .id(30L)
+                        .build()));
+
         cart = cartDao.findById(1L).get();
         assertThat(cart.getArticles().isEmpty())
                 .withFailMessage("Cart with id 1L was expected to be empty")
                 .isTrue();
+
+
     }
 
     @Nested

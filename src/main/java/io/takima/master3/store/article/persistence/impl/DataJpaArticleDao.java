@@ -3,6 +3,7 @@ package io.takima.master3.store.article.persistence.impl;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.core.pagination.PageSearch;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

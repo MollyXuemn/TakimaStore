@@ -55,7 +55,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.2" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2" level="project" />
@@ -139,5 +138,15 @@
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-hibernate53:5.0.0" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.13.2" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.testcontainers:testcontainers:1.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.20" level="project" />
+    <orderEntry type="library" name="Maven: org.rnorth.duct-tape:duct-tape:1.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.rnorth.visible-assertions:visible-assertions:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-api:3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.2" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport-zerodep:3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport:3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:24.0.1" level="project" />
   </component>
 </module>

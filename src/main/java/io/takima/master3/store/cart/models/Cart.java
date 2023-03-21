@@ -10,21 +10,11 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.customer.models.Customer;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.OrderColumn;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import io.takima.master3.store.discount.models.Offer;
+import jakarta.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_id_seq")
@@ -39,7 +29,12 @@ public class Cart {
     @JoinColumn(name = "customer_id")
     @OneToOne
     private Customer customer;
-
+    @ManyToMany
+    @JoinTable(name = "cart_offer",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id")
+    )
+    private Set<Offer> offers = new HashSet<>();
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -49,12 +44,23 @@ public class Cart {
         Cart cart = (Cart) o;
         return Objects.equals(id, cart.id);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+    public Cart(LocalDateTime date, Customer customer) {
+        this.id = id;
+        this.date = date;
+        this.customer = customer;
+    }
 
+    public Cart(Cart c) {
+        this.id = c.getId();
+        this.date = c.getDate();
+        this.customer = c.getCustomer();
+        this.cartArticles = c.getCartArticles();
+        this.offers = c.getOffers();
+    }
     public Cart() {
     }
 
@@ -69,7 +75,6 @@ public class Cart {
     }
 
     public void addArticle(Article article, int quantity) {
-
         // if cartarticle for this article already exists
         Optional<CartArticle> existingCa = cartArticles.stream().filter(ca -> ca.getArticle().equals(article))
                 .findAny();
@@ -113,19 +118,6 @@ public class Cart {
         this.date = LocalDateTime.now();
     }
 
-    public Cart(LocalDateTime date, Customer customer) {
-        this.id = id;
-        this.date = date;
-        this.customer = customer;
-    }
-
-    public Cart(Cart c) {
-        this.id = c.getId();
-        this.date = c.getDate();
-        this.customer = c.getCustomer();
-        this.cartArticles = c.getCartArticles();
-    }
-
     public Long getId() {
         return id;
     }
@@ -158,6 +150,14 @@ public class Cart {
         this.cartArticles = cartArticles;
     }
 
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
+    }
+
     public Price getTotal() {
         // give the total amount of the articles in the cart
         List<CartArticle> cartArticles = getCartArticles();
@@ -186,6 +186,10 @@ public class Cart {
 
         public Cart.Builder customer(Customer customer) {
             this.c.customer = customer;
+            return this;
+        }
+        public Cart.Builder offers(Set<Offer> offers) {
+            this.c.offers = offers;
             return this;
         }
 

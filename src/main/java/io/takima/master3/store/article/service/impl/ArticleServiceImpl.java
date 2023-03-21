@@ -45,20 +45,16 @@ public class ArticleServiceImpl implements ArticleService {
                 .build());
     };
 
-
     public long count(PageSearch<Article> pageSearch) {
         return articleDao.count(pageSearch);
     }
 
-    ;
 
     @Override
     @Transactional
     public void update(Article article) {
         articleDao.save(article);
     }
-
-    ;
 
     @Override
     @Transactional
