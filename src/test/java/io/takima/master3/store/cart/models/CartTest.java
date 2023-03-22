@@ -2,39 +2,28 @@ package io.takima.master3.store.cart.models;
 
 import io.takima.master3.store.MaStoreApplication;
 import io.takima.master3.store.article.models.Article;
-import io.takima.master3.store.article.models.Product;
 import io.takima.master3.store.article.persistence.ArticleDao;
-import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.cart.persistence.CartDao;
 import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.core.models.Country;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.customer.models.Customer;
-import io.takima.master3.store.customer.models.Gender;
-import io.takima.master3.store.seller.models.Seller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("class Cart")

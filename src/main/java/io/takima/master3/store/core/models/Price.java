@@ -46,9 +46,6 @@ public class Price {
     public double getAmount() {
         return amount;
     }
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
 
     public Price plus(Price price) {
         return new Price(amount + price.convertTo(currency).amount, currency);
@@ -59,7 +56,7 @@ public class Price {
     }
 
     public Price multiply(double ratio) {
-        return new Price(amount * ratio, currency);
+        return new Price(getAmount() * ratio, currency);
     }
 
 

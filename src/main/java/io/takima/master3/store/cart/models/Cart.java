@@ -24,6 +24,8 @@ public class Cart {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
     private List<CartArticle> cartArticles = new ArrayList<>();
+//    @Transient
+//    private Map<Article, Integer> articles;
 
     @JsonIgnore
     @JoinColumn(name = "customer_id")
@@ -35,6 +37,8 @@ public class Cart {
             inverseJoinColumns = @JoinColumn(name = "offer_id")
     )
     private Set<Offer> offers = new HashSet<>();
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -108,7 +112,7 @@ public class Cart {
                 existingCa.get().setQuantity(existingCa.get().getQuantity() - quantity);
             }
         }else {
-            throw new NoSuchElementException("aaaaaaa");
+            throw new NoSuchElementException("No such article");
         }
     }
 
@@ -160,19 +164,20 @@ public class Cart {
 
     public Price getTotal() {
         // give the total amount of the articles in the cart
-        List<CartArticle> cartArticles = getCartArticles();
-        Currency currency = this.getCustomer().getAddress().getCountry().getCurrency();
-        Price prices = new Price(0,currency);
-        for (CartArticle ca : cartArticles) {
-            int qty = ca.getQuantity();
-            Price p = ca.getArticle().getPrice();
-            prices = prices.plus(p.multiply(qty));
-        }
-        return prices;
+        Currency currency = customer.getAddress().getCountry().getCurrency();
+
+        return new Price(getArticles().entrySet().stream()
+                .map(e -> e.getKey().getPrice().multiply(e.getValue()))
+                .map(p -> p.convertTo(currency))
+                .mapToDouble(Price::getAmount)
+                .sum(), currency);
+
     }
 
     public static class Builder {
         private Cart c = new Cart();
+        private Map<Article, Integer> articles;
+
 
         public Cart.Builder id(Long id) {
             this.c.id = id;
@@ -192,9 +197,23 @@ public class Cart {
             this.c.offers = offers;
             return this;
         }
+        public Cart.Builder cartArticles(List<CartArticle> cartArticles) {
+            this.articles = new HashMap<>();
+            this.c.cartArticles = cartArticles;
+            return this;
+        }
+        public Cart.Builder articles(Map<Article, Integer> articles) {
+            this.c.cartArticles = new ArrayList<>();
+            this.articles = articles;
+            return this;
+        }
 
         public Cart build() {
-            return new Cart(c);
+            Cart cart= new Cart(c);
+            if (articles != null){
+                articles.forEach(cart::addArticle);
+            }
+                return cart;
         }
 
     }

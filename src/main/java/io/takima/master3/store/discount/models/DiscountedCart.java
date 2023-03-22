@@ -77,10 +77,13 @@ public class DiscountedCart extends Cart implements Discount {
                         int quantity = articles.get(a);
                         articles.remove(a);
 
-                        // put back the discounted article. (and yes, a bug is sneaking around here)
-                        articles.put(a, quantity);
+                        // put back the discounted article.
+                        articles.put(discountedArticle, quantity);
                     });
-            Price newTotal = getOriginalTotal();
+            // get the discounted Price
+            Price newTotal = articles.entrySet().stream()
+                                .map(a -> a.getKey().getPrice().multiply(a.getValue()))
+                    .reduce(new Price(0, oldTotal.getCurrency()), Price::plus);
 
             this.discountedTotal = discountedTotal.minus(oldTotal).plus(newTotal);
         }

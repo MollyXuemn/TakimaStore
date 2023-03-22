@@ -9,6 +9,7 @@ import io.takima.master3.store.discount.models.Offer;
 import io.takima.master3.store.discount.persistence.OfferDao;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -53,23 +54,28 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     @Transactional
     public Cart addOffer(Cart cart, String code) {
-        // TODO check if we got no code provided
+        if(code == null){throw new NullPointerException("no code provided");}
+        DiscountedCart discountedCart = new DiscountedCart(cart);
+        Offer offer = offerDao.findByCode(code).orElseThrow(() -> new NoSuchElementException(String.format("No such offer found with this code '%s'", code)));
 
-        // TODO convert into a DiscountedCart to compute the new discounted total
-        // TODO if offer does not exist with this code, throw an exception
-        // TODO create an offer context
-        // TODO if offer applies to none of the articles within the cart => throw a DiscountException
-        // TODO remove outdated offers
-        // TODO assert this offer applies to the current cart context (date, price, articles, ...)
-        // TODO if everything is ok for now... apply this offer
-        // TODO finally, apply other no-code offers if any
-        return null;
+        LocalDateTime now = LocalDateTime.now(clock);
+        OfferContext context = new OfferContext(discountedCart, offer, now);
+        if(context.getApplicableArticles().isEmpty()){
+            throw new DiscountException(DiscountException.Code.APPLICABLE_ARTICLES, offer);
+        }
+
+        pruneOutdatedOffers(discountedCart, now);
+
+        context.assertIsValid();
+
+        discountedCart.applyOffer(offer);
+
+        return findAndApplyOffers(discountedCart, now);
     }
 
 
     @Override
     public Cart removeOffer(Cart cart, String code) throws DiscountException {
-        // TODO implemennt.
         return null;
     }
 

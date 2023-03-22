@@ -74,7 +74,7 @@ public class PercentOffer extends Offer {
     public int compareTo(Offer o) {
         // oops, seems there is a mistake here
         if (o.hasCode() && !hasCode()) {
-            return 1;
+            return -1;
         }
 
         if (hasCode() && !o.hasCode()) {
@@ -86,7 +86,7 @@ public class PercentOffer extends Offer {
         } else if (o instanceof PercentOffer) {
             return Double.compare(percent, ((PercentOffer)o).percent);
         } else {
-            return 1;
+            return -1;
         }
     }
 
