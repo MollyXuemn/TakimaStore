@@ -54,7 +54,7 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     @Transactional
     public Cart addOffer(Cart cart, String code) {
-        if(code == null){throw new NullPointerException("no code provided");}
+        if(code == null){throw new NoSuchElementException("no code provided");}
         DiscountedCart discountedCart = new DiscountedCart(cart);
         Offer offer = offerDao.findByCode(code).orElseThrow(() -> new NoSuchElementException(String.format("No such offer found with this code '%s'", code)));
 

@@ -5,6 +5,7 @@ import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,21 +65,20 @@ public class AmountOffer extends Offer {
     @Override
     public int compareTo(Offer o) {
         // yep, there's a bug here...
-        if (o.hasCode() && !hasCode()) {
+        if (o.hasCode() && !this.hasCode()) {
             return -1;
         }
 
-        if (hasCode() && !o.hasCode()) {
+        if (this.hasCode() && !o.hasCode()) {
             return 1;
         }
 
         if (o instanceof PercentOffer) {
             return -1;
         } else if (o instanceof AmountOffer) {
-            return amount.compareTo(((AmountOffer)o).amount);
-        } else {
-            return 1;
+            return amount.compareTo(((AmountOffer) o).amount);
         }
+        return 1; // Never reached
     }
 
     public @Min(value = 0, message = "amount should be > 0") double getAmountValue() {

@@ -1,10 +1,8 @@
 package io.takima.master3.store.discount;
 
 import io.takima.master3.store.article.models.Article;
-import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.article.persistence.impl.DataJpaArticleDao;
 import io.takima.master3.store.cart.models.Cart;
-import io.takima.master3.store.cart.persistence.CartDao;
 import io.takima.master3.store.cart.persistence.impl.JpaCartDao;
 import io.takima.master3.store.core.models.Address;
 import io.takima.master3.store.core.models.Country;
@@ -14,7 +12,6 @@ import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.discount.models.AmountOffer;
 import io.takima.master3.store.discount.models.PercentOffer;
 import io.takima.master3.store.discount.persistence.JpaOfferDao;
-import io.takima.master3.store.discount.persistence.OfferDao;
 import io.takima.master3.store.discount.services.DiscountServiceImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -529,10 +526,10 @@ class DiscountServiceTest {
             @DisplayName("should throw a NoSuchElementException")
             void shouldThrow() {
                 Mockito.when(cartDao.findById(1L))
-                        .thenReturn(Optional.empty());
+                        .thenReturn(Optional.of(cartBuilder.articles(new HashMap<>()).build()));
 
                 Cart cart = cartDao.findById(1L).get();
-                assertThrows(NoSuchElementException.class, () -> discountService.addOffer(cart, "test"));
+                assertThrows(NoSuchElementException.class, () -> discountService.addOffer(cart, "faux code"));
             }
         }
         @Nested
@@ -574,9 +571,11 @@ class DiscountServiceTest {
                                     percentOfferBuilder.id(3L).percent(20).build()
                             ));
                     Mockito.when(offerDao.findByCode("test"))
-                            .thenReturn(Optional.of(percentOfferBuilder
-                                    .code("test").id(4L).percent(15).build()));
-
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(4L)
+                                    .percent(15)
+                                    .code("test")
+                                    .build()));
 
                     Cart cart = cartDao.findById(1L).get();
                     Price expectedPrice = cart.getTotal();
@@ -588,23 +587,28 @@ class DiscountServiceTest {
 
                     cart = discountService.addOffer(cart, "test");
 
-                    assertThat(cart.getTotal().toString()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()).toString());
+                    assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
                 @Test
                 @DisplayName("should apply 'amount offers'")
                 void shouldApplyAllAmountOffers() {
-
                     Mockito.when(offerDao.findOffersWithoutCode(LocalDateTime.now(clock)))
                             .thenReturn(Set.of(
                                     amountOfferBuilder.id(1L).amount(new Price(30, Currency.DOLLAR)).build(),
                                     amountOfferBuilder.id(2L).amount(new Price(10, Currency.DOLLAR)).build(),
                                     amountOfferBuilder.id(3L).amount(new Price(20, Currency.DOLLAR)).build()
                             ));
-
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(4L)
+                                    .percent(15)
+                                    .code("test")
+                                    .build()));
                     Cart cart = cartDao.findById(1L).get();
                     Price expectedPrice = cart.getTotal();
                     double expectedAmount = expectedPrice.getAmount();
                     expectedAmount -= 10.0;
+                    expectedAmount -= 15.0;
                     expectedAmount -= 20.0;
                     expectedAmount -= 30.0;
 
@@ -618,58 +622,57 @@ class DiscountServiceTest {
                 void shouldApplyAmountBeforePercent() {
                     Mockito.when(offerDao.findOffersWithoutCode(LocalDateTime.now(clock)))
                             .thenReturn(Set.of(
-                                    amountOfferBuilder.id(1L).amount(new Price(30, Currency.DOLLAR)).build(),
+                                    amountOfferBuilder.id(1L).amount(new Price(25, Currency.DOLLAR)).build(),
                                     percentOfferBuilder.id(2L).percent(10L).build()
                             ));
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(3L)
+                                    .percent(30)
+                                    .code("test")
+                                    .build()));
 
                     Cart cart = cartDao.findById(1L).get();
                     Price expectedPrice = cart.getTotal();
                     double expectedAmount = expectedPrice.getAmount();
+                    expectedAmount -= 25.0;
                     expectedAmount -= 30.0;
                     expectedAmount *= ((100.0 - 10.0) / 100.0);
 
                     cart = discountService.addOffer(cart, "test");
 
-                    assertThat(cart.getTotal().toString()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()).toString());
+                    assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
             }
 
             @Nested
             @DisplayName("and offer have a quantity criteria")
             class WithQuantityCriteria {
-
-                @BeforeEach
-                void init() {
-                    Mockito.when(offerDao.findOffersWithoutCode(LocalDateTime.now(clock)))
-                            .thenReturn(Set.of(
-                                    percentOfferBuilder.id(1L)
-                                            .minQuantity(2)
-                                            .maxQuantity(4)
-                                            .percent(10.0).build()
-                            ));
-                }
-
                 @Nested
                 @DisplayName("if cart meets the quantity criteria")
                 class IfQuantityCriteriaMatches {
-                    @BeforeEach
-                    void init() {
-                        Mockito.when(cartDao.findById(1L))
-                                .thenReturn(
-                                        Optional.of(cartBuilder
-                                                .articles(Map.of(articleBuilder.id(1L)
-                                                        .price(new Price(300, Currency.DOLLAR))
-                                                        .build(), 2))
-                                                .build()));
-                    }
-
                     @Test
                     @DisplayName("should apply offers")
                     void shouldApplyOffer() {
+                        Mockito.when(cartDao.findById(1L))
+                                .thenReturn(
+                                        Optional.of(cartBuilder
+                                                .articles(Map.of(articleBuilder.id(2L)
+                                                        .price(new Price(600, Currency.DOLLAR))
+                                                        .build(), 3))
+                                                .build()));
+                        Mockito.when(offerDao.findByCode("test"))
+                                .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                        .id(1L)
+                                        .percent(30)
+                                        .minQuantity(2)
+                                        .maxQuantity(4)
+                                        .code("test")
+                                        .build()));
                         Cart cart = cartDao.findById(1L).get();
                         Price expectedPrice = cart.getTotal();
                         double expectedAmount = expectedPrice.getAmount();
-                        expectedAmount *= ((100.0 - 10.0) / 100.0);
+                        expectedAmount *= ((100.0 - 30.0) / 100.0);
 
                         cart = discountService.addOffer(cart, "test");
 
@@ -690,25 +693,220 @@ class DiscountServiceTest {
                                                         .price(new Price(300, Currency.DOLLAR))
                                                         .build(), 6))
                                                 .build()));
+                        Mockito.when(offerDao.findByCode("test"))
+                                .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                        .id(1L)
+                                        .minQuantity(2)
+                                        .maxQuantity(4)
+                                        .code("test")
+                                        .build()));
                     }
 
                     @Test
-                    @DisplayName("should not apply the offers")
+                    @DisplayName(" should throw a DiscountException")
                     void shouldNotApplyOffer() {
                         Cart cart = cartDao.findById(1L).get();
-                        Price expectedPrice = cart.getTotal();
+                      //  cart = discountService.addOffer(cart, "test");
+                        // it's the new cart with expectedAmount add offers
+                        assertThrows(DiscountException.class, () -> discountService.addOffer(cart, "test"));
 
-                        cart = discountService.addOffer(cart, "test");
-
-                        assertThat(cart.getTotal()).isEqualTo(expectedPrice);
                     }
+                }
+            }
+        }
+        @Nested
+        @DisplayName("add offer have a 'price criteria'")
+        class WithQuantityCriteria {
+            @Nested
+            @DisplayName("if cart meets the price criteria")
+            class IfQuantityCriteriaMatches {
+                @BeforeEach
+                void init() {
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(1L)
+                                    .minPrice(new Price(590, Currency.DOLLAR))
+                                    .maxPrice(new Price(800, Currency.DOLLAR))
+                                    .percent(10)
+                                    .code("test")
+                                    .build()));
+                    Mockito.when(cartDao.findById(1L))
+                            .thenReturn(
+                                    Optional.of(cartBuilder
+                                            .articles(Map.of(articleBuilder.id(1L)
+                                                    .price(new Price(700, Currency.DOLLAR))
+                                                    .build(), 1))
+                                            .build()));
+                }
+                @Test
+                @DisplayName("should apply offers")
+                void shouldApplyOffer() {
+                    Cart cart = cartDao.findById(1L).get();
+                    Price expectedPrice = cart.getTotal();
+                    double expectedAmount = expectedPrice.getAmount();
+                    expectedAmount *= ((100.0 - 10.0) / 100.0);
+
+                    cart = discountService.addOffer(cart, "test");
+
+                    assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
+                }
+            }
+
+            @Nested
+            @DisplayName("if price criteria does not match")
+            class IfQuantityCriteriaNotMatches {
+                @BeforeEach
+                void init() {
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(1L)
+                                    .minPrice(new Price(590, Currency.DOLLAR))
+                                    .maxPrice(new Price(800, Currency.DOLLAR))
+                                    .code("test")
+                                    .build()));
+                    Mockito.when(cartDao.findById(1L))
+                            .thenReturn(
+                                    Optional.of(cartBuilder
+                                            .articles(Map.of(articleBuilder.id(1L)
+                                                    .price(new Price(300, Currency.DOLLAR))
+                                                    .build(), 1))
+                                            .build()));
+                }
+                @Test
+                @DisplayName("should throw a DiscountException")
+                void shouldNotApplyOffer() {
+                    Cart cart = cartDao.findById(1L).get();
+                    assertThrows(DiscountException.class, () -> discountService.addOffer(cart, "test"));
                 }
             }
         }
 
 
+        @Nested
+        @DisplayName("and offer have a 'article selection criteria'")
+        class WithArticleSelectionCriteria {
+            List<Article> articlesSelection;
+            Map<Article, Integer> articles;
+            @BeforeEach
+            void init() {
+                articlesSelection = List.of(
+                        articleBuilder.id(1L).price(new Price(100, Currency.DOLLAR)).build(),
+                        articleBuilder.id(2L).price(new Price(200, Currency.DOLLAR)).build(),
+                        articleBuilder.id(3L).price(new Price(300, Currency.DOLLAR)).build());
+
+            }
+
+            @Nested
+            @DisplayName("if cart meets the article selection criteria")
+            class IfArticleSelectionCriteriaMatches {
+                @BeforeEach
+                void init() {
+                    Mockito.when(cartDao.findById(1L))
+                            .thenReturn(
+                                    Optional.of(cartBuilder
+                                            .articles(new HashMap<>(Map.of(articleBuilder.id(3L)
+                                                    .price(new Price(300, Currency.DOLLAR))
+                                                    .build(), 1)))
+                                            .build()));
+
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(1L)
+                                    .articles(new HashSet<>(articlesSelection))
+                                    .build()));
+                }
+                @Test
+                @DisplayName("should apply offers")
+                void shouldApplyOffer() {
+                    Cart cart = cartDao.findById(1L).get();
+                    Price expectedPrice = cart.getTotal();
+                    double expectedAmount = expectedPrice.getAmount();
+
+                    cart = discountService.addOffer(cart, "test");
+
+                    assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
+                }
+            }
+
+            @Nested
+            @DisplayName("if article selection criteria does not match")
+            class IfQuantityCriteriaNotMatches {
+
+                @BeforeEach
+                void init() {
+                    Mockito.when(cartDao.findById(1L))
+                            .thenReturn(
+                                    Optional.of(cartBuilder
+                                            .articles(new HashMap<>(Map.of(articleBuilder.id(4L)
+                                                    .price(new Price(300, Currency.DOLLAR))
+                                                    .build(), 1)))
+                                            .build()));
+                    Mockito.when(offerDao.findByCode("test"))
+                            .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                    .id(1L)
+                                    .articles(new HashSet<>(articlesSelection))
+                                    .build()));
+                }
+                @Test
+                @DisplayName("should throw a DiscountException")
+                void shouldNotApplyOffer() {
+                    Cart cart = cartDao.findById(1L).get();
+                    assertThrows(DiscountException.class, () -> discountService.addOffer(cart, "test"));
+                }
+            }
+
+            @DisplayName("in addition to 'quantity criteria'")
+            @Nested
+            class WithQuantityCriteria {
+                @Nested
+                @DisplayName("if cart does not have the required quantity of articles in the selection")
+                class IfQuantityCriteriaNotMatch {
+                    @BeforeEach
+                    void init() {
+                        Mockito.when(cartDao.findById(1L))
+                                .thenReturn(
+                                        Optional.of(cartBuilder
+                                                .articles(new HashMap<>(Map.of(articleBuilder.id(4L)
+                                                        .price(new Price(300, Currency.DOLLAR))
+                                                        .build(), 2)))
+                                                .build()));
+                        Mockito.when(offerDao.findByCode("test"))
+                                .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                        .id(1L)
+                                        .articles(Set.of(articlesSelection.get(0)))
+                                        .minQuantity(2)
+                                        .percent(10.0)
+                                        .build()));
+
+                    }
+
+                    @Test
+                    @DisplayName("should throw a DiscountException")
+                    void shouldNotApplyOffer() {
+                        Cart cart = cartDao.findById(1L).get();
+                        assertThrows(DiscountException.class, () -> discountService.addOffer(cart, "test"));
+                    }
+                }
+            }
+            @Test
+            @DisplayName("should persist the cart with its added offers")
+            void shouldPersistTheCart() {
+
+                Mockito.when(offerDao.findByCode("test"))
+                        .thenReturn(Optional.ofNullable(percentOfferBuilder
+                                .id(1L)
+                                .articles(new HashSet<>(articlesSelection))
+                                .build()));
+                Cart cart = cartDao.findById(1L).get();
+                discountService.addOffer(cart,"test");
+                Mockito.verify(cartDao).update(Mockito.any(Cart.class)); //
+            }
+        }
+
 
     }
+
+
 
     LocalDateTime oneYearAgo() {
         return LocalDateTime.now(clock).minus(1, ChronoUnit.YEARS);
