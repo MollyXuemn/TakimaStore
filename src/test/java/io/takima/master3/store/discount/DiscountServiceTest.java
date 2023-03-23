@@ -175,7 +175,7 @@ class DiscountServiceTest {
                     expectedAmount *= ((100.0 - 20.0) / 100.0);
                     expectedAmount *= ((100.0 - 30.0) / 100.0);
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
@@ -198,7 +198,7 @@ class DiscountServiceTest {
                     expectedAmount -= 20.0;
                     expectedAmount -= 30.0;
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
@@ -218,7 +218,7 @@ class DiscountServiceTest {
                     expectedAmount -= 30.0;
                     expectedAmount *= ((100.0 - 10.0) / 100.0);
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
@@ -261,7 +261,7 @@ class DiscountServiceTest {
                         double expectedAmount = expectedPrice.getAmount();
                         expectedAmount *= ((100.0 - 10.0) / 100.0);
 
-                        cart = discountService.addOffer(cart, "test");
+                        cart = discountService.applyOffers(cart);
 
                         assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                     }
@@ -288,7 +288,7 @@ class DiscountServiceTest {
                         Cart cart = cartDao.findById(1L).get();
                         Price expectedPrice = cart.getTotal();
 
-                        cart = discountService.addOffer(cart, "test");
+                        cart = discountService.applyOffers(cart);
 
                         assertThat(cart.getTotal()).isEqualTo(expectedPrice);
                     }
@@ -333,7 +333,7 @@ class DiscountServiceTest {
                     double expectedAmount = expectedPrice.getAmount();
                     expectedAmount *= ((100.0 - 10.0) / 100.0);
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
@@ -360,7 +360,7 @@ class DiscountServiceTest {
                     Cart cart = cartDao.findById(1L).get();
                     Price expectedPrice = cart.getTotal();
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(expectedPrice);
                 }
@@ -411,7 +411,7 @@ class DiscountServiceTest {
                     double expectedAmount = expectedPrice.getAmount();
                     expectedAmount *= ((100.0 - 10.0) / 100.0);
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                 }
@@ -438,7 +438,7 @@ class DiscountServiceTest {
                     Cart cart = cartDao.findById(1L).get();
                     Price expectedPrice = cart.getTotal();
 
-                    cart = discountService.addOffer(cart, "test");
+                    cart = discountService.applyOffers(cart);
 
                     assertThat(cart.getTotal()).isEqualTo(expectedPrice);
                 }
@@ -474,7 +474,7 @@ class DiscountServiceTest {
                         Price expectedPrice = cart.getTotal();
                         double expectedAmount = expectedPrice.getAmount();
 
-                        cart = discountService.addOffer(cart, "test");
+                        cart = discountService.applyOffers(cart);
 
                         assertThat(cart.getTotal()).isEqualTo(new Price(expectedAmount, cart.getTotal().getCurrency()));
                     }
