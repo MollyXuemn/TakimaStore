@@ -55,7 +55,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.2" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.14.2" level="project" />
@@ -150,5 +149,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:postgresql:1.17.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:jdbc:1.17.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:database-commons:1.17.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.flywaydb:flyway-core:9.16.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.14.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.2" level="project" />
   </component>
 </module>

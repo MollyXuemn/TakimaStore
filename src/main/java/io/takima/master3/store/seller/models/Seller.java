@@ -1,6 +1,7 @@
 package io.takima.master3.store.seller.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import static jakarta.persistence.EnumType.STRING;
 
 @Cacheable
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Seller {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seller_id_seq")
