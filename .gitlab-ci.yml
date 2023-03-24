@@ -80,7 +80,7 @@ staging:
     - ssh rocky@$STAGING_HOST "docker compose up -d --force-recreate --no-build"
 
 #...
-prod:
+.prod:
   stage: deploy
   variables:
     TAG: '$CI_COMMIT_REF_NAME'
