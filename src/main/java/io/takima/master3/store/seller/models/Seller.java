@@ -36,6 +36,26 @@ public class Seller {
     public Seller() {
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
     public Long getId() {
         return id;
     }
