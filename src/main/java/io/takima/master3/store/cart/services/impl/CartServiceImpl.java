@@ -20,7 +20,6 @@ public class CartServiceImpl implements CartService {
     private final CustomerDao customerDao;
 
     @Override
-    @Transactional
     public Cart getForCustomer(long customerId){
         Customer customer = customerDao.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", customerId)));

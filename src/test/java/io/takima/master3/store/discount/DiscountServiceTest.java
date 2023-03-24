@@ -918,11 +918,4 @@ class DiscountServiceTest {
 }
 
 
-@Configuration
-class MockTimeConfig {
-    @Bean
-    @Primary
-    Clock fixedClock() { // LocalDateTime.now(clock) will always return 2050-01-01
-        return Clock.fixed(Instant.parse("2050-01-01T12:00:00.00Z"), ZoneId.of("UTC"));
-    }
-}
+

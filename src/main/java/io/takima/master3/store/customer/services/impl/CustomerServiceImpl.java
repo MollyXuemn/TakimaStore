@@ -1,27 +1,29 @@
 package io.takima.master3.store.customer.services.impl;
 
-import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.customer.persistence.CustomerDao;
 import io.takima.master3.store.customer.services.CustomerService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerDao customerDao;
-    @Transactional
+    @Autowired
+    public CustomerServiceImpl(CustomerDao customerDao) {
+        this.customerDao = customerDao;
+    }
+
     public Optional<Customer> findById(long id) {
         return customerDao.findById(id);
     }
 
-    @Transactional
+
     public Page<Customer> findPage(PageSearch pageSearch) {
         return customerDao.findPage(pageSearch);
     }

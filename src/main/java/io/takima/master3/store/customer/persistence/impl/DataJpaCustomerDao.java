@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 public interface DataJpaCustomerDao extends CustomerDao, JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
-    Optional<Customer> findById(long id);
+    //Optional<Customer> findById(long id);
 
     default Page<Customer> findPage(PageSearch page) {
         return findAll(page.getSearch(), page);
@@ -19,8 +19,6 @@ public interface DataJpaCustomerDao extends CustomerDao, JpaRepository<Customer,
     default long count(PageSearch page) {
         return count(page.getSearch());
     }
-    Customer save(Customer customer);
-    void deleteById(Long id);
 
 
 }
