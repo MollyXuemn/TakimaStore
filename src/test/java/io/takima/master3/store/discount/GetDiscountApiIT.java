@@ -67,4 +67,85 @@ public class GetDiscountApiIT {
             }
         }
     }
+    @Nested
+    @DisplayName("GET addDiscount/")
+    class AddDiscount {
+
+        @Test
+        @DisplayName("with missing parameter 'customerId' should give status 400 BAD_REQUEST")
+        void shouldGive400() throws Exception {
+            mvc.perform(get("/api/addDiscount")
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Nested
+        @DisplayName("with a valid customerId")
+        class WithValidCustomerId {
+            @Test
+            @DisplayName("should give status 200 OK")
+            void shouldGive200() throws Exception {
+                // TODO implement
+                mvc.perform(get("/api/addDiscount")
+                                .param("customerId", "1")
+                                .param("code", "XMAS-2010")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("give all discounts of the customer's cart")
+            void shouldReturnDiscounts() throws Exception{
+                // TODO implement. Get custpmerId=1 while clock fixed at 2010-12-15T12:00:00.00Z expect offers: {id=3, id=4}
+                mvc.perform(get("/api/addDiscount")
+                                .param("customerId", "1")
+                                .param("code", "XMAS-2010")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(jsonPath("$.*", hasSize(2)))
+                        .andExpect(jsonPath("[:2].id", is(List.of(3, 4))));
+
+            }
+        }
+    }
+    @Nested
+    @DisplayName("GET removeDiscount/")
+    class RemoveDiscount {
+        @Test
+        @DisplayName("with missing parameter 'customerId' should give status 400 BAD_REQUEST")
+        void shouldGive400() throws Exception {
+            mvc.perform(get("/api/removeDiscount")
+                            .contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Nested
+        @DisplayName("with a valid customerId")
+        class WithValidCustomerId {
+            @Test
+            @DisplayName("should give status 200 OK")
+            void shouldGive200() throws Exception {
+                // TODO implement
+                mvc.perform(get("/api/removeDiscount")
+                                .param("customerId", "1")
+                                .param("code", "XMAS-2010")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("give all discounts of the customer's cart")
+            void shouldReturnDiscounts() throws Exception{
+                // TODO implement. Get custpmerId=1 while clock fixed at 2010-12-15T12:00:00.00Z expect offers: {id=3, id=4}
+                mvc.perform(get("/api/removeDiscount")
+                                .param("customerId", "1")
+                                .param("code", "XMAS-2010")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(jsonPath("$.*", hasSize(3)))
+                        .andExpect(jsonPath("[:2].id", is(List.of(6, 3))));
+
+            }
+        }
+    }
 }
