@@ -3,9 +3,7 @@ variables:
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:debug"
   DOCKER_IMAGE: 'docker:20.10.21'
   DOCKER_IN_DOCKER_IMAGE: ${DOCKER_IMAGE}-dind
-  DOCKER_HOST: "tcp://docker:2375"
-  DOCKER_DRIVER: "overlay2"
-  DOCKER_TLS_CERTDIR: ''
+
 
 
 stages:
@@ -32,15 +30,11 @@ backend:test:
   stage: test
   needs: [ ]
   services:
-    - postgres:14
-    - dind
+    - $DOCKER_IN_DOCKER_IMAGE
   variables:
-    DATABASE_USER: 'madmin'
-    DATABASE_PASSWORD: 'madmin'
-    POSTGRES_DB: 'ma_store_db'
-    POSTGRES_USER: 'madmin'
-    POSTGRES_PASSWORD: 'madmin'
-    MA_DB_URL: jdbc:postgresql://localhost:5433/ma_store_db
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_DRIVER: "overlay2"
+    DOCKER_TLS_CERTDIR: ''
   script:
     - mvn verify
   extends: .backend_cache_config
