@@ -101,9 +101,13 @@ public class GetDiscountApiIT {
                                 .param("customerId", "1")
                                 .param("code", "XMAS-2010")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isOk());
+                mvc.perform(get("/api/getDiscounts")
+                                .param("customerId", "1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
-                        .andExpect(jsonPath("$.*", hasSize(2)))
-                        .andExpect(jsonPath("[:2].id", is(List.of(3, 4))));
+                        .andExpect(jsonPath("$.*", hasSize(4)))
+                        .andExpect(jsonPath("[:2].id", is(List.of(6, 1))));
 
             }
         }
@@ -141,9 +145,18 @@ public class GetDiscountApiIT {
                                 .param("customerId", "1")
                                 .param("code", "XMAS-2010")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isOk());;
+                mvc.perform(get("/api/addDiscount")
+                                .param("customerId", "1")
+                                .param("code", "XMAS-2010")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isOk());
+                mvc.perform(get("/api/getDiscounts")
+                                .param("customerId", "1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
-                        .andExpect(jsonPath("$.*", hasSize(3)))
-                        .andExpect(jsonPath("[:2].id", is(List.of(6, 3))));
+                        .andExpect(jsonPath("$.*", hasSize(4)))
+                        .andExpect(jsonPath("[:2].id", is(List.of(6, 1))));
 
             }
         }
