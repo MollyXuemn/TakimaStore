@@ -4,7 +4,7 @@ import jakarta.persistence.Converter;
 
 import java.util.*;
 
-public enum     Currency {
+public enum Currency {
     DOLLAR("USD", 1.0),
     EURO("EUR", 0.88),
     JPY("JPY", 113.22),

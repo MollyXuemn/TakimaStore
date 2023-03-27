@@ -36,6 +36,7 @@ public class Seller {
     public Seller() {
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
@@ -47,7 +48,7 @@ public class Seller {
     public void setIban(String iban) {
         this.iban = iban;
     }
-
+    @JsonIgnore
     public List<Article> getArticles() {
         return articles;
     }
@@ -55,7 +56,7 @@ public class Seller {
     public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
-
+    @JsonIgnore
     public Long getId() {
         return id;
     }

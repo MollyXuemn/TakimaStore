@@ -4,6 +4,7 @@ package io.takima.master3.store.core.models;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Embeddable
 public class Address {
@@ -14,6 +15,7 @@ public class Address {
     @NotBlank
     private String zipcode;
     @Convert(converter = Country.CountryConverter.class)
+    @NotNull
     public Country country;
 
     public Address() {

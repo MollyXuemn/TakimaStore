@@ -1,10 +1,14 @@
 package io.takima.master3.store.article.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Entity
 @Inheritance(
@@ -18,20 +22,15 @@ public class Product {
     @Column(unique = true)
     @NotBlank
     private String ref;
-    @Column
     @NotBlank
     private String name;
-    @Column
     @NotBlank
     private String brand;
-    @Column
     @NotBlank
     private String description;
-    @Column
     @NotBlank
     private String image;
-    @Column
-    private String tagsCsv;
+    private String tagsCsv="";
 
     @lombok.Setter
     @lombok.Getter
@@ -42,14 +41,15 @@ public class Product {
     })
     @JsonSerialize(using = PriceJsonSerializer.class)
     private Price basePrice;
-
+    @JsonIgnore
     public String[] getTags() {
         // TODO split tagsCsv
-        return new String[0];
+        return tagsCsv != null ? tagsCsv.split(",") : new String[0];
     }
 
     public void setTags(String[] tags) {
         // TODO assign tagsCsv = join tags;
+        tagsCsv = Arrays.stream(tags).collect(Collectors.joining(","));
     }
 
     public Product(Product p) {
@@ -81,29 +81,25 @@ public class Product {
     public Long getId() {
         return this.id;
     }
-
+    @JsonIgnore
     public String getRef() {
         return this.ref;
     }
-
+    @JsonIgnore
     public String getName() {
         return this.name;
     }
-
+    @JsonIgnore
     public String getBrand() {
         return this.brand;
     }
-
+    @JsonIgnore
     public String getDescription() {
         return this.description;
     }
-
+    @JsonIgnore
     public String getImage() {
         return this.image;
-    }
-
-    public String getTagsCsv() {
-        return this.tagsCsv;
     }
 
     public void setId(Long id) {
@@ -130,12 +126,8 @@ public class Product {
         this.image = image;
     }
 
-    public void setTagsCsv(String tagsCsv) {
-        this.tagsCsv = tagsCsv;
-    }
-
     public String toString() {
-        return "Product(id=" + this.getId() + ", ref=" + this.getRef() + ", name=" + this.getName() + ", brand=" + this.getBrand() + ", description=" + this.getDescription() + ", image=" + this.getImage() + ", tagsCsv=" + this.getTagsCsv() + ", basePrice=" + this.getBasePrice() + ")";
+        return "Product(id=" + this.getId() + ", ref=" + this.getRef() + ", name=" + this.getName() + ", brand=" + this.getBrand() + ", description=" + this.getDescription() + ", image=" + this.getImage() + ", tagsCsv=" + this.getTags() + ", basePrice=" + this.getBasePrice() + ")";
     }
 
     public boolean equals(Object o) {

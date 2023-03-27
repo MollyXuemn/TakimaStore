@@ -1,8 +1,10 @@
 package io.takima.master3.store.customer.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.core.models.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 @Table(name = "customer")
@@ -12,7 +14,6 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="customer_id_seq")
     @Column(unique = true)
     Long id;
-    @Column
     @Convert( converter = Gender.GenderConverter.class )
     Gender gender;
     @Column(name = "firstname")
@@ -23,14 +24,13 @@ public class Customer {
     String lastName;
     @Column(unique = true)
     String email;
-    @Column
     @Embedded
-    @NotBlank
+    @NotNull
     Address address;
-    @Column
     @NotBlank
     String iban;
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
     Cart cart;
 
     public Cart getCart() {
@@ -53,13 +53,12 @@ public class Customer {
 
     public Customer() {
     }
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Gender getGender() {
@@ -69,7 +68,6 @@ public class Customer {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-
     public String getFirstName() {
         return firstName;
     }
@@ -77,7 +75,6 @@ public class Customer {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getLastName() {
         return lastName;
     }
@@ -91,7 +88,6 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public Address getAddress() {
         return address;
     }

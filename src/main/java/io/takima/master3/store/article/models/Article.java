@@ -2,6 +2,7 @@ package io.takima.master3.store.article.models;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
@@ -75,7 +76,7 @@ public class Article {
 
     public Article() {
     }
-
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -83,7 +84,7 @@ public class Article {
     public void setId(Long id) {
         this.id = id;
     }
-
+    @JsonIgnore
     public Price getPrice() {
         return price;
     }
@@ -91,7 +92,6 @@ public class Article {
     public void setPrice(Price price) {
         this.price = price;
     }
-
     public Seller getSeller() {
         return seller;
     }
@@ -107,7 +107,7 @@ public class Article {
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
     }
-
+    @JsonIgnore
     public Product getProduct() {
         return product;
     }
