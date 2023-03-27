@@ -3,7 +3,6 @@ package io.takima.master3.store.discount.models;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 import java.time.LocalDateTime;

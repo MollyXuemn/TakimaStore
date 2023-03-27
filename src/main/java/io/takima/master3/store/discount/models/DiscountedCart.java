@@ -55,8 +55,6 @@ public class DiscountedCart extends Cart implements Discount {
     @Override
     public synchronized void applyOffer(Offer offer) {
         super.getOffers().add(offer);
-
-
         Map<Article, Integer> articles = getArticles();
 
         // if no article selection => apply to the whole cart
@@ -82,8 +80,8 @@ public class DiscountedCart extends Cart implements Discount {
                     });
             // get the discounted Price
             Price newTotal = articles.entrySet().stream()
-                                .map(a -> a.getKey().getPrice().multiply(a.getValue()))
-                    .reduce(new Price(0, oldTotal.getCurrency()), Price::plus);
+                                .map(a -> a.getKey().getPrice().multiply(a.getValue()))//
+                    .reduce(new Price(0, oldTotal.getCurrency()), Price::plus);// get the total price of all articles
 
             this.discountedTotal = discountedTotal.minus(oldTotal).plus(newTotal);
         }
