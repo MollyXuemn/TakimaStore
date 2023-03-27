@@ -1,5 +1,7 @@
 package io.takima.master3.store.article.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -31,11 +33,14 @@ public class Product {
     @Column
     private String tagsCsv;
 
+    @lombok.Setter
+    @lombok.Getter
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount",
                     column = @Column(name = "base_price"))
     })
+    @JsonSerialize(using = PriceJsonSerializer.class)
     private Price basePrice;
 
     public String[] getTags() {
@@ -101,10 +106,6 @@ public class Product {
         return this.tagsCsv;
     }
 
-    public Price getBasePrice() {
-        return this.basePrice;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -131,10 +132,6 @@ public class Product {
 
     public void setTagsCsv(String tagsCsv) {
         this.tagsCsv = tagsCsv;
-    }
-
-    public void setBasePrice(Price basePrice) {
-        this.basePrice = basePrice;
     }
 
     public String toString() {

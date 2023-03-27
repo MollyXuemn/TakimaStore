@@ -2,6 +2,8 @@ package io.takima.master3.store.article.models;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
 import io.takima.master3.store.seller.models.Seller;
 import jakarta.persistence.Column;
@@ -22,6 +24,7 @@ public class Article {
     private Seller seller;
     private int availableQuantity;
     @Embedded
+    @JsonSerialize(using = PriceJsonSerializer.class)
     private Price price;
     @ManyToOne
     private Product product;

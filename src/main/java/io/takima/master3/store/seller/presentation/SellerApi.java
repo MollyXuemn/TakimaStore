@@ -41,7 +41,7 @@ public class SellerApi {
         return sellerService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
     }
-    @GetMapping(value = "/{id}/articles", produces = "application/json")
+    @GetMapping(value = "/{id}/articles",   produces = "application/json")
     public Page<Article> findAllBySeller(
             @RequestParam(defaultValue = "20")int limit,
             @RequestParam(defaultValue = "0")int offset,
