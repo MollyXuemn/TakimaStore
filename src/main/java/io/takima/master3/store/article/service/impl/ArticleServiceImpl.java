@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -69,9 +70,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleDao.deleteById(id);
     }
 
-    public Article findById(long id) {
-        return articleDao.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", id)));
+    public Optional<Article> findById(long id) {
+        return articleDao.findById(id);
     }
 
     private Article changePrice(Article article) {

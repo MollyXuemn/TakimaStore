@@ -4,6 +4,7 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
+import io.takima.master3.store.seller.models.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
-@Controller
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
+@RestController
+@RequestMapping(value = "/api/articles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ArticleApi {
     private final ArticleService articleService;
     @Autowired
@@ -24,14 +25,7 @@ public class ArticleApi {
         this.articleService = articleService;
     }
 
-    @ResponseBody
-    @GetMapping(value = "/getArticle", produces = "application/json")
-    public Article getArticle(@RequestParam() long id) {
-        return articleService.findById(id);
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/getAllArticles", produces = "application/json")
+    @GetMapping(value = "", produces = "application/json")
     public Page<Article> findAll(
             @RequestParam(defaultValue = "20") int limit,
             @RequestParam(defaultValue = "0") int offset,
@@ -47,49 +41,27 @@ public class ArticleApi {
                 .sort(sort).build());
     }
 
-    @ResponseBody
-    @GetMapping(value = "/getAllArticlesBySeller", produces = "application/json")
-    public Page<Article> findAllBySeller(
-            @RequestParam(defaultValue = "20")int limit,
-            @RequestParam(defaultValue = "0")int offset,
-            @RequestParam(required = false) String id,
-            @SortDefault Sort sort) {
 
-        Specification<Article> spec = SearchSpecification.parse("seller.id="+id);
-
-        return articleService.findAll(new PageSearch.Builder<Article>()
-                .limit(limit)
-                .offset(offset)
-                .search(spec)
-                .sort(sort).build());
-    }
-
-//    Map<Seller, Page<Article>>
-
-    @ResponseBody
-    @GetMapping(value = "/countAllArticles", produces = "application/json")
-    public long findCount(PageSearch pageSearch) {
-
-        return articleService.count(pageSearch);
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public Article getOne(@PathVariable long id) {
+        return articleService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
     }
 
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
-    @ResponseBody
-    @PostMapping(value = "/createArticle", produces = "application/json")
+    @PostMapping(value = "", produces = "application/json")
     public Article create(@RequestBody() Article article) {
         if (article.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
 
         articleService.create(article);
-
         return article;
     }
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
-    @ResponseBody
-    @PostMapping(value = "/updateArticle", produces = "application/json")
+    @PutMapping(value = "", produces = "application/json")
     public Article update(@RequestBody() Article article) {
         if (article.getId() == null) {
             throw new IllegalArgumentException("did not specify the ID of article to update");
@@ -101,9 +73,8 @@ public class ArticleApi {
     }
 
     // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
-    @ResponseBody
-    @GetMapping(value = "/deleteArticle", produces = "application/json")
-    public void delete(@RequestParam() long id) {
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public void delete(@PathVariable long id) {
         articleService.deleteById(id);
     }
 

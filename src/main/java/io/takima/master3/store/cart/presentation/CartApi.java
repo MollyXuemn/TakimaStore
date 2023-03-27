@@ -37,7 +37,7 @@ public class CartApi {
     public Cart addCartArticle(@RequestParam long cartId, long articleId, int quantity) {
         var article = articleService.findById(articleId);
         var cart = cartService.findById(cartId);
-        cart.addArticle(article,quantity);
+        cart.addArticle(article.get(),quantity);
         //cartService.save(cart);
         return cart;
     }
@@ -48,7 +48,7 @@ public class CartApi {
     public Cart deleteCartArticle(@RequestParam() long cartId, long articleId, int quantity) {
         var article = articleService.findById(articleId);
         var cart = cartService.findById(cartId);
-        cart.removeArticle(article, quantity);
+        cart.removeArticle(article.get(), quantity);
         cartService.save(cart);
         return cart;
     }

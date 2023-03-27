@@ -8,13 +8,14 @@ import org.springframework.data.domain.Page;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ArticleService {
      Page<Article> findAll(PageSearch pageSearch);
      long count(PageSearch<Article> pageSearch);
      List<Article> findByName(String name);
-     Article findById(long articleId);
+     Optional<Article> findById(long articleId);
      void update(Article article);
      void create(Article article);
      void deleteById(long id);
