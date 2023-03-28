@@ -1,53 +1,40 @@
 package io.takima.master3.store.discount.presentation;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.cart.services.CartService;
 import io.takima.master3.store.discount.models.Offer;
 import io.takima.master3.store.discount.services.DiscountService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@Controller
-@RequestMapping("/api")
+@RestController
+@RequestMapping("/api/customers/{customerId}/carts/{cartId}/discounts")
+@AllArgsConstructor
 public class DiscountApi {
 
     private final CartService cartService;
     private final DiscountService discountService;
-
-    @Autowired
-    public DiscountApi(CartService cartService, DiscountService discountService) {
-        this.cartService = cartService;
-        this.discountService = discountService;
-    }
-
-    // TODO this endpoint is not RESTful. If you already followed the course on REST, refactor this endpoint to be RESTFul
-    @ResponseBody
-    @GetMapping(value = "/getDiscounts",  produces = "application/json")
-    public Set<Offer> list(@RequestParam long customerId) {
+    @JsonView(Offer.Views.LIGHT.class)
+    @GetMapping(value = "",  produces = "application/json")
+    public Set<Offer> list(@PathVariable long customerId) {
         Cart cart = cartService.getForCustomer(customerId);
         cart = discountService.applyOffers(cart);
 
         return cart.getOffers();
     }
-
-    // TODO this endpoint is not RESTful. If you already followed the course on REST, refactor this endpoint to be RESTFul
-    @ResponseBody
-    @GetMapping(value = "/addDiscount",  produces = "application/json")
-    public void addDiscount(@RequestParam long customerId, @RequestParam String code) {
+    @PutMapping(value = "",  produces = "application/json")
+    public void addDiscount(@PathVariable long customerId, @RequestParam String code) {
         Cart cart = cartService.getForCustomer(customerId);
         discountService.addOffer(cart, code);
     }
 
-    // TODO this endpoint is not RESTful. If you already followed the course on REST, refactor this endpoint to be RESTFul
-    @ResponseBody
-    @GetMapping(value = "/removeDiscount",  produces = "application/json")
-    public void removeDiscount(@RequestParam long customerId, @RequestParam String code) {
+    @DeleteMapping (value = "",  produces = "application/json")
+    public void removeDiscount(@PathVariable long customerId, @RequestParam String code) {
         Cart cart = cartService.getForCustomer(customerId);
         discountService.removeOffer(cart, code);
         cartService.save(cart);

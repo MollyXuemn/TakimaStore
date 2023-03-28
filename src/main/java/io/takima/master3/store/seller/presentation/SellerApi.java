@@ -1,5 +1,6 @@
 package io.takima.master3.store.seller.presentation;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageSearch;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 public class SellerApi {
     private final SellerService sellerService;
     private final ArticleService articleService;
-    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @JsonView(Seller.Views.LIGHT.class)
     @GetMapping(value = "", produces = "application/json")
     public Page<Seller> findAll(@RequestParam(defaultValue = "20")int limit,
                                    @RequestParam(defaultValue = "0")int offset,
@@ -35,12 +35,13 @@ public class SellerApi {
                 .search(spec)
                 .sort(sort).build());
     }
-    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @JsonView(Seller.Views.FULL.class)
     @GetMapping(value = "/{id}", produces = "application/json")
     public Seller getSeller(@PathVariable long id) {
         return sellerService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
     }
+    @JsonView(Seller.Views.LIGHT.class)
     @GetMapping(value = "/{id}/articles",   produces = "application/json")
     public Page<Article> findAllBySeller(
             @RequestParam(defaultValue = "20")int limit,
@@ -56,7 +57,6 @@ public class SellerApi {
                 .search(spec)
                 .sort(sort).build());
     }
-    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @PostMapping(value = "", produces = "application/json")
     public Seller create(@RequestBody Seller seller) {
         if (seller.getId() != null) {
@@ -66,8 +66,7 @@ public class SellerApi {
 
         return seller;
     }
-
-    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
+    @JsonView(Seller.Views.ID.class)
     @PutMapping(value = "", produces = "application/json")
     public Seller update(@RequestBody() Seller seller) {
         if (seller.getId() == null) {
@@ -78,7 +77,6 @@ public class SellerApi {
         return seller;
     }
 
-    // TODO would need a refactor to be more RESTful. This is the topic of the REST milestone.
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public void delete(@PathVariable long id) {
         sellerService.deleteById(id);

@@ -3,6 +3,7 @@ package io.takima.master3.store.article.models;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
@@ -17,18 +18,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@JsonView(Article.Views.DEFAULT.class)
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_seq")
+    @JsonView(Views.ID.class)
     private Long id;
     @ManyToOne
     private Seller seller;
+    @JsonView(Views.FULL.class)
     private int availableQuantity;
     @Embedded
     @JsonSerialize(using = PriceJsonSerializer.class)
     private Price price;
     @ManyToOne
     private Product product;
+    public static class Views {
+        public interface ID {}
+        public interface DEFAULT extends ID, Product.Views.LIGHT {}
+        public interface LIGHT extends DEFAULT, Seller.Views.LIGHT {}
+        public interface FULL extends LIGHT, Seller.Views.FULL {}
+    }
 
     public Article(Article article) {
         this.id = article.getId();
@@ -76,7 +86,6 @@ public class Article {
 
     public Article() {
     }
-    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -84,7 +93,6 @@ public class Article {
     public void setId(Long id) {
         this.id = id;
     }
-    @JsonIgnore
     public Price getPrice() {
         return price;
     }
@@ -107,7 +115,6 @@ public class Article {
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
     }
-    @JsonIgnore
     public Product getProduct() {
         return product;
     }

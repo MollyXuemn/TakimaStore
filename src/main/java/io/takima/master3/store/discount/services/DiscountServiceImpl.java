@@ -76,7 +76,23 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Cart removeOffer(Cart cart, String code) throws DiscountException {
-        return null;
+        if(code == null){throw new NoSuchElementException("no code provided");}
+        DiscountedCart discountedCart = new DiscountedCart(cart);
+        Offer offer =  cart.getOffers().stream()
+                .filter(o -> o.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(()->new NoSuchElementException("no offer with code "+code+" ,bound to this cart "+cart));
+        cart.getOffers().remove(offer);
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        OfferContext context = new OfferContext( discountedCart, offer, now);
+        if(context.getApplicableArticles().isEmpty()){
+            throw new DiscountException(DiscountException.Code.APPLICABLE_ARTICLES, offer);
+        }
+        pruneOutdatedOffers(discountedCart, now);
+        context.assertIsValid();
+
+        return cart;
     }
 
     /* ***

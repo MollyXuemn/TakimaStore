@@ -1,6 +1,7 @@
 package io.takima.master3.store.article.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
@@ -14,15 +15,17 @@ import java.util.stream.Collectors;
 @Inheritance(
         strategy = InheritanceType.JOINED
 )
+@JsonView(Product.Views.LIGHT.class)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
+    @JsonView(Views.ID.class)
     private Long id;
 
     @Column(unique = true)
     @NotBlank
     private String ref;
-    @NotBlank
+    @NotBlank@JsonView(Views.ID.class)
     private String name;
     @NotBlank
     private String brand;
@@ -30,6 +33,7 @@ public class Product {
     private String description;
     @NotBlank
     private String image;
+    @JsonView(Views.FULL.class)
     private String tagsCsv="";
 
     @lombok.Setter
@@ -191,6 +195,13 @@ public class Product {
         public Product build() {
             return new Product(p);
         }
+    }
+
+    public static class Views {
+        public interface ID {}
+        public interface LIGHT extends ID {}
+        public interface PAGE extends LIGHT {}
+        public interface FULL extends PAGE {}
     }
 
 

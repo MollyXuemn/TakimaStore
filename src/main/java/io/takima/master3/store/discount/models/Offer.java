@@ -1,6 +1,7 @@
 package io.takima.master3.store.discount.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
@@ -15,11 +16,13 @@ import java.util.Set;
 @Entity
 @DiscriminatorColumn(name = "type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@JsonView(Offer.Views.LIGHT.class)
 public abstract class Offer implements Comparable<Offer> {
 
     @Id
+    @JsonView(Views.FULL.class)
     private Long id;
-
+    @JsonView(Views.LIGHT.class)
     private String code;
 
     // no start limit if null
@@ -283,4 +286,9 @@ public abstract class Offer implements Comparable<Offer> {
     protected boolean canEqual(Object other) {
         return other instanceof Offer;
     }
+    public static class Views {
+        public interface LIGHT {}
+        public interface FULL extends LIGHT {}
+    }
+
 }

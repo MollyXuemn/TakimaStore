@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Currency;
 import io.takima.master3.store.core.models.Price;
@@ -15,18 +16,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@JsonView(Cart.Views.LIGHT.class)
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_id_seq")
+    @JsonView(Views.ID.class)
     private Long id;
 
     private LocalDateTime date;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
     private List<CartArticle> cartArticles = new ArrayList<>();
-//    @Transient
-//    private Map<Article, Integer> articles;
-
     @JsonIgnore
     @JoinColumn(name = "customer_id")
     @OneToOne
@@ -36,8 +36,13 @@ public class Cart {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "offer_id")
     )
+    @JsonView(Views.FULL.class)
     private Set<Offer> offers = new HashSet<>();
-
+    public static class Views {
+        public interface ID {}
+        public interface LIGHT extends ID, Article.Views.LIGHT, Offer.Views.LIGHT {}
+        public interface FULL extends LIGHT {}
+    }
 
     @Override
     public boolean equals(Object o) {

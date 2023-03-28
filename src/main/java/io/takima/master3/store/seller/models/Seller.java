@@ -1,10 +1,10 @@
 package io.takima.master3.store.seller.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.core.models.Address;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,17 +14,31 @@ import static jakarta.persistence.EnumType.STRING;
 @Cacheable
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Seller {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seller_id_seq")
+        @JsonView(Views.ID.class)
         Long id;
+        @NotBlank
+        @JsonView(Views.LIGHT.class)
         String name;
         @Embedded
+        @JsonView(Views.FULL.class)
         Address address;
+        @JsonView(Views.FULL.class)
         String iban;
+        @JsonView(Views.FULL.class)
         @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL,orphanRemoval = true)
         @JsonIgnore
         private List<Article> articles;
+        public static class Views {
+            public interface ID {}
+            public interface LIGHT extends ID {}
+            public interface PAGE extends LIGHT {}
+            public interface FULL extends PAGE {}
+        }
+
 
     public Seller(Long id, String name, Address address, String iban) {
         this.id = id;
