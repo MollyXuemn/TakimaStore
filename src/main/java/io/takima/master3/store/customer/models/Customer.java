@@ -1,7 +1,11 @@
 package io.takima.master3.store.customer.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import io.takima.master3.store.article.models.Article;
+import io.takima.master3.store.article.models.Product;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.core.models.Address;
+import io.takima.master3.store.seller.models.Seller;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,10 +13,12 @@ import jakarta.validation.constraints.NotNull;
 
 @Table(name = "customer")
 @Entity
+@JsonView(Customer.Views.LIGHT.class)
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="customer_id_seq")
     @Column(unique = true)
+    @JsonView(Views.ID.class)
     Long id;
     @Convert( converter = Gender.GenderConverter.class )
     Gender gender;
@@ -31,7 +37,13 @@ public class Customer {
     String iban;
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnore
+    @JsonView(Views.FULL.class)
     Cart cart;
+    public static class Views {
+        public interface ID {};
+        public interface FULL {};
+        public interface LIGHT{}
+    }
 
     public Cart getCart() {
         return cart;

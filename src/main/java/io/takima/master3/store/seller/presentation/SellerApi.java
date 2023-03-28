@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
@@ -57,14 +59,15 @@ public class SellerApi {
                 .search(spec)
                 .sort(sort).build());
     }
+    @JsonView(Seller.Views.LIGHT.class)
     @PostMapping(value = "", produces = "application/json")
-    public Seller create(@RequestBody Seller seller) {
+    public ResponseEntity<Seller> create(@RequestBody Seller seller) {
         if (seller.getId() != null) {
             throw new IllegalArgumentException("cannot create a seller and specify the ID");
         }
         sellerService.create(seller);
 
-        return seller;
+        return new ResponseEntity<>(seller, HttpStatus.CREATED);
     }
     @JsonView(Seller.Views.ID.class)
     @PutMapping(value = "", produces = "application/json")

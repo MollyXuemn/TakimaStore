@@ -5,6 +5,7 @@ import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
+import io.takima.master3.store.customer.models.Customer;
 import io.takima.master3.store.seller.models.Seller;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,15 +48,15 @@ public class ArticleApi {
         return articleService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
     }
-
+    @JsonView(Article.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
-    public Article create(@RequestBody() Article article) {
+    public ResponseEntity<Article> create(@RequestBody() Article article) {
         if (article.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
 
         articleService.create(article);
-        return article;
+        return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = "application/json")

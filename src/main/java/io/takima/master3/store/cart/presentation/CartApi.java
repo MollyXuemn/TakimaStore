@@ -7,6 +7,8 @@ import io.takima.master3.store.cart.services.CartService;
 import io.takima.master3.store.seller.models.Seller;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +25,15 @@ public class CartApi {
     public CartDTO getCart(@PathVariable long id) {
         return CartDTO.fromModel(cartService.findById(id));
     }
+
     @JsonView(Cart.Views.LIGHT.class)
     @PutMapping(value = "{cartId}/articles/{articleId}", produces = "application/json")
-    public CartDTO addCartArticle(@PathVariable long cartId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
+    public ResponseEntity<CartDTO> addCartArticle(@PathVariable long cartId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
         var article = articleService.findById(articleId);
         var cart = cartService.findById(cartId);
         cart.addArticle(article.get(),quantity);
         cartService.save(cart);
-        return CartDTO.fromModel(cart);
+        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "{cartId}/articles/{articleId}", produces = "application/json")

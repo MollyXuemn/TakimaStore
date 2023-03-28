@@ -1,5 +1,6 @@
 package io.takima.master3.store.customer.presentation;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.customer.models.Customer;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
@@ -36,15 +39,15 @@ public class CustomerApi {
         return customerService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", id)));
     }
-
+    @JsonView(Customer.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
-    public Customer create(@RequestBody Customer customer) {
+    public ResponseEntity<Customer>  create(@RequestBody Customer customer) {
         if (customer.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
         customerService.create(customer);
 
-        return customer;
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = "application/json")

@@ -7,6 +7,8 @@ import io.takima.master3.store.discount.models.Offer;
 import io.takima.master3.store.discount.services.DiscountService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +29,11 @@ public class DiscountApi {
 
         return cart.getOffers();
     }
+    @JsonView(Offer.Views.LIGHT.class)
     @PutMapping(value = "",  produces = "application/json")
-    public void addDiscount(@PathVariable long customerId, @RequestParam String code) {
+    public ResponseEntity<Cart> addDiscount(@PathVariable long customerId, @RequestParam String code) {
         Cart cart = cartService.getForCustomer(customerId);
-        discountService.addOffer(cart, code);
+        return new ResponseEntity<>(discountService.addOffer(cart, code), HttpStatus.CREATED);
     }
 
     @DeleteMapping (value = "",  produces = "application/json")

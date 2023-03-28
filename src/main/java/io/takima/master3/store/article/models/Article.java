@@ -128,7 +128,7 @@ public class Article {
     public String getRef() {
         return product.getRef();
     }
-
+    @JsonIgnore
     public String getName() {
         return product.getName();
     }
