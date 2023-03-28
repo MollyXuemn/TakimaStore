@@ -1,6 +1,8 @@
 package io.takima.master3.store.article.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
@@ -16,6 +18,12 @@ import java.util.stream.Collectors;
         strategy = InheritanceType.JOINED
 )
 @JsonView(Product.Views.LIGHT.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, defaultImpl = Product.class)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Book.class),
+        @JsonSubTypes.Type(value = VideoGame.class),
+        @JsonSubTypes.Type(value = Phone.class)
+})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")

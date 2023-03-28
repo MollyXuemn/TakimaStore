@@ -27,7 +27,6 @@ public class Article {
     @JsonView(Views.ID.class)
     private Long id;
     @ManyToOne
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Seller seller;
     @JsonView(Views.FULL.class)
     private int availableQuantity;

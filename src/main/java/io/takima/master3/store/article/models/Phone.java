@@ -1,9 +1,10 @@
 package io.takima.master3.store.article.models;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+@JsonTypeName("Phone")
 @Entity
 public class Phone extends Product{
     @Column

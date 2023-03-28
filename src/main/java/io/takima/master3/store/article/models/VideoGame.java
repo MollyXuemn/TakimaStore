@@ -3,7 +3,8 @@ package io.takima.master3.store.article.models;
 import io.takima.master3.store.core.models.Price;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@JsonTypeName("VideoGame")
 @Entity
 public class VideoGame extends Product  {
     @Column
