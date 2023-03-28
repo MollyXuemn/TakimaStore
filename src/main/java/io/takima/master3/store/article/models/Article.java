@@ -2,8 +2,10 @@ package io.takima.master3.store.article.models;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.takima.master3.store.core.json.PriceJsonSerializer;
 import io.takima.master3.store.core.models.Price;
@@ -25,6 +27,7 @@ public class Article {
     @JsonView(Views.ID.class)
     private Long id;
     @ManyToOne
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Seller seller;
     @JsonView(Views.FULL.class)
     private int availableQuantity;
