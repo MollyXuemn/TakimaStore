@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.cart.services.CartService;
-import io.takima.master3.store.seller.models.Seller;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +17,23 @@ public class CartApi {
 
     private final CartService cartService;
     private final ArticleService articleService;
+    @GetMapping()
+    @JsonView(Cart.Views.FULL.class)
+    public ResponseEntity<CartDTO> getAll(@PathVariable long customerId) {
+        var cart = cartService.getForCustomer(customerId);
+        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.CREATED);
+    }
+
     @JsonView(Cart.Views.LIGHT.class)
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public CartDTO getCart(@PathVariable long id) {
-        return CartDTO.fromModel(cartService.findById(id));
+    @GetMapping(value = "/{cartId}", produces = "application/json")
+    public  ResponseEntity<CartDTO> getCart(@PathVariable long cartId) {
+        var cart = cartService.findById(cartId);
+
+        if (!cart.getId().equals(cartId)) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.CREATED);
+
     }
 
     @JsonView(Cart.Views.LIGHT.class)

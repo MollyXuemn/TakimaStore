@@ -1,6 +1,7 @@
 package io.takima.master3.store.customer.presentation;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.takima.master3.store.cart.presentation.CartApi;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.customer.models.Customer;
@@ -10,7 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,6 +29,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @AllArgsConstructor
 public class CustomerApi {
     private final CustomerService customerService;
+    private final CustomerRepresentationModelAssembler assembler;
 
     @GetMapping(value = "", produces = "application/json")
     public Page<Customer> findPage(@RequestParam(defaultValue = "20")int limit,
@@ -44,14 +50,15 @@ public class CustomerApi {
     }
     @JsonView(Customer.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
-    public ResponseEntity<Customer>  create(@RequestBody Customer customer) {
+    public EntityModel<Customer>  create(@RequestBody Customer customer) {
+
         if (customer.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
         customerService.create(customer);
 
-        URI uri = linkTo(methodOn(CustomerApi.class).getCustomer(customer.getId())).toUri();
-        return ResponseEntity.created(uri).body(customer);
+        //URI uri = linkTo(methodOn(CustomerApi.class).getCustomer(customer.getId())).toUri();
+        return assembler.toModel(customer);
 
     }
 
@@ -70,3 +77,12 @@ public class CustomerApi {
         customerService.deleteById(id);
     }
 }
+@Component
+class CustomerRepresentationModelAssembler implements RepresentationModelAssembler<Customer, EntityModel<Customer>> {
+    public EntityModel<Customer> toModel(Customer customer) {
+        Link selfLink = linkTo(methodOn(CustomerApi.class).getCustomer(customer.getId())).withSelfRel();
+        Link cartLink = linkTo(methodOn(CartApi.class).getCart(customer.getId())).withRel("cart");
+        return EntityModel.of(customer, selfLink, cartLink);
+    }
+}
+

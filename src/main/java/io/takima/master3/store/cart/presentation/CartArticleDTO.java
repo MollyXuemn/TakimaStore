@@ -3,7 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.takima.master3.store.article.models.Article;
 
 @JsonIgnoreProperties({"availableQuantity", "seller"})
-public class CartArticleDTO extends Article {
+public class CartArticleDTO extends Article{
 
     private int quantity;
 
