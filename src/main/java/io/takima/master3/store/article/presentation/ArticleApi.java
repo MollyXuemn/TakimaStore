@@ -46,13 +46,13 @@ public class ArticleApi {
     @GetMapping(value = "/{id}", produces = "application/json")
     public Article getOne(@PathVariable long id) {
         return articleService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
+                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", id)));
     }
     @JsonView(Article.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
     public ResponseEntity<Article> create(@RequestBody() Article article) {
         if (article.getId() != null) {
-            throw new IllegalArgumentException("cannot create a customer and specify the ID");
+            throw new IllegalArgumentException("cannot create an article and specify the ID");
         }
 
         articleService.create(article);
