@@ -12,6 +12,7 @@ import io.takima.master3.store.customer.presentation.CustomerApi;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.service.SellerService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -101,7 +102,7 @@ public class SellerApi {
 }
 @Component
 class SellerRepresentationModelAssembler implements RepresentationModelAssembler<Seller, EntityModel<Seller>> {
-    public EntityModel<Seller> toModel(Seller seller) {
+    public @NotNull EntityModel<Seller> toModel(Seller seller) {
         Link selfLink = linkTo(methodOn(SellerApi.class).getSeller(seller.getId())).withSelfRel();
         return EntityModel.of(seller, selfLink);
     }
