@@ -6,6 +6,7 @@ import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.customer.models.Customer;
+import io.takima.master3.store.customer.presentation.CustomerApi;
 import io.takima.master3.store.seller.models.Seller;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.NoSuchElementException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/api/articles", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,9 +59,10 @@ public class ArticleApi {
         if (article.getId() != null) {
             throw new IllegalArgumentException("cannot create an article and specify the ID");
         }
-
         articleService.create(article);
-        return new ResponseEntity<>(article, HttpStatus.CREATED);
+        URI uri = linkTo(methodOn(ArticleApi.class).getOne(article.getId())).toUri();
+        return ResponseEntity.created(uri).body(article);
+
     }
 
     @PutMapping(value = "", produces = "application/json")

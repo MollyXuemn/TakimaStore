@@ -3,6 +3,8 @@ package io.takima.master3.store.seller.presentation;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.cart.presentation.CartApi;
+import io.takima.master3.store.cart.presentation.CartDTO;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.seller.models.Seller;
@@ -16,7 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.NoSuchElementException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/sellers")
@@ -66,8 +72,8 @@ public class SellerApi {
             throw new IllegalArgumentException("cannot create a seller and specify the ID");
         }
         sellerService.create(seller);
-
-        return new ResponseEntity<>(seller, HttpStatus.CREATED);
+        URI uri = linkTo(methodOn(SellerApi.class).getSeller(seller.getId())).toUri();
+        return ResponseEntity.created(uri).body(seller);
     }
     @JsonView(Seller.Views.ID.class)
     @PutMapping(value = "", produces = "application/json")
