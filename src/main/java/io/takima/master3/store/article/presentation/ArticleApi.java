@@ -3,6 +3,7 @@ package io.takima.master3.store.article.presentation;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
+import io.takima.master3.store.cart.presentation.CartApi;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
 import io.takima.master3.store.customer.models.Customer;
@@ -14,9 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @AllArgsConstructor
 public class ArticleApi {
     private final ArticleService articleService;
+    private final ArticleRepresentationModelAssembler assembler;
     @JsonView(Article.Views.LIGHT.class)
     @GetMapping(value = "", produces = "application/json")
     public Page<Article> findAll(
@@ -55,13 +61,13 @@ public class ArticleApi {
     }
     @JsonView(Article.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
-    public ResponseEntity<Article> create(@RequestBody() Article article) {
+    public ResponseEntity<EntityModel<Article>> create(@RequestBody() Article article) {
         if (article.getId() != null) {
             throw new IllegalArgumentException("cannot create an article and specify the ID");
         }
         articleService.create(article);
-        URI uri = linkTo(methodOn(ArticleApi.class).getOne(article.getId())).toUri();
-        return ResponseEntity.created(uri).body(article);
+        //URI uri = linkTo(methodOn(ArticleApi.class).getOne(article.getId())).toUri();
+        return new ResponseEntity<>(assembler.toModel(article), HttpStatus.CREATED);
 
     }
 
@@ -78,5 +84,12 @@ public class ArticleApi {
     public void delete(@PathVariable long id) {
         articleService.deleteById(id);
     }
-
 }
+@Component
+class ArticleRepresentationModelAssembler implements RepresentationModelAssembler<Article, EntityModel<Article>> {
+    public EntityModel<Article> toModel(Article article) {
+        Link selfLink = linkTo(methodOn(ArticleApi.class).getOne(article.getId())).withSelfRel();
+        return EntityModel.of(article, selfLink);
+    }
+}
+

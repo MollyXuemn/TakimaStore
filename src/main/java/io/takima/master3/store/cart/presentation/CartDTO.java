@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CartDTO {
+public class CartDTO extends CartRepresentationModelAssembler{
         private Long id;
         private Customer customer;
         private LocalDateTime date;

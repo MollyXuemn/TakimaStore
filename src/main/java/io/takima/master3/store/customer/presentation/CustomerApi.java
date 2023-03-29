@@ -14,6 +14,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -44,32 +45,31 @@ public class CustomerApi {
                 .sort(sort).build());
     }
     @GetMapping(value = "/{id}", produces = "application/json")
-    public Customer getCustomer(@PathVariable long id) {
-        return customerService.findById(id)
+    public ResponseEntity<EntityModel<Customer>> getCustomer(@PathVariable long id) {
+        Customer customer=customerService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no customer with id %d", id)));
+        return new ResponseEntity<>(assembler.toModel(customer), HttpStatus.OK);
     }
     @JsonView(Customer.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
-    public EntityModel<Customer>  create(@RequestBody Customer customer) {
+    public ResponseEntity<EntityModel<Customer>> create(@RequestBody Customer customer) {
 
         if (customer.getId() != null) {
             throw new IllegalArgumentException("cannot create a customer and specify the ID");
         }
         customerService.create(customer);
 
-        //URI uri = linkTo(methodOn(CustomerApi.class).getCustomer(customer.getId())).toUri();
-        return assembler.toModel(customer);
-
+        return new ResponseEntity<>(assembler.toModel(customer), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "", produces = "application/json")
-    public Customer update(@RequestBody() Customer customer) {
+    public ResponseEntity<EntityModel<Customer>> update(@RequestBody() Customer customer) {
         if (customer.getId() == null) {
             throw new IllegalArgumentException("did not specify the ID of customer to update");
         }
         customerService.update(customer);
 
-        return customer;
+        return new ResponseEntity<>(assembler.toModel(customer), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
