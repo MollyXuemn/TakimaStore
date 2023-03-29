@@ -7,6 +7,8 @@ import io.takima.master3.store.cart.presentation.CartApi;
 import io.takima.master3.store.cart.presentation.CartDTO;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
+import io.takima.master3.store.customer.models.Customer;
+import io.takima.master3.store.customer.presentation.CustomerApi;
 import io.takima.master3.store.seller.models.Seller;
 import io.takima.master3.store.seller.service.SellerService;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,6 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class SellerApi {
     private final SellerService sellerService;
     private final ArticleService articleService;
+    private final SellerRepresentationModelAssembler assembler;
     @JsonView(Seller.Views.LIGHT.class)
     @GetMapping(value = "", produces = "application/json")
     public Page<Seller> findAll(@RequestParam(defaultValue = "20")int limit,
@@ -45,9 +52,10 @@ public class SellerApi {
     }
     @JsonView(Seller.Views.FULL.class)
     @GetMapping(value = "/{id}", produces = "application/json")
-    public Seller getSeller(@PathVariable long id) {
-        return sellerService.findById(id)
+    public ResponseEntity<EntityModel<Seller>> getSeller(@PathVariable long id) {
+        Seller seller = sellerService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no seller with id %d", id)));
+        return new ResponseEntity<>(assembler.toModel(seller), HttpStatus.OK);
     }
     @JsonView(Seller.Views.LIGHT.class)
     @GetMapping(value = "/{id}/articles",   produces = "application/json")
@@ -67,27 +75,34 @@ public class SellerApi {
     }
     @JsonView(Seller.Views.LIGHT.class)
     @PostMapping(value = "", produces = "application/json")
-    public ResponseEntity<Seller> create(@RequestBody Seller seller) {
+    public ResponseEntity<EntityModel<Seller>> create(@RequestBody Seller seller) {
         if (seller.getId() != null) {
             throw new IllegalArgumentException("cannot create a seller and specify the ID");
         }
         sellerService.create(seller);
-        URI uri = linkTo(methodOn(SellerApi.class).getSeller(seller.getId())).toUri();
-        return ResponseEntity.created(uri).body(seller);
+
+        return new ResponseEntity<>(assembler.toModel(seller), HttpStatus.CREATED);
     }
     @JsonView(Seller.Views.ID.class)
     @PutMapping(value = "", produces = "application/json")
-    public Seller update(@RequestBody() Seller seller) {
+    public ResponseEntity<EntityModel<Seller>> update(@RequestBody() Seller seller) {
         if (seller.getId() == null) {
             throw new IllegalArgumentException("did not specify the ID of seller to update");
         }
         sellerService.update(seller);
 
-        return seller;
+        return new ResponseEntity<>(assembler.toModel(seller), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public void delete(@PathVariable long id) {
         sellerService.deleteById(id);
+    }
+}
+@Component
+class SellerRepresentationModelAssembler implements RepresentationModelAssembler<Seller, EntityModel<Seller>> {
+    public EntityModel<Seller> toModel(Seller seller) {
+        Link selfLink = linkTo(methodOn(SellerApi.class).getSeller(seller.getId())).withSelfRel();
+        return EntityModel.of(seller, selfLink);
     }
 }

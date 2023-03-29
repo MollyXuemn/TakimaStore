@@ -29,13 +29,13 @@ public class GetDiscountApiIT {
     @Autowired
     private MockMvc mvc;
     @Nested
-    @DisplayName("GET getDiscounts/")
+    @DisplayName("GET discounts")
     class GetDiscounts {
 
         @Test
         @DisplayName("with missing parameter 'customerId' should give status 400 BAD_REQUEST")
         void shouldGive400() throws Exception {
-            mvc.perform(get("/api/getDiscounts")
+            mvc.perform(get("/api/customers/1/carts/1/discounts")
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isBadRequest());
         }
@@ -47,8 +47,7 @@ public class GetDiscountApiIT {
             @DisplayName("should give status 200 OK")
             void shouldGive200() throws Exception {
                 // TODO implement
-                mvc.perform(get("/api/getDiscounts")
-                        .param("customerId", "1")
+                mvc.perform(get("/api/customers/1/carts/1/discounts")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andExpect(status().isOk());
             }
@@ -57,8 +56,7 @@ public class GetDiscountApiIT {
             @DisplayName("give all discounts of the customer's cart")
             void shouldReturnDiscounts() throws Exception{
                 // TODO implement. Get custpmerId=1 while clock fixed at 2010-12-15T12:00:00.00Z expect offers: {id=3, id=4}
-                mvc.perform(get("/api/getDiscounts")
-                                .param("customerId", "1")
+                mvc.perform(get("/api/customers/1/carts/1/discounts")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(jsonPath("$.*", hasSize(3)))
@@ -102,7 +100,7 @@ public class GetDiscountApiIT {
                                 .param("code", "XMAS-2010")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andExpect(status().isOk());
-                mvc.perform(get("/api/getDiscounts")
+                mvc.perform(get("/api/customers/{customerId}/carts/{cartId}/discounts")
                                 .param("customerId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
@@ -151,7 +149,7 @@ public class GetDiscountApiIT {
                                 .param("code", "XMAS-2010")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andExpect(status().isOk());
-                mvc.perform(get("/api/getDiscounts")
+                mvc.perform(get("/api/customers/{customerId}/carts/{cartId}/discounts")
                                 .param("customerId", "1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())

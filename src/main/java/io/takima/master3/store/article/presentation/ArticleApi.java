@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,27 +39,31 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ArticleApi {
     private final ArticleService articleService;
     private final ArticleRepresentationModelAssembler assembler;
+
+    private final PagedResourcesAssembler<Article> pageAssembler;
+
     @JsonView(Article.Views.LIGHT.class)
     @GetMapping(value = "", produces = "application/json")
-    public Page<Article> findAll(
+    public PagedModel<EntityModel<Article>> findAll(
             @RequestParam(defaultValue = "20") int limit,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(required = false) String search,
             @SortDefault Sort sort) {
 
         Specification<Article> spec = (search != null) ? SearchSpecification.parse(search) : Specification.where(null);
-        return articleService.findAll(new PageSearch.Builder<Article>()
+        return pageAssembler.toModel(articleService.findAll(new PageSearch.Builder<Article>()
                 .limit( limit)
                 .offset( offset)
                 .search(spec)
-                .sort(sort).build());
+                .sort(sort).build()));
     }
 
     @JsonView(Article.Views.FULL.class)
     @GetMapping(value = "/{id}", produces = "application/json")
-    public Article getOne(@PathVariable long id) {
-        return articleService.findById(id)
+    public ResponseEntity<EntityModel<Article>> getOne(@PathVariable long id) {
+        Article article = articleService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", id)));
+        return new ResponseEntity<>(assembler.toModel(article), HttpStatus.OK);
     }
     @JsonView(Article.Views.ID.class)
     @PostMapping(value = "", produces = "application/json")
@@ -72,13 +78,12 @@ public class ArticleApi {
     }
 
     @PutMapping(value = "", produces = "application/json")
-    public Article update(@RequestBody() Article article) {
+    public ResponseEntity<EntityModel<Article>> update(@RequestBody() Article article) {
         if (article.getId() == null) {
             throw new IllegalArgumentException("did not specify the ID of article to update");
         }
         articleService.update(article);
-
-        return article;
+        return new ResponseEntity<>(assembler.toModel(article), HttpStatus.CREATED);
     }
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public void delete(@PathVariable long id) {

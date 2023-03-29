@@ -18,9 +18,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import org.springframework.hateoas.server.core.Relation;
 
 @Entity
 @JsonView(Article.Views.DEFAULT.class)
+@Relation(value = "article", collectionRelation = "articles")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_seq")

@@ -22,18 +22,12 @@ public class PageSearch<T> implements Pageable{
         this.sort = sort;
     }
 
-    public PageSearch(PageSearch pageSearch, Specification<T> search) {
-        this(
-            pageSearch.limit,
-            pageSearch.offset,
-            pageSearch.search,
-            pageSearch.sort
-        );
-    }
 
     public PageSearch(Specification<T> search) {
+
         this.search = search;
     }
+
 
     public Specification<T>  getSearch() {
         return search;
@@ -84,6 +78,7 @@ public class PageSearch<T> implements Pageable{
     public boolean hasPrevious() {
         return false;
     }
+
 
     public static final class Builder<T> {
         private int limit = 1;
