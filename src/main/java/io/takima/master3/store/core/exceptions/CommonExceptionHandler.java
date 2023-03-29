@@ -1,6 +1,7 @@
 package io.takima.master3.store.core.exceptions;
 
 import io.takima.master3.store.core.presentation.ExceptionEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,7 @@ public class CommonExceptionHandler {
 
         return new ExceptionEntity.Builder()
                 .cause(e.getCause())
+                .headers(HttpHeaders.EMPTY)
                 .code("No valable request Exception")
                 .message(e.getMessage())
                 .status(resolveAnnotatedResponseStatus(e))
@@ -32,6 +34,7 @@ public class CommonExceptionHandler {
 
         return new ExceptionEntity.Builder()
                 .cause(e.getCause())
+                .headers(HttpHeaders.writableHttpHeaders(new HttpHeaders()))
                 .code("No such element ! ")
                 .message(e.getMessage())
                 .status(HttpStatus.NOT_FOUND)
@@ -44,6 +47,7 @@ public class CommonExceptionHandler {
 
         return new ExceptionEntity.Builder()
                 .cause(e.getCause())
+                .headers(HttpHeaders.EMPTY)
                 .code("Illegal Argument Exception")
                 .message(e.getMessage())
                 .status(HttpStatus.BAD_REQUEST)

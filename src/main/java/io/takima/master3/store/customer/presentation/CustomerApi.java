@@ -10,11 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.NoSuchElementException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -47,7 +50,9 @@ public class CustomerApi {
         }
         customerService.create(customer);
 
-        return new ResponseEntity<>(customer, HttpStatus.CREATED);
+        URI uri = linkTo(methodOn(CustomerApi.class).getCustomer(customer.getId())).toUri();
+        return ResponseEntity.created(uri).body(customer);
+
     }
 
     @PutMapping(value = "", produces = "application/json")
