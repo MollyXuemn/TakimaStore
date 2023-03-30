@@ -18,10 +18,6 @@ public record Article(
         return new Builder();
     }
 
-    public static Builder builder(Article article) {
-        return new Builder(article);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

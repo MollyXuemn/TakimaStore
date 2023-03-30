@@ -1,6 +1,7 @@
 package io.takima.master3.store.seller.persistence;
 import io.takima.master3.store.domain.Seller;
 import io.takima.master3.store.ConnectionManager;
+import io.takima.master3.store.exceptions.PersistenceException;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.mapper.SellerMapper;
 
@@ -15,7 +16,7 @@ public enum JdbcSellerDao implements SellerDao {
     ResultSetMapper<Seller> sellerMapper = SellerMapper.INSTANCE ;
     List<Seller> sellers = new ArrayList<>();
 
-    public void SellerDao(ResultSetMapper<Seller> sellerMapper) {
+    JdbcSellerDao() {
         this.sellerMapper = SellerMapper.INSTANCE;
     }
 
@@ -29,7 +30,7 @@ public enum JdbcSellerDao implements SellerDao {
                 sellers.add(sellerMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
         return sellers;
     }
@@ -45,7 +46,7 @@ public enum JdbcSellerDao implements SellerDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Impossible to insert site " +
+            throw new PersistenceException("Impossible to insert site " +
                     name, e);
         }
         return sellers;
@@ -62,7 +63,7 @@ public enum JdbcSellerDao implements SellerDao {
                 return Optional.of(sellerMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
         return Optional.empty();
     }
@@ -83,7 +84,7 @@ public enum JdbcSellerDao implements SellerDao {
                 sellers.add(sellerMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
     public void create(Seller seller){
@@ -104,7 +105,7 @@ public enum JdbcSellerDao implements SellerDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
 
@@ -119,7 +120,7 @@ public enum JdbcSellerDao implements SellerDao {
                 sellers.add(sellerMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
 }

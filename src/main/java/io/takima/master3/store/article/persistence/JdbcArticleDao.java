@@ -1,5 +1,6 @@
 package io.takima.master3.store.article.persistence;
 import io.takima.master3.store.ConnectionManager;
+import io.takima.master3.store.exceptions.PersistenceException;
 import io.takima.master3.store.mapper.ArticleMapper;
 import io.takima.master3.store.mapper.ResultSetMapper;
 import io.takima.master3.store.domain.Article;
@@ -11,10 +12,10 @@ import java.util.*;
 
 public enum JdbcArticleDao implements ArticleDao {
     INSTANCE;
-    ResultSetMapper<Article> articleMapper = ArticleMapper.INSTANCE;
+    ResultSetMapper<Article> articleMapper;
     List<Article> articles = new ArrayList<>();
 
-    void JdbcArticleDao() {
+    JdbcArticleDao() {
         this.articleMapper = ArticleMapper.INSTANCE;
     }
 
@@ -28,7 +29,7 @@ public enum JdbcArticleDao implements ArticleDao {
                 articles.add(articleMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
         return articles;
     };
@@ -44,7 +45,7 @@ public enum JdbcArticleDao implements ArticleDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Impossible to insert site " +
+            throw new PersistenceException("Impossible to insert site " +
                     name, e);
         }
         return articles;
@@ -56,16 +57,10 @@ public enum JdbcArticleDao implements ArticleDao {
                 ps.setLong(1, id);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-/*                    int articleId = rs.getInt("id");
-                    String name = rs.getString("name");
-                    String ref = rs.getString("name");
-                    String description = rs.getString("name");
-                    String image= rs.getString("name");
-                    int availableQuantity = rs.getInt("available_quantity");*/
                     return Optional.of(articleMapper.map(rs));
                 }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    throw new PersistenceException(e);
                 }
                 return Optional.empty();
             };
@@ -82,7 +77,7 @@ public enum JdbcArticleDao implements ArticleDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
         return articles;
     };
@@ -106,7 +101,7 @@ public enum JdbcArticleDao implements ArticleDao {
                     articles.add(articleMapper.map(rs));
                 }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
     public void create(Article article){
@@ -129,7 +124,7 @@ public enum JdbcArticleDao implements ArticleDao {
                 }
 
                 } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
 
@@ -144,7 +139,7 @@ public enum JdbcArticleDao implements ArticleDao {
                 articles.add(articleMapper.map(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     };
 

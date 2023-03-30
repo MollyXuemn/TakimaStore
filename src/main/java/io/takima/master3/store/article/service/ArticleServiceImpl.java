@@ -2,6 +2,7 @@ package io.takima.master3.store.article.service;
 
 import io.takima.master3.store.article.persistence.JdbcArticleDao;
 import io.takima.master3.store.domain.Article;
+import io.takima.master3.store.exceptions.PersistenceException;
 import io.takima.master3.store.money.Money;
 import io.takima.master3.store.article.persistence.ArticleDao;
 import io.takima.master3.store.money.MoneyConversionFactory;
@@ -71,7 +72,7 @@ public enum ArticleServiceImpl implements ArticleService {
         try {
             articleDao.delete(id);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new PersistenceException(e);
         }
     }
 

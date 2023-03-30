@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SellerService {
-    public List<Seller> findAll();
+    List<Seller> findAll();
 
-    public List<Seller> findByName(String name);
-    public Optional<Seller> findById(long id);
-    public void update(Seller seller);
-    public void create(Seller seller);
-    public void delete(long id) throws SQLException;
+    List<Seller> findByName(String name);
+    Optional<Seller> findById(long id);
+    void update(Seller seller);
+    void create(Seller seller);
+    void delete(long id) throws SQLException;
 
 }

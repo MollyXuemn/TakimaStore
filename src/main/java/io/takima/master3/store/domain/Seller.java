@@ -16,9 +16,6 @@ public record Seller (
         return new Builder();
     }
 
-    public static Builder builder(Seller seller) {
-        return new Builder(seller);
-    }
 
     public boolean equals(Object o) {
         if (this == o) return true;
