@@ -1,12 +1,12 @@
 package io.takima.master3.store.core.pagination;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Objects;
-
 public class PageSearch<T> implements Pageable{
     private int limit =1;
     private int offset=0;
