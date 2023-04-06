@@ -1,26 +1,19 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import articles from './articles.json';
+import ArticleList from "./components/article/ArticleList";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    return (
+
+        <div className="App">
+            {/*on vient donner en props nos articles tirés de articles.json*/}
+            <ArticleList/>
+        </div>
+
+    );
 }
 
 export default App;
