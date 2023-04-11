@@ -1,7 +1,6 @@
 // Comme toujours on en profite pour bien typer nos objets !
-import { Article } from "../../../models/article";
+import { Article } from "../article";
 import axios from "axios";
-import articles from "../../../articles.json";
 //./src/components/Article/api/getArticle.ts
 
 // Comme toujours on en profite pour bien typer nos objets !
@@ -12,6 +11,9 @@ interface PageableResponse<T> {
   _embedded: any;
 }
 
+export async function getArticle(articleId: number) {
+  return axios.get<Article>(`${Config.apiBaseUrl}/articles/${articleId}`);
+}
 export async function getArticles() {
   return axios.get<PageableResponse<Article>>(`${Config.apiBaseUrl}/articles`);
 }

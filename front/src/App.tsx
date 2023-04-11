@@ -1,15 +1,19 @@
-import React from "react";
 import "./App.scss";
-import ArticleList from "./components/article/ArticleList/ArticleList";
-import ErrorBoundary from "antd/es/alert/ErrorBoundary";
+import { BrowserRouter, Outlet } from "react-router-dom";
+import NavigationBar from "./components/Shell/NavigationBar";
+import { MantineProvider } from "@mantine/core";
+import React from "react";
 
 function App() {
   return (
-    <div className="App">
-      <ErrorBoundary>
-        <ArticleList />
-      </ErrorBoundary>
-    </div>
+    <>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <div className="App">
+          <NavigationBar />
+          <Outlet />
+        </div>
+      </MantineProvider>
+    </>
   );
 }
 

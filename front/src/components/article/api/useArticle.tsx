@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { getArticles } from "./getArticle";
+import { getArticle, getArticles } from "./getArticle";
 import { Article } from "../article";
 import { AxiosError } from "axios";
 
-export default function useArticleList() {
+export default function useArticle(articleId: number) {
   const [isLoading, setLoading] = useState(false);
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [article, setArticle] = useState<Article | undefined>(undefined);
   // On pense toujours à typer notre variable !
   const [error, setError] = useState<Error | AxiosError | undefined>();
 
   function fetch() {
     setLoading(true);
-    return getArticles()
+    return getArticle(articleId)
       .then((response) => {
         //debugger
-        //console.log(articles, setArticles)
-        setArticles(response.data["_embedded"].articles);
+        //console.log(article, setArticle)
+        setArticle(response.data);
         console.log(response);
       })
       .catch((e: Error | AxiosError) => {
@@ -32,5 +32,5 @@ export default function useArticleList() {
     fetch();
   }, []);
 
-  return { articles, isLoading, error };
+  return { article, isLoading, error };
 }

@@ -1,0 +1,39 @@
+.navigationBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 60px;
+
+  padding: 5px 20px 5px 10px;
+
+  background-color: #212529;
+  border-bottom: 2px solid #cc1b6780;
+  color: white;
+
+  a {
+    display: flex;
+    align-items: center;
+
+    margin-left: 10px;
+
+    text-decoration: none;
+    color: white;
+  }
+
+  div {
+    display: flex;
+  }
+
+  svg {
+    font-size: 1.3em;
+  }
+}
+
+.linkElement {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 5px;
+}

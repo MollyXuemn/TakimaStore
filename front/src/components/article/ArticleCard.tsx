@@ -1,10 +1,18 @@
-import { Article } from "../../models/article";
+import { Article } from "./article";
 import styles from "./ArticleCard.module.scss";
-import { Card, Text, Badge, Button, Group, Box, Space } from "@mantine/core";
+import { Card, Text, Badge, Button, Group, Box } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 export default function ArticleCard({ article }: { article: Article }) {
+  const navigate = useNavigate();
+
+  async function onClick() {
+    // Dans ce cas c'est ce composant qui possède la responsabilité de savoir sur quelle route rediriger l'utilisateur
+    navigate(`articles/${article.id}`);
+  }
+
   // article est passé en props de notre composant.
   return (
-    <div className={styles.articleCard}>
+    <div className={styles.articleCard} onClick={onClick}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
           <img
