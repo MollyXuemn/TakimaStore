@@ -34,6 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/articles", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ArticleApi {

@@ -1,4 +1,4 @@
 declare const Config: {
-    imageAssetsUrl: string;
-    apiBaseUrl: string;
+  imageAssetsUrl: string;
+  apiBaseUrl: string;
 };

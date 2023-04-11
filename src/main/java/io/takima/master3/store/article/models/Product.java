@@ -40,6 +40,7 @@ public class Product {
     @NotBlank
     private String description;
     @NotBlank
+    @JsonView(Views.LIGHT.class)
     private String image;
     @JsonView(Views.FULL.class)
     private String tagsCsv="";

@@ -1,19 +1,16 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.scss';
-import articles from './articles.json';
-import ArticleList from "./components/article/ArticleList";
+import React from "react";
+import "./App.scss";
+import ArticleList from "./components/article/ArticleList/ArticleList";
+import ErrorBoundary from "antd/es/alert/ErrorBoundary";
 
 function App() {
-
-    return (
-
-        <div className="App">
-            {/*on vient donner en props nos articles tirés de articles.json*/}
-            <ArticleList/>
-        </div>
-
-    );
+  return (
+    <div className="App">
+      <ErrorBoundary>
+        <ArticleList />
+      </ErrorBoundary>
+    </div>
+  );
 }
 
 export default App;
