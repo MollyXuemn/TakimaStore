@@ -13,10 +13,8 @@ export default function ArticlePage() {
 
   return (
     <div className={styles.articlePage}>
-      {/* eslint-disable-next-line react/jsx-no-undef */}
       {<ErrorComponent error={error} />}
       {!error && isLoading ? (
-        // eslint-disable-next-line react/jsx-no-undef
         <Loader />
       ) : (
         <ArticleDetail article={article!}></ArticleDetail>

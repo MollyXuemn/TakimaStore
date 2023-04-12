@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import CartPage from "./pages/CartPage/CartPage";
 import SellerHomePage from "./pages/SellerHomePage/SellerHomePage";
+import Router from "./Router";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,18 +16,20 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <>
-    {/*    <Router />*/}
-    <BrowserRouter>
+    {/* eslint-disable-next-line react/jsx-no-undef */}
+    <Router />
+    {/*<BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
           <Route path="articles" element={<HomePage />} />
+
           <Route path="/articles/:articleId" element={<ArticlePage />} />
           <Route path="sellers" element={<SellerHomePage />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>*/}
   </>
 );
 // function Router() {
