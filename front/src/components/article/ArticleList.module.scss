@@ -1,7 +1,8 @@
-/* ArticlePage.module.scss */
+/* SellerHomePage.module.scss */
 
 .articleList {
-  max-width: 20em;
+  display: flex;
+  flex-wrap: wrap;
 
   .articleImage {
     background: rgba(76, 175, 180, 0.1);

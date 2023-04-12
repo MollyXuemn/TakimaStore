@@ -17,7 +17,7 @@ export default function Router() {
             {/*Cette route sera afficher à la place de la précédente si le path match l'url actuel*/}
             <Route path="/articles/:articleId" element={<ArticlePage />} />
             {/*<Route path="sellers" element={<SellerHomePage />} />
-            <Route path="cart" element={<CartPage />} />
+            <Route path="cart" element={<SellerHomePage />} />
             <Route path="profile" element={<ProfilePage />} />*/}
           </Route>
         </Routes>
