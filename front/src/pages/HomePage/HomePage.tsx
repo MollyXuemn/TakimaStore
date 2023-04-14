@@ -1,11 +1,12 @@
-import { Loader, Pagination } from "@mantine/core";
-import { ErrorComponent } from "../../components/Error/Error";
+import { Pagination } from "@mantine/core";
 import ArticleList from "../../components/article/ArticleList";
-import useArticleList from "../../components/article/api/useArticleList";
-import { useArticlePagination } from "../../components/article/api/searchArticle";
+import { useArticlePagination } from "../../components/article/api/searchArticle/searchArticlePagination";
+import styles from "./Home.module.scss";
+import Search from "antd/es/input/Search";
+import { ConfigProvider } from "antd";
 
 export default function HomePage() {
-  const { articles, error, isLoading } = useArticleList();
+  // const { articles, error, isLoading } = useCustomers();
   const {
     currentPage,
     currentPageNumber,
@@ -14,21 +15,47 @@ export default function HomePage() {
     goToPage,
     nextPage,
     previousPage,
+    searchValue,
+    search,
   } = useArticlePagination();
+
+  function onSearch(value: string) {
+    console.log(search);
+    searchValue(value);
+  }
+
   return (
-    <div className="homePage">
-      {error && <ErrorComponent error={error} />}
-      {!error && isLoading ? (
-        // eslint-disable-next-line react/jsx-no-undef
-        <Loader />
-      ) : (
-        <ArticleList articles={articles}></ArticleList>
-      )}
-      <Pagination
-        total={totalPages}
-        value={currentPageNumber}
-        onChange={goToPage}
-      />
+    <div className={styles.homePage}>
+      <div style={{ margin: "10px" }}>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#f75ea0",
+            },
+          }}
+        >
+          <Search
+            placeholder="input search text"
+            allowClear
+            enterButton
+            type="warning"
+            style={{ width: 300 }}
+            onSearch={onSearch}
+          />
+        </ConfigProvider>
+      </div>
+
+      {
+        <>
+          {currentPage && <ArticleList articles={currentPage}></ArticleList>}
+          <Pagination
+            total={totalPages}
+            value={currentPageNumber}
+            onChange={goToPage}
+            position="center"
+          />
+        </>
+      }
     </div>
   );
 }

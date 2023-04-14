@@ -3,15 +3,9 @@ package io.takima.master3.store.article.presentation;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
-import io.takima.master3.store.cart.presentation.CartApi;
 import io.takima.master3.store.core.pagination.PageSearch;
 import io.takima.master3.store.core.pagination.SearchSpecification;
-import io.takima.master3.store.customer.models.Customer;
-import io.takima.master3.store.customer.presentation.CustomerApi;
-import io.takima.master3.store.seller.models.Seller;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -24,17 +18,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.NoSuchElementException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RequestMapping(value = "/api/articles", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ArticleApi {

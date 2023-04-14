@@ -11,7 +11,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ma-store" target="19" />
       <module name="takima-store" target="1.6" />
     </bytecodeTargetLevel>
   </component>
