@@ -1,4 +1,3 @@
-// src/models/article.ts
 export interface Customer {
   id: number;
   gender: string;

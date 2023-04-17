@@ -6,7 +6,7 @@ import Search from "antd/es/input/Search";
 import { ConfigProvider } from "antd";
 
 export default function HomePage() {
-  // const { articles, error, isLoading } = useCustomers();
+  // const { articles, error, isLoading } = useCustomer();
   const {
     currentPage,
     currentPageNumber,

@@ -9,7 +9,7 @@ export default function ArticlePage() {
   const { articleId } = useParams();
   const { article, isLoading, error } = useArticle(
     parseInt(articleId ?? "0")
-  ); /*it enforce the articleId to be string if it doesnot exist */
+  ); /*it enforce the articleId to be string if it does not exist */
 
   return (
     <div className={styles.articlePage}>
