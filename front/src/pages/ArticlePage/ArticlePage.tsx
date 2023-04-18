@@ -14,7 +14,16 @@ export default function ArticlePage() {
   return (
     <div className={styles.articlePage}>
       {<ErrorComponent error={error} />}
-      {!error && isLoading ? <Loader /> : <ArticleDetail article={article!} />}
+      {!error && isLoading ? (
+        <Loader />
+      ) : (
+        <ArticleDetail
+          onCart={(article) => {
+            return;
+          }}
+          article={article!}
+        />
+      )}
     </div>
   );
 }

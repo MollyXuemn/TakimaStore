@@ -1,29 +1,64 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../stores/redux";
-import { removeFromCart } from "../store/cartSlice";
+import { RootState } from "../../stores/redux";
+import { removeFromCart } from "../../stores/slices/CartSlice";
 import { Article } from "../../components/article/article";
+import styles from "./CartPage.module.scss";
+import { Badge, Box, Button, Card, Group, Text } from "@mantine/core";
+
 export default function CartPage() {
   const articles = useSelector((state: RootState) => state.cart.articles);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const handleRemoveFromCart = (article: Article) => {
-      dispatch(removeFromCart(article));
-    };
+  const handleRemoveFromCart = (article: Article) => {
+    dispatch(removeFromCart(article));
+  };
 
-    return (
-      <div>
-        {cartItems.map((cartItem) => (
-          <div key={cartItem.article.id}>
-            <h3>{cartItem.article.title}</h3>
-            <p>Price: {cartItem.article.price}</p>
-            <p>Quantity: {cartItem.quantity}</p>
-            <button onClick={() => handleRemoveFromCart(cartItem.article)}>
+  return (
+    <>
+      {articles.map((article) => (
+        <div className={styles.cartPage} key={article.id}>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Card.Section>
+              <img
+                className={styles.articleImage}
+                src={`${Config.imageAssetsUrl}/${article.product.image}`}
+                alt={article.product.name}
+              />
+            </Card.Section>
+
+            <Group position="apart" mt="md" mb="xs">
+              <Box ml={6} w={150}>
+                <Text weight={500}>{article.product.name}</Text>
+                <Text size="sm" color="dimmed">
+                  Seller : {article.description}
+                </Text>
+              </Box>
+              <Badge
+                variant="gradient"
+                gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
+                mt="md"
+                radius="md"
+              >
+                Cart
+              </Badge>
+            </Group>
+            <Badge ml={4} mt="md" w={100}>
+              {article.product.basePrice}
+            </Badge>
+
+            <Button
+              variant="gradient"
+              gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
+              mt="md"
+              ml="5rem"
+              radius="md"
+              onClick={() => handleRemoveFromCart(article)}
+            >
               Remove
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
+            </Button>
+          </Card>
+        </div>
+      ))}
+    </>
+  );
 }

@@ -2,8 +2,12 @@
 
 .articleCard {
   max-width: 20em;
-  height: 600px;
+  height: 500px;
+  margin-bottom: 20px;
   overflow-y:hidden;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 
   .articleImage {
     background: rgba(76, 175, 180, 0.1);

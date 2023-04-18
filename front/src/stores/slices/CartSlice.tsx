@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Article } from "../../components/article/article";
+import { RootState } from "../redux";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -8,14 +9,17 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action: PayloadAction<Article>) => {
-      // TODO implement this
       // action.payload contient l'article à ajouter au store dans state.articles
       // state contient l'état précédent de l'application
-      state.articles.push(action.payload);
-
-      removeFromCart: (state, action: PayloadAction<Article>) => {
-        // TODO implement this
-        state.articles.remove(action.payload);
+      return { ...state, articles: [...state.articles, action.payload] };
+    },
+    removeFromCart: (state, action: PayloadAction<Article>) => {
+      // action.payload contient l'article à supprimer du store dans state.articles
+      return {
+        ...state,
+        articles: state.articles.filter(
+          (article) => article.id !== action.payload.id
+        ),
       };
     },
   },

@@ -1,20 +1,36 @@
 import styles from "./NavigationBar.module.scss";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../../App";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import {
   ShoppingCartOutlined,
   UsergroupDeleteOutlined,
   AppstoreOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Space } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../stores/redux";
+import { Badge, Space } from "@mantine/core";
 
 const linkStyle = ({ isActive }: { isActive: boolean }) => ({
   backgroundColor: isActive ? "#e2E2E210" : "",
   borderRadius: "10px",
   padding: "5px",
 });
+function NavShoppingCart() {
+  const cartState = useSelector((state: RootState) => state.cart);
+  return (
+    <NavLink to="/cart" style={linkStyle}>
+      <ShoppingCartOutlined />
+
+      <span>Cart</span>
+      <Space w="md" />
+      <Badge color="gray" size="xl">
+        {cartState.articles.length}
+      </Badge>
+    </NavLink>
+  );
+}
 
 export default function NavigationBar() {
   const user = useContext(UserContext);
@@ -35,9 +51,7 @@ export default function NavigationBar() {
         </NavLink>
       </>
       <>
-        <NavLink to="/card" style={linkStyle}>
-          <ShoppingCartOutlined />
-        </NavLink>
+        <NavShoppingCart />
         <NavLink to="/profile" style={linkStyle}>
           <UserOutlined />
           {user && (

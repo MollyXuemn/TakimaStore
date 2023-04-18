@@ -5,7 +5,7 @@ import { Article } from "./article";
 import styles from "./ArticleDetail.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../stores/cartSlice";
+import { addToCart } from "../../stores/slices/CartSlice";
 export default function ArticleDetail({
   article,
   onCart,
@@ -21,13 +21,14 @@ export default function ArticleDetail({
   }
 
   return article ? (
-    <div className={styles.articleDetails} onClick={onClick}>
+    <div className={styles.articleDetails}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
           <img
             className={styles.articleImage}
             src={`${Config.imageAssetsUrl}/${article.product.image}`}
             alt={article.product.name}
+            onClick={onClick}
           />
         </Card.Section>
 
@@ -36,7 +37,7 @@ export default function ArticleDetail({
             <Text weight={500}>{article.product.name}</Text>
             <hr />
             <Text size="sm" color="dimmed">
-              Seller : {article.product.description}
+              Seller : {article.description}
             </Text>
           </Box>
           <Badge color="pink" variant="light">
@@ -55,7 +56,9 @@ export default function ArticleDetail({
             gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
             mt="md"
             radius="md"
-            onClick={() => dispatch(addToCart(article))}
+            onClick={(e) => {
+              dispatch(addToCart(article));
+            }}
           >
             Ajouter au panier
           </Button>

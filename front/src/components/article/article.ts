@@ -9,8 +9,9 @@ export interface Article {
     ref: string;
     name: string;
     brand: string | null;
-    description: string;
+
     image: string;
     basePrice: string;
   };
+  description: string;
 }
