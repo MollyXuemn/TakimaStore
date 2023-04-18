@@ -37,7 +37,7 @@ export default function ArticleDetail({
             <Text weight={500}>{article.product.name}</Text>
             <hr />
             <Text size="sm" color="dimmed">
-              Seller : {article.description}
+              Description : {article.description}
             </Text>
           </Box>
           <Badge color="pink" variant="light">
@@ -50,11 +50,11 @@ export default function ArticleDetail({
             {article.product.basePrice}
           </Badge>
 
-          {/*<Button>{article.product.basePrice}</Button>*/}
           <Button
             variant="gradient"
             gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
             mt="md"
+            ml={40}
             radius="md"
             onClick={(e) => {
               dispatch(addToCart(article));

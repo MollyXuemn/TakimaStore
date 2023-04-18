@@ -9,12 +9,9 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action: PayloadAction<Article>) => {
-      // action.payload contient l'article à ajouter au store dans state.articles
-      // state contient l'état précédent de l'application
       return { ...state, articles: [...state.articles, action.payload] };
     },
     removeFromCart: (state, action: PayloadAction<Article>) => {
-      // action.payload contient l'article à supprimer du store dans state.articles
       return {
         ...state,
         articles: state.articles.filter(

@@ -3,7 +3,8 @@ import { RootState } from "../../stores/redux";
 import { removeFromCart } from "../../stores/slices/CartSlice";
 import { Article } from "../../components/article/article";
 import styles from "./CartPage.module.scss";
-import { Badge, Box, Button, Card, Group, Text } from "@mantine/core";
+import { Badge, Box, Button, Card, Divider, Group, Text } from "@mantine/core";
+import React from "react";
 
 export default function CartPage() {
   const articles = useSelector((state: RootState) => state.cart.articles);
@@ -17,6 +18,7 @@ export default function CartPage() {
     <>
       {articles.map((article) => (
         <div className={styles.cartPage} key={article.id}>
+          <Divider orientation={"horizontal"} size="sm" />
           <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Card.Section>
               <img

@@ -22,7 +22,7 @@ export default function Router() {
             <Route path="/articles/:articleId" element={<ArticlePage />} />
             {/*<Route path="sellers" element={<SellerHomePage />} />*/}
             <Route path="/cart" element={<CartPage />} />
-            {/*<Route path="/customers/:userId" element={<ProfilePage />} />*/}
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/*" element={<NotFound />} />
           </Route>
         </Routes>

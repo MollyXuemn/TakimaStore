@@ -10,7 +10,8 @@ import {
 } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/redux";
-import { Badge, Space } from "@mantine/core";
+import { Badge, Menu, Space } from "@mantine/core";
+import Divider = Menu.Divider;
 
 const linkStyle = ({ isActive }: { isActive: boolean }) => ({
   backgroundColor: isActive ? "#e2E2E210" : "",
