@@ -6,6 +6,7 @@ import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import SellerHomePage from "./pages/SellerHomePage/SellerHomePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import NotFound from "./pages/NotFound/NotFound";
+import CartPage from "./pages/CartPage/CartPage";
 
 export default function Router() {
   return (
@@ -19,9 +20,9 @@ export default function Router() {
 
             {/*Cette route sera afficher à la place de la précédente si le path match l'url actuel*/}
             <Route path="/articles/:articleId" element={<ArticlePage />} />
-            <Route path="sellers" element={<SellerHomePage />} />
-            <Route path="cart" element={<SellerHomePage />} />
-            <Route path="/customers/:userId" element={<ProfilePage />} />
+            {/*<Route path="sellers" element={<SellerHomePage />} />*/}
+            <Route path="cart" element={<CartPage />} />
+            {/*<Route path="/customers/:userId" element={<ProfilePage />} />*/}
             <Route path="/*" element={<NotFound />} />
           </Route>
         </Routes>

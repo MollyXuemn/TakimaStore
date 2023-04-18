@@ -7,7 +7,7 @@ export function useArticlePagination() {
   const [currentPageNumber, setCurrentPageNumber] = useState(0);
   const [search, setSearch] = useState<string>("");
 
-  const { searchResult, totalPages, limit } = useSearchArticle({
+  const { searchResult, totalPages } = useSearchArticle({
     offset: ELEMENT_PER_PAGE * currentPageNumber,
     //(currentPageNumber === 1 ? currentPageNumber : currentPageNumber - 1),
     limit: ELEMENT_PER_PAGE,
@@ -34,7 +34,7 @@ export function useArticlePagination() {
   }
 
   return {
-    currentPage: searchResult,
+    articles: searchResult,
     currentPageNumber,
     totalPages,
     totalElements: searchResult,

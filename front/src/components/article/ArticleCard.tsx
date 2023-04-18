@@ -5,19 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Divider } from "antd";
 
 export default function ArticleCard({ article }: { article: Article }) {
-  const navigate = useNavigate();
-
-  async function onClick() {
-    // Dans ce cas c'est ce composant qui possède la responsabilité de savoir sur quelle route rediriger l'utilisateur
-    navigate(`articles/${article.id}`);
-  }
-
   // article est passé en props de notre composant.
   return (
     <div className={styles.articleCard}>
       <Divider orientation="left"></Divider>
 
-      <Card shadow="sm" padding="lg" radius="md" withBorder onClick={onClick}>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
           <img
             className={styles.articleImage}

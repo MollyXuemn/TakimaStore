@@ -19,7 +19,6 @@ export default function useArticle(articleId: number) {
         console.log(response);
       })
       .catch((e: Error | AxiosError) => {
-        // gestion d'erreur dans la partie suivante
         console.error("Error when fetching Article List !" + e);
         setError(e);
       })

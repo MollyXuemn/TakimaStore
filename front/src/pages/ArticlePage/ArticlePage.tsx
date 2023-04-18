@@ -14,11 +14,7 @@ export default function ArticlePage() {
   return (
     <div className={styles.articlePage}>
       {<ErrorComponent error={error} />}
-      {!error && isLoading ? (
-        <Loader />
-      ) : (
-        <ArticleDetail article={article!}></ArticleDetail>
-      )}
+      {!error && isLoading ? <Loader /> : <ArticleDetail article={article!} />}
     </div>
   );
 }

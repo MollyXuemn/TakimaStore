@@ -8,10 +8,9 @@ import { ConfigProvider } from "antd";
 export default function HomePage() {
   // const { articles, error, isLoading } = useCustomer();
   const {
-    currentPage,
+    articles,
     currentPageNumber,
     totalPages,
-    totalElements,
     goToPage,
     nextPage,
     previousPage,
@@ -47,11 +46,13 @@ export default function HomePage() {
 
       {
         <>
-          {currentPage && <ArticleList articles={currentPage}></ArticleList>}
+          {articles && <ArticleList articles={articles}></ArticleList>}
           <Pagination
             total={totalPages}
             value={currentPageNumber}
             onChange={goToPage}
+            onNextPage={nextPage}
+            onPreviousPage={previousPage}
             position="center"
           />
         </>

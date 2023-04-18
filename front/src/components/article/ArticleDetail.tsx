@@ -4,10 +4,17 @@ import React from "react";
 import { Article } from "./article";
 import styles from "./ArticleDetail.module.scss";
 import { useNavigate } from "react-router-dom";
-
-export default function ArticleDetail({ article }: { article: Article }) {
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../stores/cartSlice";
+export default function ArticleDetail({
+  article,
+  onCart,
+}: {
+  article: Article;
+  onCart: (article: Article) => void;
+}) {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   async function onClick() {
     // Dans ce cas c'est ce composant qui possède la responsabilité de savoir sur quelle route rediriger l'utilisateur
     navigate(`articles/${article.id}`);
@@ -38,13 +45,19 @@ export default function ArticleDetail({ article }: { article: Article }) {
         </Group>
 
         <Box ml={6} w={100}>
+          <Badge color="pink" variant="light" size="md" fullWidth>
+            {article.product.basePrice}
+          </Badge>
+
+          {/*<Button>{article.product.basePrice}</Button>*/}
           <Button
             variant="gradient"
             gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
             mt="md"
             radius="md"
+            onClick={() => dispatch(addToCart(article))}
           >
-            {article.product.basePrice}
+            Ajouter au panier
           </Button>
         </Box>
       </Card>

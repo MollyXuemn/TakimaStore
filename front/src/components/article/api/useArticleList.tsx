@@ -13,13 +13,10 @@ export default function useArticleList() {
     setLoading(true);
     return getArticles()
       .then((response) => {
-        //debugger
-        //console.log(articles, setArticles)
         setArticles(response.data["_embedded"].articles);
         console.log(response);
       })
       .catch((e: Error | AxiosError) => {
-        // gestion d'erreur dans la partie suivante
         console.error("Error when fetching Article List !" + e);
         setError(e);
       })

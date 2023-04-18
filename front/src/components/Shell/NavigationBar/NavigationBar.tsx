@@ -21,39 +21,32 @@ export default function NavigationBar() {
 
   return (
     <div className={styles.navigationBar}>
-      <div>
+      <>
         <NavLink to="/" style={linkStyle}>
           <img alt="" src={"/takima_logo.png"} width="35" />
         </NavLink>
         <NavLink to="/articles" style={linkStyle}>
           <AppstoreOutlined />
-          <div className={styles.linkElement}>
-            <span>Articles</span>
-          </div>
+          <span className={styles.linkElement}>Articles</span>
         </NavLink>
         <NavLink to="/sellers" style={linkStyle}>
           <UsergroupDeleteOutlined />
-          <div className={styles.linkElement}>
-            <span>Sellers</span>
-          </div>
+          <span className={styles.linkElement}>Sellers</span>
         </NavLink>
-      </div>
-
-      <div>
+      </>
+      <>
         <NavLink to="/card" style={linkStyle}>
-          <div>
-            <ShoppingCartOutlined />
-          </div>
+          <ShoppingCartOutlined />
         </NavLink>
         <NavLink to="/profile" style={linkStyle}>
           <UserOutlined />
           {user && (
-            <div>
+            <>
               {user.firstName} {user.lastName}
-            </div>
+            </>
           )}
         </NavLink>
-      </div>
+      </>
     </div>
   );
 }
