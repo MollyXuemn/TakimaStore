@@ -26,6 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/customers")
 @AllArgsConstructor
 public class CustomerApi {

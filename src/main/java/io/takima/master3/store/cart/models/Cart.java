@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -16,18 +17,21 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@JsonView(Cart.Views.LIGHT.class)
+@JsonView(Cart.Views.FULL.class)
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_id_seq")
     @JsonView(Views.ID.class)
     private Long id;
 
+    @JsonView(Views.LIGHT.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "_order")
-    private List<CartArticle> cartArticles = new ArrayList<>();
     @JsonIgnore
+    private List<CartArticle> cartArticles = new ArrayList<>();
+
     @JoinColumn(name = "customer_id")
     @OneToOne
     private Customer customer;

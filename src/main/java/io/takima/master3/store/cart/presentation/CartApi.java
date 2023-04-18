@@ -1,6 +1,7 @@
 package io.takima.master3.store.cart.presentation;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.takima.master3.store.article.models.Article;
 import io.takima.master3.store.article.service.ArticleService;
 import io.takima.master3.store.cart.models.Cart;
 import io.takima.master3.store.cart.services.CartService;
@@ -16,10 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/customers/{customerId}/carts", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class CartApi {
@@ -28,47 +32,34 @@ public class CartApi {
     private final ArticleService articleService;
     //private final CartRepresentationModelAssembler assembler;
     @GetMapping()
+    @JsonView(CartDTO.Views.FULL.class)
+    public CartDTO getCart(@PathVariable long customerId) {
+
+        Cart cart = cartService.getForCustomer(customerId);
+        return CartDTO.fromModel(cart);
+    }
+
+
     @JsonView(Cart.Views.FULL.class)
-    public ResponseEntity<CartDTO> getAll(@PathVariable long customerId) {
-        var cart = cartService.getForCustomer(customerId);
-        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.CREATED);
-    }
+    @PutMapping("{cartId}/articles/{articleId}")
+    public Cart addCartArticle(@PathVariable long customerId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
+        Article article= articleService.findById(articleId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", articleId)));
 
-    @JsonView(Cart.Views.LIGHT.class)
-    @GetMapping(value = "/{cartId}", produces = "application/json")
-    public ResponseEntity<CartDTO> getCart(@PathVariable long cartId) {
-        var cart = cartService.findById(cartId);
-
-        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.OK);
-
-
-
-    }
-
-    @JsonView(Cart.Views.LIGHT.class)
-    @PutMapping(value = "{cartId}/articles/{articleId}", produces = "application/json")
-    public ResponseEntity<CartDTO> addCartArticle(@PathVariable long cartId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
-        var article = articleService.findById(articleId);
-        var cart = cartService.findById(cartId);
-        cart.addArticle(article.get(),quantity);
+        Cart cart = cartService.getForCustomer(customerId);
+        cart.addArticle(article,quantity);
         cartService.save(cart);
-        return new ResponseEntity<>(CartDTO.fromModel(cart), HttpStatus.CREATED);
+        return cart;
     }
 
     @DeleteMapping(value = "{cartId}/articles/{articleId}", produces = "application/json")
-    public CartDTO deleteCartArticle(@PathVariable long cartId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
-        var article = articleService.findById(articleId);
-        var cart = cartService.findById(cartId);
-        cart.removeArticle(article.get(), quantity);
+    public Cart deleteCartArticle(@PathVariable long customerId, @PathVariable long articleId, @RequestParam(required = false, defaultValue = "1") int quantity) {
+        Article article= articleService.findById(articleId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("no article with id %d", articleId)));
+
+        Cart cart = cartService.getForCustomer(customerId);
+        cart.removeArticle(article, quantity);
         cartService.save(cart);
-        return CartDTO.fromModel(cart);
-    }
-}
-@Component
-class CartRepresentationModelAssembler implements RepresentationModelAssembler<Cart, EntityModel<Cart>> {
-    public EntityModel<Cart> toModel(Cart cart) {
-        Link selfLink = linkTo(methodOn(CartApi.class).getCart(cart.getId())).withSelfRel();
-        Link cartLink = linkTo(methodOn(CartApi.class).getCart(cart.getId())).withRel("cart");
-        return EntityModel.of(cart, selfLink, cartLink);
+        return cart;
     }
 }

@@ -40,7 +40,6 @@ public class JpaCartDao implements CartDao {
     public Cart create(Cart cart) {
         em.persist(cart);  //Make an instance managed and persistent.
         return cart;
-
     }
 
     public Cart update(Cart cart) {
