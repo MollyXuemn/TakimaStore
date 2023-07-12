@@ -1,0 +1,18 @@
+/* ArticleCard.module.scss */
+
+.articleCard {
+  max-width: 20em;
+  max-height: 550px;
+  margin-bottom: 20px;
+  overflow-y: hidden;
+  display: flex;
+  flex-wrap: wrap;
+
+  .articleImage {
+    background: rgba(76, 175, 180, 0.1);
+    width: 250px;
+    height: 250px;
+    margin: 20px;
+    // Add any other styles you want here
+  }
+}

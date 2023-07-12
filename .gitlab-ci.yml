@@ -1,0 +1,75 @@
+include: /generic-config-template.yml
+
+variables:
+  MAVEN_IMAGE: 'maven:3.9.0-amazoncorretto-19'
+  KANIKO_IMAGE: "gcr.io/kaniko-project/executor:debug"
+  PROJECT_NAME: 'hibernates'
+
+stages: # Declared stage order is execution order -
+  - build
+  - test
+  - package
+  - deploy
+
+# Jobs definition
+backend:build:
+  image: $MAVEN_IMAGE
+  stage: build
+  extends: .backend_cache_config
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1h
+  script:
+    - mvn package -DskipTests
+
+backend:test:
+  image: $MAVEN_IMAGE
+  stage: test
+  services:
+    - name: docker:dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: "overlay2"
+  script:
+    - mvn verify
+  extends: .backend_cache_config
+  cache:
+    policy: pull
+
+backend:package:
+  extends: .common_package_config
+  dependencies:
+    - backend:build # Download jar from build stage
+  script:
+    - /kaniko/executor
+      --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --destination $CI_REGISTRY_IMAGE/back:$CI_COMMIT_REF_NAME
+      --destination $CI_REGISTRY_IMAGE/back:latest
+      --cache=true
+
+deploy:
+  stage: deploy
+  variables:
+    TAG: '$CI_COMMIT_REF_NAME'
+  before_script:
+    - 'which ssh-agent || ( apk update && apk add openssh-client )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - - mkdir -p ~/back
+      - chmod 744 ~/back
+  script:
+    # Copying compose files over the server (we don't need the whole Git repo)
+    - scp -P 22 -r docker-compose.yml flyway rocky@$HOST:~/$PROJECT_NAME
+    - echo TAG=$TAG >> $ENV
+    - scp -P 22 $ENV rocky@$HOST:~/$PROJECT_NAME/.env
+    # Deployment
+    - ssh rocky@$HOST "cd $PROJECT_NAME && docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh rocky@$HOST "cd $PROJECT_NAME && docker compose -f docker-compose.yml pull"
+    - ssh rocky@$HOST "cd $PROJECT_NAME && docker compose -f docker-compose.yml up -d --force-recreate --no-build"

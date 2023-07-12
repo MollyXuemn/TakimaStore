@@ -1,0 +1,13 @@
+.backend_cache_config:
+  cache:
+    paths:
+      - .m2/repository
+      - target/
+
+.common_package_config:
+  image:
+    name: $KANIKO_IMAGE
+    entrypoint: ['']
+  stage: package
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json

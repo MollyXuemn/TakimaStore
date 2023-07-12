@@ -1,0 +1,17 @@
+/* SellerHomePage.module.scss */
+
+.articleList {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 50px;
+  justify-content: space-around;
+
+  .articleImage {
+    background: rgba(76, 175, 180, 0.1);
+    width: 250px;
+    height: 250px;
+    border-radius: 5px !important;
+    margin: 20px;
+    // Add any other styles you want here
+  }
+}
